@@ -9,7 +9,7 @@ Version 1.0
 Release date: March 20, 2017
 Features: 
 clustering analysis of human scRNAseq samples
-three modes included: 
+three modes: 
             "GlobalPanel": default option for clusterig general single cell data sets that include a wide spectrum of cell types.
             "ColonEpitheliumPanel": suitable for analyzing human colon/intestine derived samples.
             "SelfProjection": suitable for analyzing data sets from not-well-studied tissue types (still under optimization)
