@@ -76,7 +76,7 @@ Fig1A and Fig1B show the scatter plot and heat map of RCA clusters, labeled with
 
 <img src="./results/cellline_RCAplot_heatmap_external_labels.png" alt="alt text" width="400" >
 
-*Fig 1B: Heat map showing reference component scores, with rows representing reference profiels and columns representing single cells.*
+*Fig 1B: Heat map showing reference component scores, with rows representing reference components and columns representing single cells.*
 
 
 
