@@ -1,7 +1,4 @@
----
-title: "RCA version1.0"
-output: github_document
----
+# RCA version1.0
 
 RCA, short for Reference Component Analysis, is an R package for robust clustering analysis of single cell RNA sequencing data (scRNAseq). It is developed by Prabhakar Group at Genome Institute of Singapore (GIS). 
 
