@@ -7,6 +7,7 @@ RCA, short for Reference Component Analysis, is an R package for robust clusteri
 Version 1.0 
 
 Release date: March 20, 2017
+
 Features: 
 * clustering analysis of scRNAseq data from Human samples
 * three modes :
