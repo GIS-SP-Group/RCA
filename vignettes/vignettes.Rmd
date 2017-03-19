@@ -1,13 +1,7 @@
----
-title: "Analyzing scRNAseq data with RCA"
-author: "Huipeng Li"
-date: "20/03/2017"
-output:
-  pdf_document:
-    
-#output: github_document
-fig_caption: yes
----
+# Analyzing scRNAseq data with RCA"
+Author: Huipeng Li
+
+date: 20/03/2017
 
 ## Introduction
 
