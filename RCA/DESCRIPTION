@@ -1,9 +1,0 @@
-Package: RCA
-Type: Package
-Title: RCA: Clustering Single Cell RNAseq Data using Reference Component Analysis
-Version: 1.0
-Date: 2017-03-20
-Author: Huipeng Li
-Maintainer: Huipeng Li <lihp@gis.a-star.edu.sg> or <lihuipengsmacsb@gmail.com>
-Description: This package provides the Reference Component Analysis (RCA) algorithm for clustering single cell RNAseq data. The current version can be applied on data from human samples. An extention for mouse data clustering will be available soon.  
-License: MIT
