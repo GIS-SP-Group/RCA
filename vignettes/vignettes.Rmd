@@ -70,12 +70,13 @@ RCAPlot(data_obj,cluster_color_labels = color_to_use);
 
 Fig1A and Fig1B show the scatter plot and heat map of RCA clusters, labeled with predefined cell types (colors).
 
-```{r, fig1A,fig.width=.1,out.width = "400px",echo=FALSE,message=TRUE,include=TRUE,fig.cap="Fig 1A: RCA clusters of cell line data in PCA space. Each color represents one cell type."}
-knitr::include_graphics("./results/cellline_RCAplot_PCA_external_labels.png")
-```
+<img src="./results/cellline_RCAplot_PCA_external_labels.png" alt="alt text" width="400" >
 
-```{r, fig1B,fig.width=.1,out.width = "400px",echo=FALSE,message=FALSE,include=TRUE,fig.cap="Fig 1B: Heat map showing reference component scores, with rows representing reference profiels and columns representing single cells."}
-knitr::include_graphics("./results/cellline_RCAplot_heatmap_external_labels.png")
-```
+*Fig 1A: RCA clusters of cell line data in PCA space. Each color represents one cell type.*
+
+<img src="./results/cellline_RCAplot_heatmap_external_labels.png" alt="alt text" width="400" >
+
+*Fig 1B: Heat map showing reference component scores, with rows representing reference profiels and columns representing single cells.*
+
 
 
