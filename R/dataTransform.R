@@ -27,6 +27,14 @@ dataTransform <- function(obj_in,method = "log10")
     fpkm_transform = log_fpkm_temp;
   }
 
+    if (method == "log10_10x"){
+    pseudo_count = 0.1;
+    log_fpkm_temp = fpkm_temp;
+    log_fpkm_temp[log_fpkm_temp<=pseudo_count] = pseudo_count;
+    log_fpkm_temp = log10(log_fpkm_temp);
+    fpkm_transform = log_fpkm_temp;
+  }  
+    
   #### 3: writing output ####  
   obj_out = append(obj_in,
               list("fpkm_transformed" = fpkm_transform
