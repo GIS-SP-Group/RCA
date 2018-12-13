@@ -7,7 +7,7 @@
 dataConstruct(input_data)
 }
 \arguments{
-\item{input_data}{A data frame of expression values (FPKM, TPM, UMI counts ...), with rows representing genes and columns representing cells. Note the current version of RCA only accepts gene names in the following format: "GenomeLocation_HGNCGeneName_EnsembleID", from which the "HGNCGeneName" is extracted for RCA analysis. For input data with only HGNC names, the users need to attach two strings to the HGNC names to make them into the "XXXX_HGNCGeneNames_YYYY" format.}
+\item{input_data}{A data frame of expression values (FPKM, TPM, UMI counts ...), with rows representing genes and columns representing cells. Note the current version of RCA only accepts gene names in the following format: "GenomeLocation_HGNCGeneName_EnsembleID", from which the "HGNCGeneName" is extracted for RCA analysis. For input data with only HGNC names, the users need to attach two strings to the HGNC names to make them into the "XXXX_HGNCGeneNames_ENSYYYY" format.}
 }
 \value{
 The data object for the following RCA analysis.
