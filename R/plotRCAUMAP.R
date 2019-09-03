@@ -57,7 +57,7 @@ plotRCAUMAP <- function(projection, clusterColorList = NULL, cellPropertyList = 
                 umap.df[[clusterColorName]] <- clusterColorList[[index]]
                 
                 # Create the plot
-                umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[clusterColorName]])) + geom_point(size = 1.5) + scale_color_manual(values = sort(unique(umap.df[[clusterColorName]]))) + labs(colour = clusterColorName) + theme_classic() + ggtitle(label = paste("Cluster Colors", clusterColorName))
+                umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[clusterColorName]])) + geom_point(size = 1.5) + scale_color_manual(values = sort(unique(umap.df[[clusterColorName]]))) + labs(colour = clusterColorName) + theme_bw() + ggtitle(label = paste("Cluster Colors", clusterColorName))
                 
                 # Save plot
                 ggsave(filename = paste0(folderpath, "/", "ClusterColors_", clusterColorName,"_", filename), plot = umapClusterColorsPlot)
@@ -79,7 +79,7 @@ plotRCAUMAP <- function(projection, clusterColorList = NULL, cellPropertyList = 
                 umap.df[[CellPropertyName]] <- cellPropertyList[[index]]
                 
                 # Create the plot
-                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[CellPropertyName]])) + geom_point(size = 1.5) + scale_colour_gradient(low = "lightgrey", high = "blue") + labs(colour = CellPropertyName) + theme_classic() + ggtitle(label = paste("Cell Property", CellPropertyName))
+                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[CellPropertyName]])) + geom_point(size = 1.5) + scale_colour_gradient(low = "lightgrey", high = "blue") + labs(colour = CellPropertyName) + theme_bw() + ggtitle(label = paste("Cell Property", CellPropertyName))
                 
                 # Save plot
                 ggsave(filename = paste0(folderpath, "/", "CellProperty_", CellPropertyName,"_", filename), plot = umapCellPropertyPlot)
