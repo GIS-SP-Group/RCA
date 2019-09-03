@@ -173,7 +173,7 @@ plotRCAHeatmap <- function(projection, cellTree, clusterColorList = NULL, cellPr
     }
     
     # Create pdf object to hold heatmap
-    pdf(filename,
+    pdf(paste0(folderpath, "/",filename),
         width = 20,
         height = 20)
     
