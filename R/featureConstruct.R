@@ -36,8 +36,7 @@ featureConstruct <- function(obj_in,method="GlobalPanel",power=4)
         data4 = data[temp5,,drop=FALSE];
         data3 = data2;
         data3[data3<=(sysdata$at)[i]] = (sysdata$at)[i];
-        data5 = cbind(data4,data3);
-        data6 = cor(data5,method = "pearson");
+        data6 = cor(data4,data3,,method = "pearson");
         data6 = as.data.frame(data6);
         data7 = data6[(dim(data)[2]+1):dim(data6)[2],1:dim(data)[2]];
         data8 = data7;
