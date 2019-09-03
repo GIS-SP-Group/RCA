@@ -1,18 +1,18 @@
 #' Plot heatmap of projection to the RCA panel
 #'
 #' @param projection data matrix (genes x cells)
-#' @param cellTree data matrix (genes x cells)
-#' @param clusterColorList data matrix (genes x cells)
-#' @param cellPropertyPlotList data matrix (genes x cells)
+#' @param cellTree object of class "hclust" or "dendrogram" indicating clustering result
+#' @param clusterColorList list of cluster colour annotations
+#' @param cellPropertyList list of cell properties to plot
 #' @param folderpath path to save heatmap to
 #' @param filename file name of saved heatmap
 #' @export
 #' @examples
 #'
-#' plotRCAHeatmap(rca_projection, cellTree, folderpath = ".", filename = "RCA_Heatmap.pdf")
+#' plotRCAHeatmap(rca_projection, cellTree, dynamicColorsList, nGeneList,  folderpath = ".", filename = "RCA_Heatmap.pdf")
 #'
 
-plotRCAHeatmap <- function(projection, cellTree, clusterColorList = NULL, cellPropertyPlotList = NULL, folderpath = ".", filename = "RCA_Heatmap.pdf") {
+plotRCAHeatmap <- function(projection, cellTree, clusterColorList = NULL, cellPropertyList = NULL, folderpath = ".", filename = "RCA_Heatmap.pdf") {
     
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
     # ComplexHeatmap
@@ -50,7 +50,7 @@ plotRCAHeatmap <- function(projection, cellTree, clusterColorList = NULL, cellPr
         )
     
     # If no cluster colors or cell properties are to be plotted
-    if(is.null(clusterColorList) & is.null(cellPropertyPlotList)) {
+    if(is.null(clusterColorList) & is.null(cellPropertyList)) {
         
         # Initialize heatmap object
         ht <- Heatmap(
@@ -96,10 +96,10 @@ plotRCAHeatmap <- function(projection, cellTree, clusterColorList = NULL, cellPr
         }
         
         # If cell properties are to be plotted
-        if(!is.null(cellPropertyPlotList)) {
+        if(!is.null(cellPropertyList)) {
             
             # Create list of annotation bar plots from cell property list
-            annoBarPlotList <- lapply(cellPropertyPlotList, function(cellPropertyVec){
+            annoBarPlotList <- lapply(cellPropertyList, function(cellPropertyVec){
                 anno_barplot(
                     cellPropertyVec,
                     gp = gpar(fill = "#777777", col = "#777777"),
@@ -110,7 +110,7 @@ plotRCAHeatmap <- function(projection, cellTree, clusterColorList = NULL, cellPr
             })
             
             # Set names of annotation bar plots
-            names(annoBarPlotList) <- names(cellPropertyPlotList)
+            names(annoBarPlotList) <- names(cellPropertyList)
             
             # Set parameter list for dynamic number of cell property plots
             paramList <- list(df = clusterColorDf,
