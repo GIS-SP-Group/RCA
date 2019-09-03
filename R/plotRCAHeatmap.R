@@ -5,8 +5,7 @@
 #' @param clusterColorList data matrix (genes x cells)
 #' @param cellPropertyPlotList data matrix (genes x cells)
 #' @param folderpath path to save heatmap to
-#' @param filename file name to save heatmap to
-#' @return log-normalised data matrix
+#' @param filename file name of saved heatmap
 #' @export
 #' @examples
 #'
@@ -50,6 +49,7 @@ plotRCAHeatmap <- function(projection, cellTree, clusterColorList = NULL, cellPr
             )
         )
     
+    # If no cluster colors or cell properties are to be plotted
     if(is.null(clusterColorList) & is.null(cellPropertyPlotList)) {
         
         # Initialize heatmap object
@@ -82,6 +82,7 @@ plotRCAHeatmap <- function(projection, cellTree, clusterColorList = NULL, cellPr
         )
         
     } else {
+        
         # If cluster colors are to be plotted
         if(!is.null(clusterColorList)) {
             
@@ -173,7 +174,7 @@ plotRCAHeatmap <- function(projection, cellTree, clusterColorList = NULL, cellPr
     }
     
     # Create pdf object to hold heatmap
-    pdf(paste0(folderpath, "/",filename),
+    pdf(paste0(folderpath, "/", filename),
         width = 20,
         height = 20)
     
