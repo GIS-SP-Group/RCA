@@ -12,7 +12,7 @@ fuzzy_transfer <- function(x,min_val){
 #' Compute Reference Component features for clustering analysis
 #' 
 #' @param obj_in data object.
-#' @param method: Either "GlobalPanel"(default), "ColonEpitheliumPanel", "SelfProjection", or the filename (including path) to any custom panel
+#' @param method: Either "GlobalPanel"(default), "ColonEpitheliumPanel", "SelfProjection", or the filename (including path) to any custom panel stored in RDS format
 #' @param corMeth: Any of the correlation measures supported by R, defaults to pearson
 #' @param power: power to raise up to for the RCA features before clusterin, default is 4
 #' @param scale: True if the data should be scaled, False otherwise
