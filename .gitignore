@@ -29,3 +29,4 @@
 *.knit.md
 *.Rproj
 .Rbuildignore
+.Rproj.user

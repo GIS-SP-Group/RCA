@@ -5,36 +5,35 @@
 #' @param minClustSize integer value indicating the minimum size of the resulting clusters. Default is 5.
 #' @return RCA object.
 #' @export
-#' @examples
-#'
-#' clustering_output = cellClust(rca.obj, 1:3, 10);
 #'
 dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
-        
+
     ### Extract projection data
     projection.data <- rca.obj$projection.data
     ### Load packages
-    
+
     # fastcluster
     if (!require(fastcluster))
         install.packages("fastcluster", repos = "http://cran.us.r-project.org")
     require(fastcluster)
-    
+
     # WGCNA
     if (!require(WGCNA)) {
+        if(!require(BiocManager))
+            install.packages("BiocManager")
         BiocManager::install(c("impute", "GO.db", "preprocessCore"))
         install.packages("WGCNA")
     }
     require(WGCNA)
-    
+
     # HiClimR
     if (!require(HiClimR)) {
         install.packages("HiClimR")
     }
     require(HiClimR)
-    
+
     ### Cluster cells
-    
+
     # If HiClimR is available, use fastCor to compute distance matrix
     if (require(HiClimR)) {
         d = as.dist(1 - fastCor(
@@ -47,10 +46,10 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
         # else, use cor
         d = as.dist(1 - cor(projection.data, method = "pearson"))
     }
-    
+
     # Obtain cell tree using distance matrix
     cellTree = fastcluster::hclust(d, method = "average")
-    
+
     # For each deepsplit value given, compute dynamic groups
     dynamicGroupsList <-
         lapply(X = deepSplitValues, function(deepSplit) {
@@ -62,19 +61,19 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
                 minClusterSize = minClustSize
             )
         })
-    
+
     # Convert labels to colours for each tree cut
     dynamicColorsList <- lapply(dynamicGroupsList, labels2colors)
     names(dynamicColorsList) <- paste0("deepSplit ", deepSplitValues)
-    
+
     # Assign clustering result to RCA object
     rca.obj$clustering.out <- list(
         "d" = d,
         "cellTree" = cellTree,
         "dynamicColorsList" = dynamicColorsList
     )
-    
+
     ### Return RCA object
-    
+
     return(rca.obj)
 }

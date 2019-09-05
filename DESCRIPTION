@@ -1,9 +1,12 @@
-Package: RCA
+Package: RCAv2
 Type: Package
-Title: RCA: Clustering Single Cell RNAseq Data using Reference Component Analysis
-Version: 1.0
-Date: 2017-03-20
-Author: Huipeng Li
-Maintainer: Huipeng Li <lihp@gis.a-star.edu.sg> or <lihuipengsmacsb@gmail.com>
-Description: This package provides the Reference Component Analysis (RCA) algorithm for clustering single cell RNAseq data. The current version can be applied on data from human samples. An extention for mouse data clustering will be available soon.  
+Title: Reference Component Analysis
+Version: 2.0.0
+Author: Bobby Ranjan, Florian Schmidt
+Maintainer: Bobby Ranjan <ranjanb@gis.a-star.edu.sg>
+Description: RCA correlates single-cell gene expression data with bulk reference transcriptomes for cell type annotation.
 License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports: fastcluster, WGCNA, dplyr, ComplexHeatmap, circlize, umap, ggplot2
+RoxygenNote: 6.1.1
