@@ -13,6 +13,9 @@
 #'
 dataFilter <- function(data, nGene.thresholds = c(100, NULL), nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0.0, 0.2), min.cell.exp = 0.001*ncol(data)) {
     
+    if(class(data) == "dgCMatrix")
+        data = as.matrix(data)
+    
     ### Gene filter ###
     
     if(!is.null(min.cell.exp)) {
