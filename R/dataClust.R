@@ -25,6 +25,12 @@ dataClust <- function(projection_data, deepSplitValues = 1, minClustSize = 5) {
     }
     require(WGCNA)
     
+    # HiClimR
+    if (!require(HiClimR)) {
+        install.packages("HiClimR")
+    }
+    require(HiClimR)
+    
     ### Cluster cells
     
     # If HiClimR is available, use fastCor to compute distance matrix
@@ -41,7 +47,7 @@ dataClust <- function(projection_data, deepSplitValues = 1, minClustSize = 5) {
     }
     
     # Obtain cell tree using distance matrix
-    cellTree = fastcluster::hClust(d, method = "average")
+    cellTree = fastcluster::hclust(d, method = "average")
     
     # For each deepsplit value given, compute dynamic groups
     dynamicGroupsList <-
