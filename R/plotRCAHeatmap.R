@@ -1,6 +1,6 @@
 #' Plot heatmap of projection to the RCA panel
 #'
-#' @param projection data matrix (genes x cells)
+#' @param rca.obj data matrix (genes x cells)
 #' @param cellTree object of class "hclust" or "dendrogram" indicating clustering result
 #' @param clusterColorList list of cluster colour annotations
 #' @param cellPropertyList list of cell properties to plot
@@ -12,7 +12,12 @@
 #' plotRCAHeatmap(rca_projection, cellTree, dynamicColorsList, nGeneList,  folderpath = ".", filename = "RCA_Heatmap.pdf")
 #'
 
-plotRCAHeatmap <- function(projection, cellTree, clusterColorList = NULL, cellPropertyList = NULL, folderpath = ".", filename = "RCA_Heatmap.pdf") {
+plotRCAHeatmap <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_Heatmap.pdf") {
+    
+    ### Extract projection data and clustering result from RCA object
+    projection = rca.obj$projection.data
+    cellTree = rca.obj$clustering.out$cellTree
+    clusterColorList = rca.obj$clustering.out$dynamicColorsList
     
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
     # ComplexHeatmap

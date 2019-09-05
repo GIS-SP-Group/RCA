@@ -1,18 +1,21 @@
 #' Compute Reference Component features for clustering analysis
 #'
-#' @param sc_data single-cell expression data - gene names as assumed to be in the "Gene Symbol" format.
+#' @param rca.obj RCA object.
 #' @param method: Either "GlobalPanel"(default), "ColonEpitheliumPanel", or "Custom"
 #' @param customPath: directory path (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".
 #' @param corMeth: Any of the correlation measures supported by R, defaults to pearson
 #' @param power: power to raise up to for the RCA features before clustering, default is 4
 #' @param scale: True if the data should be scaled, False otherwise
-#' @return projection: result of data projection onto panel 
+#' @return RCA object.
 #' @export
 #' @examples
 #'
 #' data_projection = dataProject(data)
 #'
-dataProject <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
+dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
+    
+    # Extract data
+    sc_data <- rca.obj$data
     
     # dplyr
     if (!require(dplyr))
@@ -116,7 +119,10 @@ dataProject <- function(sc_data, method = "GlobalPanel", customPath = NULL, corM
         projection = as.data.frame(projection)
     }
     
-    ### Return projection result
+    # Assign projection result to RCA object
+    rca.obj$projection.data <- projection
     
-    return(projection)
+    ### Return RCA object
+    
+    return(rca.obj)
 }

@@ -1,13 +1,16 @@
 #' Log-transform and normalise data by sequencing depth
 #'
-#' @param data data matrix (genes x cells)
-#' @return log-normalised data matrix
+#' @param rca.obj RCA object.
+#' @return RCA object.
 #' @export
 #' @examples
 #'
 #' logNormData = dataLogNormalize(data);
 #'
-dataLogNormalise <- function(data) {
+dataLogNormalise <- function(rca.obj) {
+    
+    # Extract data from RCA object
+    data <- rca.obj$data
     
     # Compute sequencing depth vector
     seqDepthVec <- colSums(data)
@@ -20,6 +23,9 @@ dataLogNormalise <- function(data) {
     # Log-transform normalised data
     logNorm.data <- log(1+norm.data)
     
+    # Store log-transformed normalised data in RCA object
+    rca.obj$data <- logNorm.data
+    
     # Return log-normalised data
-    return(logNorm.data)
+    return(rca.obj)
 }

@@ -1,7 +1,6 @@
 #' Plot heatmap of projection to the RCA panel
 #'
-#' @param projection data matrix (genes x cells)
-#' @param clusterColorList list of cluster colour annotations
+#' @param rca.obj RCA object
 #' @param cellPropertyList list of cell properties to plot
 #' @param folderpath path to save heatmap to
 #' @param filename file name of saved heatmap
@@ -11,7 +10,11 @@
 #' plotRCAUMAP(rca_projection, cellTree, dynamicColorsList, nGeneList, folderpath = ".", filename = "RCA_Heatmap.pdf")
 #'
 
-plotRCAUMAP <- function(projection, clusterColorList = NULL, cellPropertyList = NULL, folderpath = ".", filename = "RCA_UMAP.pdf") {
+plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_UMAP.pdf") {
+    
+    ### Extract projection data from RCA object
+    projection = rca.obj$projection.data
+    clusterColorList = rca.obj$clustering.out$dynamicColorsList
     
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
     # umap

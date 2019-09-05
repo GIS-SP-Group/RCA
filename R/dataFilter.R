@@ -1,17 +1,20 @@
 #' @objective To filter the dataset and remove genes and cells that could be of poor quality using user-defined thresholds
 #'
-#' @param data data matrix (genes x cells)
+#' @param rca.obj RCA object.
 #' @param nGene.thresholds numeric vector with lower and upper nGene thresholds
 #' @param nUMI.thresholds numeric vector with lower and upper nUMI thresholds
 #' @param percent.mito.thresholds numeric vector with lower and upper pMito thresholds
 #' @param min.cell.exp minimum number of cells a gene must be expressed in
-#' @return filtered data matrix
+#' @return RCA object.
 #' @export
 #' @examples
 #'
 #' data_obj = dataFilter(data, nGene.thresholds = c(100, Inf), nUMI.thresholds = c(1000, Inf), percent.mito.thresholds = c(0.0, 0.2), min.cell.exp = 10);
 #'
-dataFilter <- function(data, nGene.thresholds = c(100, NULL), nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0.0, 0.2), min.cell.exp = 0.001*ncol(data)) {
+dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0.0, 0.2), min.cell.exp = 10) {
+    
+    # Extract data from RCA object
+    data <- rca.obj$raw.data
     
     if(class(data) == "dgCMatrix")
         data = as.matrix(data)
@@ -103,8 +106,8 @@ dataFilter <- function(data, nGene.thresholds = c(100, NULL), nUMI.thresholds = 
     filt.cells <- intersect(intersect(nGene.filt.cells, nUMI.filt.cells), pMito.filt.cells)
     
     # Combine results from cell and gene filtering
-    filt.data <- data[filt.genes, filt.cells]
+    rca.obj$data <- data[filt.genes, filt.cells]
     
     # Return
-    return(filt.data)
+    return(rca.obj)
 }
