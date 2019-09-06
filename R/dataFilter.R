@@ -5,10 +5,27 @@
 #' @param nUMI.thresholds numeric vector with lower and upper nUMI thresholds
 #' @param percent.mito.thresholds numeric vector with lower and upper pMito thresholds
 #' @param min.cell.exp minimum number of cells a gene must be expressed in
+#' @param plot boolean - if True, plot data filter metrics
+#' @param folderpath path to save data filter metric plots to
+#' @param filename file name of saved plots
 #' @return RCA object.
 #' @export
 #'
-dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0.0, 0.2), min.cell.exp = 10) {
+dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0.0, 0.2), min.cell.exp = 200, plot = T, folderpath = ".", filename = "RCA_Filter.pdf") {
+
+    # Packages for plotting, if plot is True
+    if (plot) {
+
+        # ggplot2
+        if (!require(ggplot2))
+            install.packages("ggplot2", repos = "http://cran.us.r-project.org")
+        require(ggplot2)
+
+        # gridExtra
+        if (!require(gridExtra))
+            install.packages("gridExtra", repos = "http://cran.us.r-project.org")
+        require(gridExtra)
+    }
 
     # Extract data from RCA object
     data <- rca.obj$raw.data
@@ -24,9 +41,22 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
         geneExpVec <- rowSums(data>0)
         filt.genes <- rownames(data)[which(geneExpVec > min.cell.exp)]
 
+        # If plot is True
+        if(plot) {
+
+            # Create data frame for plot
+            geneExpDf <- data.frame(Num_Cells = geneExpVec)
+
+            # Create histogram of gene expression in number of cells
+            geneExpHistPlot <- ggplot(geneExpDf, aes(x=Num_Cells)) +
+                geom_histogram(binwidth = 100, color = "black", fill = "white") + theme_bw() + ylab(label = "Number of genes expressed in Num_Cells") + geom_vline(aes(xintercept = min.cell.exp), color = "red", linetype="dashed", size=1.2) + ggtitle("Histogram of gene expression in number of cells")
+        }
+
     } else {
         filt.genes <- rownames(data)
     }
+
+
 
     ### Cell filter - nGene ###
 
@@ -101,6 +131,69 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
 
     # Select only the cells that satisfy all 3 cell filtering criteria
     filt.cells <- intersect(intersect(nGene.filt.cells, nUMI.filt.cells), pMito.filt.cells)
+
+    # If plot is True
+    if(plot) {
+
+        # Create dataframe for 3D plot
+        cellFiltDf <- data.frame(nGene = nGeneVec, nUMI = nUMIVec, pMito = pMitoVec)
+        cellFiltDf$isFilt <- ifelse(test = rownames(cellFiltDf) %in% filt.cells, yes = "Filtered", no = "Discarded")
+
+        # Colors for scatter plot
+        colors <- c("grey", "black")
+
+        # Create 2D plots for all pairwise combinations of nGene, nUMI and pMito
+
+        # nGene x pMito
+
+        # Create threshold lines
+        nGene.thres.lines <- lapply(nGene.thresholds, function(thres){
+            geom_vline(aes(xintercept = thres), color = "red", linetype="dashed", size=1)
+        })
+
+        pMito.thres.lines <- lapply(percent.mito.thresholds, function(thres){
+            geom_hline(aes(yintercept = thres), color = "red", linetype="dashed", size=1)
+        })
+
+        # Create plot
+        nGene_pMito_plot <- ggplot(data = cellFiltDf, aes(x = nGene, y = pMito, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nGene.thres.lines + pMito.thres.lines + theme_bw() + ggtitle("Scatterplot: nGene vs pMito")
+
+        # nUMI x pMito
+
+        # Create threshold lines
+        nUMI.thres.lines <- lapply(nUMI.thresholds, function(thres){
+            geom_vline(aes(xintercept = thres), color = "red", linetype="dashed", size=1)
+        })
+
+        # Create plot
+        nUMI_pMito_plot <- ggplot(data = cellFiltDf, aes(x = nUMI, y = pMito, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nUMI.thres.lines + pMito.thres.lines + theme_bw() + ggtitle("Scatterplot: nUMI vs pMito")
+
+        # nGene x nUMI
+
+        # Change nUMI threshold lines to horizontal lines
+        nUMI.thres.lines <- lapply(nUMI.thresholds, function(thres){
+            geom_hline(aes(yintercept = thres), color = "red", linetype="dashed", size=1)
+        })
+
+        # Create plot
+        nGene_nUMI_plot <- ggplot(data = cellFiltDf, aes(x = nGene, y = nUMI, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nGene.thres.lines + nUMI.thres.lines + theme_bw() + ggtitle("Scatterplot: nGene vs nUMI")
+
+        pdf(file = paste0(folderpath,"/",filename), width = 10, height = 10)
+
+        # If gene filtering is implemented
+        if(!is.null(min.cell.exp)) {
+
+            # Arrange plots including histogram of gene expression
+            grid.arrange(geneExpHistPlot, nGene_pMito_plot, nUMI_pMito_plot, nGene_nUMI_plot, nrow = 2)
+        } else {
+
+            # Arrange scatter plots only
+            grid.arrange(nGene_pMito_plot, nUMI_pMito_plot, nGene_nUMI_plot, nrow = 2)
+        }
+
+        # Save plot
+        dev.off()
+    }
 
     # Combine results from cell and gene filtering
     rca.obj$data <- data[filt.genes, filt.cells]

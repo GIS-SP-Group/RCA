@@ -6,7 +6,8 @@
 \usage{
 dataFilter(rca.obj, nGene.thresholds = c(100, NULL),
   nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0, 0.2),
-  min.cell.exp = 10)
+  min.cell.exp = 200, plot = T, folderpath = ".",
+  filename = "RCA_Filter.pdf")
 }
 \arguments{
 \item{rca.obj}{RCA object.}
@@ -18,6 +19,12 @@ dataFilter(rca.obj, nGene.thresholds = c(100, NULL),
 \item{percent.mito.thresholds}{numeric vector with lower and upper pMito thresholds}
 
 \item{min.cell.exp}{minimum number of cells a gene must be expressed in}
+
+\item{plot}{boolean - if True, plot data filter metrics}
+
+\item{folderpath}{path to save data filter metric plots to}
+
+\item{filename}{file name of saved plots}
 }
 \value{
 RCA object.
