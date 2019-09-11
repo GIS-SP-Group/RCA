@@ -196,7 +196,7 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
     }
 
     # Combine results from cell and gene filtering
-    rca.obj$data <- data[filt.genes, filt.cells]
+    rca.obj$data <- as(data[filt.genes, filt.cells], "dgCMatrix")
 
     # Return
     return(rca.obj)

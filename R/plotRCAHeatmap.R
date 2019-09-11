@@ -10,7 +10,7 @@
 plotRCAHeatmap <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_Heatmap.pdf") {
 
     ### Extract projection data and clustering result from RCA object
-    projection = rca.obj$projection.data
+    projection = as.matrix(rca.obj$projection.data)
     cellTree = rca.obj$clustering.out$cellTree
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
 

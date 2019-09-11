@@ -10,7 +10,7 @@
 plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_UMAP.pdf") {
 
     ### Extract projection data from RCA object
-    projection = rca.obj$projection.data
+    projection = as.matrix(rca.obj$projection.data)
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
 
     ### Check if package dependencies are available; if not, download from CRAN and require those packages

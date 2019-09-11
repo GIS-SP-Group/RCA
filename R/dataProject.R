@@ -113,7 +113,7 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
         }
 
         # Store projection result of custom panel as data frame
-        projection = as.data.frame(projection)
+        projection = as(projection, "dgCMatrix")
     }
 
     # Assign projection result to RCA object

@@ -22,7 +22,7 @@ dataLogNormalise <- function(rca.obj) {
     logNorm.data <- log(1+norm.data)
 
     # Store log-transformed normalised data in RCA object
-    rca.obj$data <- logNorm.data
+    rca.obj$data <- as(logNorm.data, "dgCMatrix")
 
     # Return log-normalised data
     return(rca.obj)
