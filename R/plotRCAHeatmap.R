@@ -1,8 +1,6 @@
 #' Plot heatmap of projection to the RCA panel
 #'
 #' @param rca.obj data matrix (genes x cells)
-#' @param cellTree object of class "hclust" or "dendrogram" indicating clustering result
-#' @param clusterColorList list of cluster colour annotations
 #' @param cellPropertyList list of cell properties to plot
 #' @param folderpath path to save heatmap to
 #' @param filename file name of saved heatmap

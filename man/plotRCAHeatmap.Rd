@@ -15,10 +15,6 @@ plotRCAHeatmap(rca.obj, cellPropertyList = NULL, folderpath = ".",
 \item{folderpath}{path to save heatmap to}
 
 \item{filename}{file name of saved heatmap}
-
-\item{cellTree}{object of class "hclust" or "dendrogram" indicating clustering result}
-
-\item{clusterColorList}{list of cluster colour annotations}
 }
 \description{
 Plot heatmap of projection to the RCA panel

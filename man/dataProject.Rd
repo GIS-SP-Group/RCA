@@ -10,15 +10,15 @@ dataProject(rca.obj, method = "GlobalPanel", customPath = NULL,
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{method:}{Either "GlobalPanel"(default), "ColonEpitheliumPanel", or "Custom"}
+\item{method}{Either "GlobalPanel"(default), "ColonEpitheliumPanel", or "Custom"}
 
-\item{customPath:}{directory path (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".}
+\item{customPath}{directory path (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".}
 
-\item{corMeth:}{Any of the correlation measures supported by R, defaults to pearson}
+\item{corMeth}{Any of the correlation measures supported by R, defaults to pearson}
 
-\item{power:}{power to raise up to for the RCA features before clustering, default is 4}
+\item{power}{power to raise up to for the RCA features before clustering, default is 4}
 
-\item{scale:}{True if the data should be scaled, False otherwise}
+\item{scale}{True if the data should be scaled, False otherwise}
 }
 \value{
 RCA object.

@@ -2,16 +2,16 @@
 % Please edit documentation in R/createRCAObject.R
 \name{createRCAObject}
 \alias{createRCAObject}
-\title{Create Reference Class}
+\title{Create RCA object}
 \usage{
-createRCAObject(raw_data)
+createRCAObject(rawData)
 }
 \arguments{
-\item{raw_data}{A matrix of expression values}
+\item{rawData}{A matrix of expression values}
 }
 \value{
 RCA object.
 }
 \description{
-Create Reference Class
+Create RCA object
 }

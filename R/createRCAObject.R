@@ -1,13 +1,13 @@
-#' Create Reference Class
+#' Create RCA object
 #'
-#' @param raw_data A matrix of expression values
+#' @param rawData A matrix of expression values
 #' @return RCA object.
 #' @export
 #'
-createRCAObject <- function(raw_data) {
+createRCAObject <- function(rawData) {
 
     # Create RCA object using RCAConstruct and the raw data provided
-    rca.obj <- RCAConstruct$new(raw.data = raw_data, data = raw_data)
+    rca.obj <- RCAConstruct$new(raw.data = rawData, data = rawData)
 
     # Return RCA object
     return(rca.obj)
