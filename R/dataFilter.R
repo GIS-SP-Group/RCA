@@ -11,7 +11,7 @@
 #' @return RCA object.
 #' @export
 #'
-dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0.0, 0.2), min.cell.exp = 200, plot = T, folderpath = ".", filename = "RCA_Filter.pdf") {
+dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0.0, 0.2), min.cell.exp = 10, plot = T, folderpath = ".", filename = "RCA_Filter.pdf") {
 
     # Packages for plotting, if plot is True
     if (plot) {
@@ -30,15 +30,12 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
     # Extract data from RCA object
     data <- rca.obj$raw.data
 
-    if(class(data) == "dgCMatrix")
-        data = as.matrix(data)
-
     ### Gene filter ###
 
     if(!is.null(min.cell.exp)) {
 
         # Select genes with expression in a minimum number of cells
-        geneExpVec <- rowSums(data>0)
+        geneExpVec <- Matrix::rowSums(data>0)
         filt.genes <- rownames(data)[which(geneExpVec > min.cell.exp)]
 
         # If plot is True
@@ -66,7 +63,7 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
     if(!is.null(nGene.thresholds)) {
 
         # Compute nGene vector
-        nGeneVec <- colSums(data>0)
+        nGeneVec <- Matrix::colSums(data>0)
 
         if(is.numeric(nGene.thresholds) & (length(nGene.thresholds) == 2)) {
 
@@ -87,7 +84,7 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
     if(!is.null(nUMI.thresholds)) {
 
         # Compute nUMI vector
-        nUMIVec <- colSums(data)
+        nUMIVec <- Matrix::colSums(data)
 
         if(is.numeric(nUMI.thresholds) & (length(nUMI.thresholds) == 2)) {
 
@@ -111,7 +108,7 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
         mito.genes = grep(pattern = "^MT-", x = rownames(data), value = T)
 
         # Compute percent.mito vector
-        pMitoVec <- colSums(data[mito.genes, ])/colSums(data)
+        pMitoVec <- Matrix::colSums(data[mito.genes, ])/Matrix::colSums(data)
 
 
         if(is.numeric(percent.mito.thresholds) & (length(percent.mito.thresholds) == 2)) {

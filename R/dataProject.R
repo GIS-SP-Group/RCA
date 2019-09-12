@@ -45,7 +45,17 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
             subset_panel[subset_panel <= (ReferencePanel$at)[i]] = (ReferencePanel$at)[i]
 
             # Compute projection of input data with the panel fragment
-            projection_fragment <- cor(subset_panel, subset_data, method = corMeth)
+            if(corMeth == "pearson") {
+                subset_panel = as.matrix(subset_panel)
+                projection_fragment <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
+            } else {
+                projection_fragment <- cor(subset_panel, subset_data, method = corMeth)
+            }
+
+
+            # Reattach dimnames
+            colnames(projection_fragment) <- colnames(subset_data)
+            rownames(projection_fragment) <- colnames(subset_panel)
 
             # Raise the projection fragment to power
             projection_fragment = abs(projection_fragment) ^ (power) * sign(projection_fragment)
@@ -98,7 +108,12 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
         subset_data = sc_data[shared_genes, , drop = FALSE]
 
         # Compute projection of input data with the panel
-        projection <- cor(subset_panel, subset_data, method = corMeth)
+        if(corMeth == "pearson") {
+            subset_panel = as.matrix(subset_panel)
+            projection <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
+        } else {
+            projection <- cor(subset_panel, subset_data, method = corMeth)
+        }
 
         # Raise the projection to power
         projection = abs(projection) ^ (power) * sign(projection)
@@ -111,10 +126,11 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
                                center = TRUE,
                                scale = TRUE)
         }
-
-        # Store projection result of custom panel as data frame
-        projection = as(projection, "dgCMatrix")
     }
+
+    # Store projection result as Matrix
+    projection = as.matrix(projection)
+    projection = as(projection, "dgCMatrix")
 
     # Assign projection result to RCA object
     rca.obj$projection.data <- projection

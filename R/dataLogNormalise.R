@@ -10,7 +10,7 @@ dataLogNormalise <- function(rca.obj) {
     data <- rca.obj$data
 
     # Compute sequencing depth vector
-    seqDepthVec <- colSums(data)
+    seqDepthVec <- Matrix::colSums(data)
 
     # Normalise data by cell
     norm.data <- sapply(seq_along(seqDepthVec), function(index) {

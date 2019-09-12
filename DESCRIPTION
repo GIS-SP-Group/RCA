@@ -8,5 +8,6 @@ Description: RCA correlates single-cell gene expression data with bulk reference
 License: MIT
 Encoding: UTF-8
 LazyData: true
-Imports: BiocManager, impute, preprocessCore, GO.db, fastcluster, WGCNA, dplyr, ComplexHeatmap, circlize, umap, ggplot2, Hmisc, Matrix, methods
+Imports: BiocManager, qlcMatrix, impute, preprocessCore, GO.db, fastcluster, WGCNA, dplyr, ComplexHeatmap, circlize, umap, ggplot2, Hmisc, Matrix, methods
+Depends: Matrix
 RoxygenNote: 6.1.1

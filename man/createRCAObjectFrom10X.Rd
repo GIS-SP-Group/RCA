@@ -4,12 +4,15 @@
 \alias{createRCAObjectFrom10X}
 \title{Create RCA Object from 10X data}
 \usage{
-createRCAObjectFrom10X(dataDir, cellrangerVersion = 3)
+createRCAObjectFrom10X(dataDir, cellrangerVersion = 3,
+  min.barcode.umi = 100)
 }
 \arguments{
 \item{dataDir}{Directory containing 10X data}
 
 \item{cellrangerVersion}{Version of cellranger used to generate data. Default is 3.0.}
+
+\item{min.barcode.umi}{Minimum UMIs needed for a barcode to be considered. Default is 100.}
 }
 \value{
 RCA object.

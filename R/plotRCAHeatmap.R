@@ -10,7 +10,7 @@
 plotRCAHeatmap <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_Heatmap.pdf") {
 
     ### Extract projection data and clustering result from RCA object
-    projection = as.matrix(rca.obj$projection.data)
+    heatmapIn = as.matrix(rca.obj$projection.data)
     cellTree = rca.obj$clustering.out$cellTree
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
 
@@ -24,9 +24,6 @@ plotRCAHeatmap <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", f
     if (!require(circlize))
         install.packages("circlize", repos = "http://cran.us.r-project.org")
     require(circlize)
-
-    # Initialize heatmap input
-    heatmapIn <- projection
 
     # Set color scheme of heatmap
     colorScheme <-

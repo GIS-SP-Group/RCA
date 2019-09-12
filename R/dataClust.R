@@ -9,7 +9,7 @@
 dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
 
     ### Extract projection data
-    projection.data <- rca.obj$projection.data
+    projection.data <- as.matrix(rca.obj$projection.data)
     ### Load packages
 
     # fastcluster
