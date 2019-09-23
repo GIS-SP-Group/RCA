@@ -114,6 +114,8 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
         } else {
             projection <- cor(subset_panel, subset_data, method = corMeth)
         }
+        rownames(projection) <- colnames(subset_panel)
+        colnames(projection) <- colnames(subset_data)
 
         # Raise the projection to power
         projection = abs(projection) ^ (power) * sign(projection)
