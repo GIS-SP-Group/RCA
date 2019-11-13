@@ -9,4 +9,4 @@ RCAConstruct <- setRefClass(Class = "RCA",
 					  clustering.out = "list"))
 
 RCAConstruct$methods(show=function(){dataSize=dim(raw.data);
-		     print(paste0("RCA reference class object (version 2.0) holding ",dataSize[2]," cells and ",dataSize[1],"features."))})
+		     print(paste0("RCA reference class object (version 2.0) holding ",dataSize[2]," cells and ",dataSize[1]," features in the raw data field."))})
