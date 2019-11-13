@@ -42,7 +42,7 @@ The current release of RCA requires the following packages to be available on yo
 * umap
 * ggpubr
 
-All missing CRAN-packages can be automatically installed during the RCA installation.
+All missing CRAN-packages can be *automatically installed* during the RCA installation.
 Note that the *HiClimR* package is optional, it allows to speed up the computationally expensive steps.
 
 ### Load the package
@@ -60,19 +60,18 @@ library("RCAv2")
 
 ## FAQ
 What is the difference between the original RCA version (Li et al., Nat Genet, 2017) and RCA version 2?
-*Answer here*
+*RCA version 2 improves upon version 1 in terms of performance, applicability, functionality and usability. We reimplented the algorithm more efficiently and use faster packages. We considerably extended the included reference data sets and provide new ways of cluster free cell type annotation for large data sets. Also the automated generation of Figures has been improved to scale better with the size of current data sets.*
 
 The clustering is very slow (or it doesn't work at all), what can I do?
-*Answer here*
+*First make sure you are indeed using RCA version 2. Secondly you may check whether you can install the HiClimR package for more a more memory efficient clustering algorithm. Also consider to run RCA on a compute cluster or in the cloud using a machine with large main memory. For very big data sets, consider to omit the clustering and use the z-score based cell-type annotation and UMAP coloring introduced with RCA version 2.*
 
 The cell-type I am interested in are not part of the provided panels, can I generate and use my own reference data set in RCA?
-*Answer here*
-
-Why is RCA currently available only in R?
-*Answer here*
+*Yes you can. Any custom panel can be considered in RCA:*
+**ADD CODE EXAMPLE**
 
 I do not have 10X data, can I just use a count matrix as input for RCA?
-*Answer here*
+*Yes, that is possible as well. You can generate a RCA object from a custom count matrix using*
+**ADD CODE EXAMPLE**
 
-How to cite RCA?
+How to cite RCA version 2?
 *Answer here*
