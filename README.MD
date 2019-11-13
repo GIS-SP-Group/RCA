@@ -62,14 +62,35 @@ PBMCs<-RCAv2::createRCAObjectFrom10X("10xPBMCs/")
 
 The resulting RCA object has its own print function providing basic information on the data
 ```{r}
-print(PBMCs)
+PBMCs
 ```
-
-	Reference class object of class "RCA"
-	Field "raw.data":
-	33570 x 5247 sparse Matrix of class "dgTMatrix"
+	RCA reference class object (version 2.0) holding 5247 cells and 33570 features in the raw data field.
 
 ### Perform basic QC steps and data normalization
+Quality control can performed directly within RCA. We use the command
+
+```{r}
+PBMCs<-RCAv2::dataFilter(PBMCs,
+                  nGene.thresholds = c(300,5000), 
+                  nUMI.thresholds = c(400,30000),
+                  percent.mito.thresholds = c(0.025,0.2),
+                  min.cell.exp = 10,
+                  plot=T,
+                  filename = "PBMCs_filter_example.pdf")
+```
+
+to filter the raw data according to
+* the number of detected genes (*nGene.thresholds*)
+* the number of unique molecular identifiers (*nUMI.thresholds*)
+* the percentage of mitochondrial reads (*percent.mito.thresholds*)
+* the minimum number of cells any gene needs to be expressed (*min.cell.exp*)
+
+
+For easy interpretation of the data, the *dataFilter* function automatically generates a graphical representation of various QC metrics, stored in the specified file. 
+
+**ADD PBMC FIGURE**
+
+Plotting can be disabled using the *plot* option.
 
 ### Compute a projection to a (custom) reference data set
 
@@ -77,7 +98,7 @@ print(PBMCs)
 ## FAQ
 **What is the difference between the original RCA version (Li et al., Nat Genet, 2017) and RCA version 2?**
 
-*RCA version 2 improves upon version 1 in terms of performance, applicability, functionality and usability. We reimplented the algorithm more efficiently and use faster packages. We considerably extended the included reference data sets and provide new ways of cluster free cell type annotation for large data sets. Also the automated generation of Figures has been improved to scale better with the size of current data sets.*
+*RCA version 2 improves upon version 1 in terms of performance, applicability, functionality and usability. We reimplented the algorithm more efficiently and use faster packages. We considerably extended the included reference data sets and provide new ways of cluster free cell type annotation for large data sets. Also the automated generation of figures has been improved to scale better with the size of current data sets.*
 
 **The clustering is very slow (or it doesn't work at all), what can I do?**
 
