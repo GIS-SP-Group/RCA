@@ -10,13 +10,14 @@ Release date: September 3, 2019
 ## Functionality of RCA
 Features: 
 * clustering analysis of scRNAseq data from Human samples
-* two modes :
+* Provided reference panels:
   * "GlobalPanel": default option for clusterig general single cell data sets that include a wide spectrum of cell types.          
   * "ColonEpitheliumPanel": suitable for analyzing human colon/intestine derived samples.
 
 
 ## A beginner's guide to RCA
 This guide will walk you through installing RCA and will showcase a exemplary analysis of publicly available scRNA-seq data from *10X Genomics*.
+If you are using the *Seurat* R-package already and want to stick to that, we suggest you to look at the Section *Combining Seurat and RCA*. 
 
 ### Install the RCA R-package
 Before you try to install RCA make sure that your R-version is at least R 3.5.0.
@@ -88,7 +89,7 @@ to filter the raw data according to
 * the minimum number of cells any gene needs to be expressed (*min.cell.exp*)
 
 
-For easy interpretation of the data, the *dataFilter* function automatically generates a graphical representation of various QC metrics, stored in the specified file. 
+For easy interpretation of the data, the *dataFilter* function automatically generates a graphical representation of various QC metrics: 
 
 ![](Tutorial/QC_Example.png)
 
@@ -106,8 +107,49 @@ tells us that the RCA object now holds both the intial unfiltered data as well a
 	Raw data: 5247 cells and 33570 features.
 	Filtered data: 4973 cells and 17120 features.
 
-### Compute a projection to a (custom) reference data set
+Upon filtering, we can normalize the data by sequencing depth and log transform it:
 
+```{r}
+PBMCs<-RCAv2::dataLogNormalise(PBMCs)
+```
+
+### Compute a projection to a reference data sets
+To project the single-cell RNA-seq data against a reference, we use the *dataProject* function:
+
+```{r}
+PBMCs<-RCAv2::dataProject(PBMCs,
+                     method = "GlobalPanel",
+                     corMeth = "pearson")
+```
+
+The method parameter specifies the reference panel to be used. In this example, we use the *GlobalPanel* which is the original RCA panel used by Li et al. (Nat Genet, 2017).
+The correlation with the reference panel and the single-cell data is assessed using Pearson correlation, as indiciated by the *corMeth* option.
+Upon calling the *dataProject* function, the PBMCs object has been extended:
+
+```{r}
+PBMCs
+```
+
+	RCA reference class object
+	Raw data: 5247 cells and 33570 features.
+	Filtered data: 4973 cells and 17120 features.
+	Projection data: 4973 cells to 179 cell-types
+
+RCAv2 directly allows the user to utilize any custom panel. A user generated panel **has to** have a distinct structure:
+* the panel has to be a R *data.frame* that is stored in *RDS* format,
+* row names of the *data.frame* are gene names that match the gene names present in the RNA-seq data,
+* column names of *data.frame* are cell-type/tissue names,
+
+To use the custom panel *MyPanel.RDS* use the following command: 
+
+```{r}
+PBMCs<-RCAv2::dataProject(PBMCs,
+                     method = "Custom",
+		     customPath = "MyPanel.RDS",
+                     corMeth = "pearson")
+```
+
+## Combining RCA with Seurat
 
 ## FAQ
 **What is the difference between the original RCA version (Li et al., Nat Genet, 2017) and RCA version 2?**
