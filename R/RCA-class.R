@@ -8,5 +8,21 @@ RCAConstruct <- setRefClass(Class = "RCA",
 					  projection.data = "Matrix", 
 					  clustering.out = "list"))
 
-RCAConstruct$methods(show=function(){dataSize=dim(raw.data);
-		     print(paste0("RCA reference class object (version 2.0) holding ",dataSize[2]," cells and ",dataSize[1]," features in the raw data field."))})
+RCAConstruct$methods(show=function(){
+		     print("RCA reference class object")
+		     if (!(is.null(raw.data))){
+			     dataSize=dim(raw.data);
+			     print(paste0("Raw data: ",dataSize[2]," cells and ",dataSize[1]," features."))}
+			    }
+                     if (!(is.null(data))){
+		     dataSize=dim(data);
+			     print(paste0("Filtered data: ",dataSize[2]," cells and ",dataSize[1]," features."))}
+	
+		     if (!(is.null(projection.data))){
+		     dataSize=dim(projection.data);
+			     print(paste0("Projection data: ",dataSize[2]," cells to ",dataSize[1]," cell-types."))}
+		     
+		     
+		     )
+
+		      
