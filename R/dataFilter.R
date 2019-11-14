@@ -38,17 +38,6 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
         geneExpVec <- Matrix::rowSums(data>0)
         filt.genes <- rownames(data)[which(geneExpVec > min.cell.exp)]
 
-        # If plot is True
-        if(plot) {
-
-            # Create data frame for plot
-            geneExpDf <- data.frame(Num_Cells = geneExpVec)
-
-            # Create histogram of gene expression in number of cells
-            geneExpHistPlot <- ggplot(geneExpDf, aes(x=Num_Cells)) +
-                geom_histogram(binwidth = 100, color = "black", fill = "white") + theme_bw() + ylab(label = "Number of genes expressed in Num_Cells") + geom_vline(aes(xintercept = min.cell.exp), color = "red", linetype="dashed", size=1.2) + ggtitle("Histogram of gene expression in number of cells")
-        }
-
     } else {
         filt.genes <- rownames(data)
     }
@@ -134,7 +123,7 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
 
         # Create dataframe for 3D plot
         cellFiltDf <- data.frame(nGene = nGeneVec, nUMI = nUMIVec, pMito = pMitoVec)
-        cellFiltDf$isFilt <- ifelse(test = rownames(cellFiltDf) %in% filt.cells, yes = "Filtered", no = "Discarded")
+        cellFiltDf$isFilt <- ifelse(test = rownames(cellFiltDf) %in% filt.cells, yes = "Retained", no = "Discarded")
 
         # Colors for scatter plot
         colors <- c("grey", "black")
@@ -153,7 +142,7 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
         })
 
         # Create plot
-        nGene_pMito_plot <- ggplot(data = cellFiltDf, aes(x = nGene, y = pMito, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nGene.thres.lines + pMito.thres.lines + theme_bw() + ggtitle("Scatterplot: nGene vs pMito")
+        nGene_pMito_plot <- ggplot(data = cellFiltDf, aes(x = nGene, y = pMito, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nGene.thres.lines + pMito.thres.lines + theme_bw() + ggtitle("a) nGene vs pMito")+theme(legend.position="none")
 
         # nUMI x pMito
 
@@ -163,7 +152,7 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
         })
 
         # Create plot
-        nUMI_pMito_plot <- ggplot(data = cellFiltDf, aes(x = nUMI, y = pMito, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nUMI.thres.lines + pMito.thres.lines + theme_bw() + ggtitle("Scatterplot: nUMI vs pMito")
+        nUMI_pMito_plot <- ggplot(data = cellFiltDf, aes(x = nUMI, y = pMito, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nUMI.thres.lines + pMito.thres.lines + theme_bw() + ggtitle("b) nUMI vs pMito")+theme(legend.position="none")
 
         # nGene x nUMI
 
@@ -173,20 +162,12 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
         })
 
         # Create plot
-        nGene_nUMI_plot <- ggplot(data = cellFiltDf, aes(x = nGene, y = nUMI, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nGene.thres.lines + nUMI.thres.lines + theme_bw() + ggtitle("Scatterplot: nGene vs nUMI")
+        nGene_nUMI_plot <- ggplot(data = cellFiltDf, aes(x = nGene, y = nUMI, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nGene.thres.lines + nUMI.thres.lines + theme_bw() + ggtitle("c) nGene vs nUMI")+theme(legend.position="right")+theme(legend.key.height=unit(1.5,"cm"))
 
         pdf(file = paste0(folderpath,"/",filename), width = 10, height = 10)
 
-        # If gene filtering is implemented
-        if(!is.null(min.cell.exp)) {
-
-            # Arrange plots including histogram of gene expression
-            grid.arrange(geneExpHistPlot, nGene_pMito_plot, nUMI_pMito_plot, nGene_nUMI_plot, nrow = 2)
-        } else {
-
-            # Arrange scatter plots only
-            grid.arrange(nGene_pMito_plot, nUMI_pMito_plot, nGene_nUMI_plot, nrow = 2)
-        }
+        # Arrange scatter plots
+        grid.arrange(nGene_pMito_plot, nUMI_pMito_plot, nGene_nUMI_plot, nrow = 1,widths=c(1,1,1.2))
 
         # Save plot
         dev.off()

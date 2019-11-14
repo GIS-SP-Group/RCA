@@ -74,7 +74,7 @@ PBMCs<-RCAv2::dataFilter(PBMCs,
                   nGene.thresholds = c(300,5000), 
                   nUMI.thresholds = c(400,30000),
                   percent.mito.thresholds = c(0.025,0.2),
-                  min.cell.exp = 10,
+                  min.cell.exp = 3,
                   plot=T,
                   filename = "PBMCs_filter_example.pdf")
 ```
@@ -91,6 +91,15 @@ For easy interpretation of the data, the *dataFilter* function automatically gen
 **ADD PBMC FIGURE**
 
 Plotting can be disabled using the *plot* option.
+
+Interrogating the R-object with
+
+```{r}
+PBMCs
+```
+
+tells us that the RCA object now holds both the intial unfiltered data as well as the data after QC.
+
 
 ### Compute a projection to a (custom) reference data set
 
