@@ -162,12 +162,12 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
         })
 
         # Create plot
-        nGene_nUMI_plot <- ggplot(data = cellFiltDf, aes(x = nGene, y = nUMI, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nGene.thres.lines + nUMI.thres.lines + theme_bw() + ggtitle("c) nGene vs nUMI")+theme(legend.position="right")+theme(legend.key.height=unit(1.5,"cm"))
+        nGene_nUMI_plot <- ggplot(data = cellFiltDf, aes(x = nGene, y = nUMI, colour = cellFiltDf$isFilt)) + geom_point(size = 1) + geom_jitter() + scale_color_manual(values = colors) + nGene.thres.lines + nUMI.thres.lines + theme_bw() + ggtitle("c) nGene vs nUMI")+theme(legend.position="right")+theme(legend.key.height=unit(1.5,"cm"))+labs(colour="")
 
-        pdf(file = paste0(folderpath,"/",filename), width = 10, height = 10)
+        pdf(file = paste0(folderpath,"/",filename), width = 15, height = 5)
 
         # Arrange scatter plots
-        grid.arrange(nGene_pMito_plot, nUMI_pMito_plot, nGene_nUMI_plot, nrow = 1,widths=c(1,1,1.2))
+        grid.arrange(nGene_pMito_plot, nUMI_pMito_plot, nGene_nUMI_plot, nrow = 1,widths=c(1,1,1.3))
 
         # Save plot
         dev.off()
