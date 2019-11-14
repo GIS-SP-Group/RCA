@@ -64,7 +64,9 @@ The resulting RCA object has its own print function providing basic information 
 ```{r}
 PBMCs
 ```
-	RCA reference class object (version 2.0) holding 5247 cells and 33570 features in the raw data field.
+
+	RCA reference class object
+	Raw data: 5247 cells and 33570 features.
 
 ### Perform basic QC steps and data normalization
 Quality control can performed directly within RCA. We use the command
@@ -100,6 +102,9 @@ PBMCs
 
 tells us that the RCA object now holds both the intial unfiltered data as well as the data after QC.
 
+	RCA reference class object
+	Raw data: 5247 cells and 33570 features.
+	Filtered data: 4973 cells and 17120 features.
 
 ### Compute a projection to a (custom) reference data set
 
