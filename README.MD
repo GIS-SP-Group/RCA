@@ -88,7 +88,7 @@ to filter the raw data according to
 
 For easy interpretation of the data, the *dataFilter* function automatically generates a graphical representation of various QC metrics, stored in the specified file. 
 
-**ADD PBMC FIGURE**
+![](Tutorial/QC_Example.png)
 
 Plotting can be disabled using the *plot* option.
 
