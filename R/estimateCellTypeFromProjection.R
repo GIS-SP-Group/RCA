@@ -26,10 +26,10 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL) {
 
 
 
-    cellTypes<-c()
+    cellTypes<-list()
     for (i in c(1:dim(rca.obj$projection.data)[2])){
-    	  if (confidence == NULL){
-          cellTypesWU<-c(cellTypesWU,cTIdfWU(rca.obj$projection.data[,i]))
+    	  if (is.null(confidence)){
+          cellTypes<-c(cellTypes,cTIdfWU(rca.obj$projection.data[,i]))
 	  }
 	  else{
 	  cellTypes<-c(cellTypes,cTIdf(rca.obj$projection.data[,i],confidence))
