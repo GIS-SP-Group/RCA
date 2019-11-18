@@ -18,7 +18,7 @@ Features:
 ## A beginner's guide to RCA
 This guide will walk you through installing RCA and will showcase a exemplary analysis of publicly available scRNA-seq data from *10X Genomics*.
 If you are using the *Seurat* R-package already and want to stick to that, we suggest you to look at the Section *Combining Seurat and RCA*. 
-
+Further details on parameters and function of the mentioned R functions are provided in the R help
 ### Install the RCA R-package
 Before you try to install RCA make sure that your R-version is at least R 3.5.0.
 You can directly install RCA from github using the commands:
@@ -113,7 +113,7 @@ Upon filtering, we can normalize the data by sequencing depth and log transform 
 PBMCs<-RCAv2::dataLogNormalise(PBMCs)
 ```
 
-### Compute a projection to a reference data sets
+### Compute a projection to a reference data set
 To project the single-cell RNA-seq data against a reference, we use the *dataProject* function:
 
 ```{r}
@@ -149,7 +149,39 @@ PBMCs<-RCAv2::dataProject(PBMCs,
                      corMeth = "pearson")
 ```
 
+### Cluster the projection and visualize it
+The projected data can be clustered using the command:
+```{r}
+PBMCs<-RCAv2::dataClust(PBMCs)
+```
+The clustering can be influenced by the parameters *deepSplitValues* and *minClustSize*, indicating the deepness of the cut in the clustering and the minimum number of cells within a cluster, respectively. 
+
+RCA offers a heatmap plotting function using the *ComplexHeatmap* package.
+
 ## Combining RCA with Seurat
+Data processing can also be carried out with Seurat. Here is an example how you can integrate RCA with Seurat
+
+### Load and preprocess data
+Using the same 10x data as before, we generate a Seurat object.
+
+```{r}
+Add code
+```
+
+### Generate a RCA object and perform RCA analysis
+We use the RCA function *createRCAObject* to generate a RCA object from the count data stored in our Seurat object.
+
+```{r}
+Add code
+```
+
+### Add UMAP coordinates and annotations to the Seurat object
+For greater convenience the results of RCA can be saved within the Seurat object for further analysis.
+Especially keeping the UMAP coordinates is recommened for reasons for reproduciblity and efficiency.
+
+```{r}
+Add code
+```
 
 ## FAQ
 **What is the difference between the original RCA version (Li et al., Nat Genet, 2017) and RCA version 2?**
@@ -167,8 +199,7 @@ PBMCs<-RCAv2::dataProject(PBMCs,
 
 **I do not have 10X data, can I just use a count matrix as input for RCA?**
 
-*Yes, that is possible as well. You can generate a RCA object from a custom count matrix using*
-**ADD CODE EXAMPLE**
+*Yes, that is possible as well. You can generate a RCA object from a custom count matrix using. Guidelines are provided above (Compute a projection to a reference data set)*
 
 **How to cite RCA version 2?**
 

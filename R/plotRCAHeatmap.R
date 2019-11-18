@@ -67,7 +67,7 @@ plotRCAHeatmap <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", f
             column_dend_height = unit(100, "mm"),
             column_dend_reorder = FALSE,
 
-            show_column_names = TRUE,
+            show_column_names = FALSE,,
 
             show_row_names = TRUE,
             row_names_gp = gpar(fontsize = 15),
@@ -155,7 +155,7 @@ plotRCAHeatmap <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", f
             column_dend_height = unit(100, "mm"),
             column_dend_reorder = FALSE,
 
-            show_column_names = TRUE,
+            show_column_names = FALSE,,
 
             show_row_names = TRUE,
             row_names_gp = gpar(fontsize = 5),
