@@ -32,16 +32,15 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
     umap.df <- as.data.frame(umap.projection$layout)
     colnames(umap.df) <- c("UMAP1", "UMAP2")
 
-
+    umapPlots<-c()
     # If no cluster colors or cell properties are to be plotted
     if(is.null(clusterColorList) & is.null(cellPropertyList)) {
 
         # Plot UMAP of cells without annotations
         umap.plot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2)) + geom_point(size = 1.5) + theme_classic()
-
+	umapPlots<-c(umapPlots,umap.plot)
         # Save UMAP
         ggsave(filename = paste0(folderpath, "/", filename), plot = umap.plot)
-	return(umap.plot)
 
     } else {
 
@@ -62,7 +61,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
                 # Save plot
                 ggsave(filename = paste0(folderpath, "/", "ClusterColors_", clusterColorName,"_", filename), plot = umapClusterColorsPlot)
-		return(umapClusterColorsPlot)
+		umapPlots<-c(umapPlots,umapClusterColorsPlot)
 
             }
 
@@ -92,11 +91,11 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
                 # Save plot
                 ggsave(filename = paste0(folderpath, "/", "CellProperty_", CellPropertyName,"_", filename), plot = umapCellPropertyPlot)
-		return(umapCellPropertyPlot)
+		umapPlots<-c(umapPlots,umapCellPropertyPlot)
 
             }
         }
 
     }
-
+	return(umapPlots)
 }
