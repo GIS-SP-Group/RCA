@@ -1,9 +1,9 @@
-#' Plot heatmap of projection to the RCA panel
+#' Plot umap of projection to the RCA panel
 #'
 #' @param rca.obj RCA object
 #' @param cellPropertyList list of cell properties to plot
-#' @param folderpath path to save heatmap to
-#' @param filename file name of saved heatmap
+#' @param folderpath path to save umap to
+#' @param filename file name of saved umap
 #' @export
 #'
 
@@ -41,6 +41,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
         # Save UMAP
         ggsave(filename = paste0(folderpath, "/", filename), plot = umap.plot)
+	return(umap.plot)
 
     } else {
 
@@ -57,10 +58,11 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
                 umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
                 # Create the plot
-                umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[clusterColorName]])) + geom_point(size = 1.5) + scale_color_manual(values = sort(unique(umap.df[[clusterColorName]]))) + labs(colour = clusterColorName) + theme_bw() + ggtitle(label = paste("Cluster Colors", clusterColorName))
+                umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[clusterColorName]])) + geom_point(size = 1.5) + scale_color_manual(values = sort(unique(umap.df[[clusterColorName]]))) + labs(colour = clusterColorName) + theme_bw()
 
                 # Save plot
                 ggsave(filename = paste0(folderpath, "/", "ClusterColors_", clusterColorName,"_", filename), plot = umapClusterColorsPlot)
+		return(umapClusterColorsPlot)
 
             }
 
@@ -79,10 +81,18 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
                 umap.df[[CellPropertyName]] <- cellPropertyList[[index]]
 
                 # Create the plot
-                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[CellPropertyName]])) + geom_point(size = 1.5) + labs(colour = CellPropertyName) + theme_bw() + ggtitle(label = paste("Cell Property", CellPropertyName))
+		if (class(umap.df[[CellPropertyName]])=="numeric"){
+	                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[CellPropertyName]])) + geom_point(size = 1.5) + labs(colour = CellPropertyName) + theme_bw()+
+			scale_color_gradient(low="grey",high="blue")
+
+		}
+		else{
+                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[CellPropertyName]])) + geom_point(size = 1.5) + labs(colour = CellPropertyName) + theme_bw()
+		}
 
                 # Save plot
                 ggsave(filename = paste0(folderpath, "/", "CellProperty_", CellPropertyName,"_", filename), plot = umapCellPropertyPlot)
+		return(umapCellPropertyPlot)
 
             }
         }
