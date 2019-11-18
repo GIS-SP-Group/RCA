@@ -156,7 +156,57 @@ PBMCs<-RCAv2::dataClust(PBMCs)
 ```
 The clustering can be influenced by the parameters *deepSplitValues* and *minClustSize*, indicating the deepness of the cut in the clustering and the minimum number of cells within a cluster, respectively. 
 
-RCA offers a heatmap plotting function using the *ComplexHeatmap* package.
+RCA offers a heatmap plotting function using the *ComplexHeatmap* package:
+
+```{r}
+RCAv2::plotRCAHeatmap(PBMCs,filename = "Heatmap_PBMCs.pdf")
+```
+
+The heatmap can be used to manually assign cell-types based on the projection.
+
+![](Tutorial/Heatmap_Example.png)
+
+In addition to the visuzalization in the heatmap, it can make sense to look at the projection using a UMAP.
+To do so, simple use the function
+
+```{r}
+RCAv2::plotRCAUMAP(PBMCs,filename = "UMAP_PBMCs.pdf")
+```
+The *plotRCAUMAP* returns a list of *ggplot2* objects to allow for simple modification of the generated figures. 
+
+![](Tutorial/Umap_clusters_Example.png)
+
+Based on the heatmap we can relabel the clusters according to the major cell type annotations:
+```{r}
+RCAcellTypes<-PBMCs$clustering.out$dynamicColorsList[[1]]
+RCAcellTypes[which(RCAcellTypes=="blue")]<-"Monocytes"
+RCAcellTypes[which(RCAcellTypes=="green")]<-"Dendritic cells"
+RCAcellTypes[which(RCAcellTypes=="yellow")]<-"B cells"
+RCAcellTypes[which(RCAcellTypes=="grey")]<-"B cells"
+RCAcellTypes[which(RCAcellTypes=="brown")]<-"NK cells"
+RCAcellTypes[which(RCAcellTypes=="turquoise")]<-"T cells"
+RCAcellTypes[which(RCAcellTypes=="red")]<-"Myeloid cells"
+RCAcellTypes[which(RCAcellTypes=="black")]<-"Progenitor cells"
+```
+
+Also, we generate a vector holding the expression of *CD56*, a common NK cell marker. The gene name of *CD56* is NCAM1.
+
+```{r}
+CD56Exp<-PBMCs$data[which(rownames(PBMCs$data)=="NCAM1"),]
+```
+
+We can use the RCA plot function to obtain two additional UMAPs that are labelled according to the cell types and the CD56 marker:
+
+```{r}
+RCAv2::plotRCAUMAP(PBMCs,cellPropertyList = list(CellTypes=RCAcellTypes,CD56=CD56Exp),filename = "UMAP_PBMCs.pdf")
+```
+Each UMAP will be stored in a separate *pdf* where the filename indicates which element from the *cellPropertyList* is depicted in the UMAP.
+
+![](Tutorial/Umap_ct_based_clustering_Example.png)
+
+![](Tutorial/Umap_NK_marker_CD56_Example.png)
+
+For numerical data, the dots are transparent for low values to avoid overplotting issues. In our example, we can see that *CD56* expression corresponds to the NK annotation.
 
 ## Combining RCA with Seurat
 Data processing can also be carried out with Seurat. Here is an example how you can integrate RCA with Seurat
