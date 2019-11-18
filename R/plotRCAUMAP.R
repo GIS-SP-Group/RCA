@@ -38,7 +38,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
         # Plot UMAP of cells without annotations
         umap.plot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2)) + geom_point(size = .5) + theme_classic()
-	umapPlots<-c(umapPlots,umap.plot)
+	umapPlots<-c(umapPlots,list(umap.plot))
         # Save UMAP
         ggsave(filename = paste0(folderpath, "/", filename), plot = umap.plot)
 
@@ -61,7 +61,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
                 # Save plot
                 ggsave(filename = paste0(folderpath, "/", "ClusterColors_", clusterColorName,"_", filename), plot = umapClusterColorsPlot,width=10,height=8,units="in")
-		umapPlots<-c(umapPlots,umapClusterColorsPlot)
+		umapPlots<-c(umapPlots,list(umapClusterColorsPlot))
 
             }
 
@@ -90,7 +90,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
                 # Save plot
                 ggsave(filename = paste0(folderpath, "/", "CellProperty_", CellPropertyName,"_", filename), plot = umapCellPropertyPlot,width=10,height=8,units="in")
-		umapPlots<-c(umapPlots,umapCellPropertyPlot)
+		umapPlots<-c(umapPlots,list(umapCellPropertyPlot))
 
             }
         }
