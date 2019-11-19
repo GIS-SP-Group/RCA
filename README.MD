@@ -179,7 +179,8 @@ The *plotRCAUMAP* returns a list of *ggplot2* objects to allow for simple modifi
 
 To better understand the composition of each cluster we generate a stacked bar plot Figure using the *plotRCAClusterComposition* function:
 ```{r}
-RCAv2::plotClusterComposition(PBMCs,filename="Cluster_Composition.pdf")
+PBMCs<-estimateCellTypeFromProjection(PBMCs,confidence = NULL)
+RCAv2::plotRCAClusterComposition(PBMCs,filename="Cluster_Composition.pdf")
 ```
 ![](Tutorial/Cluster_Enrichment.png)
 
