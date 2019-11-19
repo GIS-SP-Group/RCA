@@ -184,13 +184,13 @@ RCAv2::plotRCAClusterComposition(PBMCs,filename="Cluster_Composition.pdf")
 ```
 ![](Tutorial/Cluster_Enrichment.png)
 
-In a) we show the relative composition of each cluster where b) shows the absolute number of cells in each cluster and their most likely annotation.
+In a) we show the relative composition of each cluster and b) shows the absolute number of cells in each cluster. The color code indicates the most likely annotation of the cells.
 
 Based on the heatmap as well as the stacked bar plots we can relabel the clusters according to the major cell type annotations:
 ```{r}
 RCAcellTypes<-PBMCs$clustering.out$dynamicColorsList[[1]]
 RCAcellTypes[which(RCAcellTypes=="blue")]<-"Monocytes"
-RCAcellTypes[which(RCAcellTypes=="green")]<-"Dendritic cells"
+RCAcellTypes[which(RCAcellTypes=="green")]<-"Dentritic cells"
 RCAcellTypes[which(RCAcellTypes=="yellow")]<-"B cells"
 RCAcellTypes[which(RCAcellTypes=="grey")]<-"B cells"
 RCAcellTypes[which(RCAcellTypes=="brown")]<-"NK cells"
@@ -241,14 +241,37 @@ table(unlist(PBMCs$cell.Type.Estimate))
 
 Slightly simplifying the annotation via
 ```{r}
-
+SimplifiedAnnotation<-unlist(PBMCs$cell.Type.Estimate)
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD33._Myeloid")]<-"Myeloid"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD4._Tcells")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD8._Tcells")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD14._Monocytes")]<- "Monocytes"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="BDCA4._DentriticCells")]<-"Dentritic cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L93_B.Cell_Plasma.Cell")]<- "B cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L52_Platelet")]<-"Myeloid"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L74_T.Cell_CD4.Centr..Memory")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L51_B.Cell_Bone.Marrow")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L75_T.Cell_CD4.Centr..Memory")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L85_NK.Cell_CD56Hi")]<-"NK cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD34.")]<-"Progenitor"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L45_CMP_Bone.Marrow")]<- "Progenitor"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="WholeBlood")]<- "Myeloid"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L69_Dendritic.Cell_Monocyte.derived")]<- "Myeloid"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L80_T.Cell_CD8.Eff..Memory")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L60_Monocyte_CD16")]<- "Monocytes"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L86_NK.Cell_CD56Lo")]<-"NK cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L73_T.Cell_CD4.Naive")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD56._NKCells")]<-"NK cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD19._BCells.neg._sel..")]<- "B cells"
 ```
-and plotting a new UMAP results in:
+and plotting a new UMAP with
 ```{r}
-
-
+umapFigures<-RCAv2::plotRCAUMAP(PBMCs,cellPropertyList = list(`Cell Type`=SimplifiedAnnotation),filename = "UMAP_PBMCs.pdf")
 ```
-TODO Show UMAP.
+leads us to a clustering free cell type assignment.
+
+![](Tutorial/Umap_ClusterFree.png)
+
 
 ## Combining RCA with Seurat
 Data processing can also be carried out with Seurat. Here is an example how you can integrate RCA with Seurat
