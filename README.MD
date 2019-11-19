@@ -44,7 +44,8 @@ The current release of RCA requires the following packages to be available on yo
 * ggpubr
 
 All missing CRAN-packages can be *automatically installed* during the RCA installation.
-Note that the *HiClimR* package is optional, it allows to speed up the computationally expensive steps.
+Note that the *HiClimR* package is optional, it allows to speed up the computationally expensive steps. Also the
+*randomColoR* package is optional, it is useful to obtain distinguishable colors.
 
 ### Load the package
 After installation, load the package with the command
@@ -176,7 +177,15 @@ The *plotRCAUMAP* returns a list of *ggplot2* objects to allow for simple modifi
 
 ![](Tutorial/Umap_clusters_Example.png)
 
-Based on the heatmap we can relabel the clusters according to the major cell type annotations:
+To better understand the composition of each cluster we generate a stacked bar plot Figure using the *plotRCAClusterComposition* function:
+```{r}
+RCAv2::plotClusterComposition(PBMCs,filename="Cluster_Composition.pdf")
+```
+![](Tutorial/Cluster_Enrichment.png)
+
+In a) we show the relative composition of each cluster where b) shows the absolute number of cells in each cluster and their most likely annotation.
+
+Based on the heatmap as well as the stacked bar plots we can relabel the clusters according to the major cell type annotations:
 ```{r}
 RCAcellTypes<-PBMCs$clustering.out$dynamicColorsList[[1]]
 RCAcellTypes[which(RCAcellTypes=="blue")]<-"Monocytes"
@@ -207,6 +216,38 @@ Each UMAP will be stored in a separate *pdf* where the filename indicates which 
 ![](Tutorial/Umap_NK_marker_CD56_Example.png)
 
 For numerical data, the dots are transparent for low values to avoid overplotting issues. In our example, we can see that *CD56* expression corresponds to the NK annotation.
+
+### Clustering free analysis of the projection
+Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering indepent cell-type assignment approach that is purely based on each cells z-score distribution.
+A call to the function 
+```{r}
+PBMCs<-estimateCellTypeFromProjection(PBMCs,confidence = NULL)
+```
+will return the most likely cell type for each cell and save it in the PBMCs object. With the parameter *confidence* a threshold (between 0 and 1) can be imposed on the ratio between the two most likely cell-types. In uncertain cases, a cell will be labelled as unkown.
+
+The above call results in the following cell type predictions:
+```{r}
+table(unlist(PBMCs$cell.Type.Estimate))
+
+              BDCA4._DentriticCells                     CD14._Monocytes             CD19._BCells.neg._sel.. 
+                                 69                                 108                                 307 
+                      CD33._Myeloid                               CD34.                         CD4._Tcells 
+                               1363                                   3                                2266 
+                      CD56._NKCells                         CD8._Tcells                 L45_CMP_Bone.Marrow 
+                                458                                 364                                   4 
+             L51_B.Cell_Bone.Marrow                        L52_Platelet  
+```
+
+Slightly simplifying the annotation via
+```{r}
+
+```
+and plotting a new UMAP results in:
+```{r}
+
+
+```
+TODO Show UMAP.
 
 ## Combining RCA with Seurat
 Data processing can also be carried out with Seurat. Here is an example how you can integrate RCA with Seurat
