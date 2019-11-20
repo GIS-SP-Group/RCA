@@ -7,7 +7,7 @@ RCAConstruct <- setRefClass(Class = "RCA",
 					  data = "Matrix", 
 					  projection.data = "Matrix", 
 					  clustering.out = "list",
-					  umap.coordinates - "data.frame",
+					  umap.coordinates = "data.frame",
 					  cell.Type.Estimate = "list"))
 
 RCAConstruct$methods(show=function(){
