@@ -18,9 +18,9 @@ computeUMAP <- function(rca.obj, nDIMS=2) {
     require(umap)
 
     # Compute UMAP projection from cell type projection
-    if ((nDIMs < 2) | (nDIMS > 3))
-	print("Error: nDIMS must be set to 2 or 3");
-    	return(rca.obj)
+    if ((nDIMs < 2) | (nDIMS > 3)){
+	print("Error: nDIMS must be set to 2 or 3")
+    	return(rca.obj)}
     else{
         umap.projection <- umap(t(projection),n_components=nDIMS)
     }
