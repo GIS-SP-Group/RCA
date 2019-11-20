@@ -270,7 +270,9 @@ SimplifiedAnnotation[which(SimplifiedAnnotation=="CD19._BCells.neg._sel..")]<- "
 ```
 and plotting a new UMAP with
 ```{r}
-umapFigures<-RCAv2::plotRCAUMAP(PBMCs,cellPropertyList = list(`Cell Type`=SimplifiedAnnotation),filename = "UMAP_PBMCs.pdf")
+umapFigures<-RCAv2::plotRCAUMAP(PBMCs,
+                      cellPropertyList = list(`Cell Type`=SimplifiedAnnotation),
+                      filename = "UMAP_PBMCs.pdf")
 ```
 leads us to a clustering free cell type assignment.
 
@@ -298,7 +300,8 @@ pbmc_Seurat <- CreateSeuratObject(counts = PBMCs.10x.data$`Gene Expression`,
 
 #Compute the percentage of mitochondrial rates
 mito.genes<-grep(pattern="^MT-",x=rownames(pbmc_Seurat@assays[["RNA"]]),value=T)
-percent.mito <- Matrix::colSums(pbmc_Seurat@assays[["RNA"]][mito.genes, ])/Matrix::colSums(pbmc_Seurat@assays[["RNA"]])
+percent.mito <- Matrix::colSums(pbmc_Seurat@assays[["RNA"]][mito.genes, ])/
+                                Matrix::colSums(pbmc_Seurat@assays[["RNA"]])
 pbmc_Seurat <- AddMetaData(object = pbmc_Seurat, metadata = percent.mito, col.name = "percent.mito")
 
 #Perform QC using the same parameters as above
@@ -314,7 +317,13 @@ To run RCA, no further processing steps would be needed. However, we want to als
 ```{r}
 
 #Find HVGs
-pbmc_Seurat <- FindVariableFeatures(object = pbmc_Seurat, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.0125, x.high.cutoff = 3, y.cutoff = 0.5, nfeatures = 2000)
+pbmc_Seurat <- FindVariableFeatures(object = pbmc_Seurat, 
+                   mean.function = ExpMean, 
+                   dispersion.function = LogVMR, 
+                   x.low.cutoff = 0.0125, 
+                   x.high.cutoff = 3, 
+                   y.cutoff = 0.5, 
+                   nfeatures = 2000)
 
 #Center and scale the data
 pbmc_Seurat <- ScaleData(object = pbmc_Seurat)
@@ -409,21 +418,40 @@ SimplifiedAnnotation[which(SimplifiedAnnotation=="CD19._BCells.neg._sel..")]<- "
 
 #Plot a umap colored by the simplified cell type labels
 myColors<-distinctColorPalette(length(unique(SimplifiedAnnotation)))
-umapAll_Seurat_Estimated_CT<-ggplot(umap_resultSL,aes(x=V1,y=V2,color=SimplifiedAnnotation))+theme_bw(30)+
-  geom_point(size=1.5)+theme(legend.position = "bottom")+labs(colour="Cell type")+
-  guides(colour = guide_legend(override.aes = list(size=4)))+theme(legend.position = "bottom")+
-  theme(legend.text=element_text(size=10))+scale_color_manual(values=myColors)+ggtitle("b)")+xlab("UMAP1")+ylab("UMAP2")+theme(legend.title = element_text(size=12))
+umapAll_Seurat_Estimated_CT<-ggplot(umap_resultSL,
+aes(x=V1,y=V2,color=SimplifiedAnnotation))+
+theme_bw(30)+
+geom_point(size=1.5)+
+theme(legend.position = "bottom")+
+labs(colour="Cell type")+
+guides(colour = guide_legend(override.aes = list(size=4)))+
+theme(legend.text=element_text(size=10))+
+scale_color_manual(values=myColors)+
+ggtitle("b)")+
+xlab("UMAP1")+ylab("UMAP2")+
+theme(legend.title = element_text(size=12))
 
 #Plot a umap colored by the RCA cluster ID
-umapAll_Seurat_RCA_Clusters<-ggplot(umap_resultSL,aes(x=V1,y=V2,color=RCA_from_Seurat$clustering.out$dynamicColorsList[[1]]))+theme_bw(30)+
-  geom_point(size=1.5)+theme(legend.position = "bottom")+labs(colour="RCA Cluster ID")+
-  guides(colour = guide_legend(override.aes = list(size=4)))+theme(legend.position = "bottom")+
-  theme(legend.text=element_text(size=10))+xlab("UMAP1")+ylab("UMAP2")+scale_color_identity(guide=guides(color=RCA_from_Seurat$clustering.out$dynamicColorsList[[1]]))+ggtitle("a)")+theme(legend.title = element_text(size=12))
+umapAll_Seurat_RCA_Clusters<-ggplot(umap_resultSL,
+aes(x=V1,y=V2,color=RCA_from_Seurat$clustering.out$dynamicColorsList[[1]]))+
+theme_bw(30)+
+geom_point(size=1.5)+
+theme(legend.position = "bottom")+
+labs(colour="RCA Cluster ID")+
+guides(colour = guide_legend(override.aes = list(size=4)))+
+theme(legend.text=element_text(size=10))+
+xlab("UMAP1")+ylab("UMAP2")+
+scale_color_identity(guide=guides(color=RCA_from_Seurat$clustering.out$dynamicColorsList[[1]]))+
+ggtitle("a)")+
+theme(legend.title = element_text(size=12))
 
 #Combine the Figures into one
 library(gridExtra)
 grid.arrange(umapAll_Seurat_RCA_Clusters,umapAll_Seurat_Estimated_CT,nrow=1)
 ```
+
+![](Tutorial/Combined_UMAPs_Seurat_RCA.png)
+
 The RCA clusters show a high concordance to the Seurat clusters shown in the previous UMAP.
 
 ### Add UMAP coordinates and annotations to the Seurat object
