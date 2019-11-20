@@ -52,7 +52,7 @@ plotRCAClusterComposition <- function(rca.obj, folderpath = ".", filename = "RCA
        ratioPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Ratio,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Percentage")+coord_flip()+ggtitle("a)")+theme(legend.position = "none")
        countPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Count,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Count")+coord_flip()+ggtitle("b)")+labs(fill="Cell type")+guides(fill=guide_legend(ncol=1))
     }
-   pdf(paste0(folderpath,"Heatmap_Composition_"filename,width=15,height=7))
+   pdf(paste0(folderpath,"Heatmap_Composition_",filename,width=15,height=7))
    grid.arrange(ratioPlot,countPlot,widths=c(1,1.4),nrow=1)
    dev.off()
 }
