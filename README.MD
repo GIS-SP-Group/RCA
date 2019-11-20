@@ -179,7 +179,9 @@ The *plotRCAUMAP* returns a list of *ggplot2* objects to allow for simple modifi
 
 To better understand the composition of each cluster we generate a stacked bar plot Figure using the *plotRCAClusterComposition* function:
 ```{r}
+#Estimate the most probable cell type label for each cell
 PBMCs<-estimateCellTypeFromProjection(PBMCs,confidence = NULL)
+#Generate the cluster composition plot
 RCAv2::plotRCAClusterComposition(PBMCs,filename="Cluster_Composition.pdf")
 ```
 ![](Tutorial/Cluster_Enrichment.png)
@@ -241,7 +243,9 @@ table(unlist(PBMCs$cell.Type.Estimate))
 
 Slightly simplifying the annotation via
 ```{r}
+#Retrieve annotation
 SimplifiedAnnotation<-unlist(PBMCs$cell.Type.Estimate)
+#Relabel it
 SimplifiedAnnotation[which(SimplifiedAnnotation=="CD33._Myeloid")]<-"Myeloid"
 SimplifiedAnnotation[which(SimplifiedAnnotation=="CD4._Tcells")]<-"T cells"
 SimplifiedAnnotation[which(SimplifiedAnnotation=="CD8._Tcells")]<-"T cells"
@@ -274,28 +278,161 @@ leads us to a clustering free cell type assignment.
 
 
 ## Combining RCA with Seurat
-Data processing can also be carried out with Seurat. Here is an example how you can integrate RCA with Seurat
+Data processing can also be carried out with Seurat. Here is an example how you can combine a RCA analysis with data preprocessed in Seurat.
 
 ### Load and preprocess data
-Using the same 10x data as before, we generate a Seurat object.
+Using the same 10x data as before, we generate a Seurat object and perform an initial analysis:
 
 ```{r}
-Add code
+library(Seurat)
+
+#Load the data
+PBMCs.10x.data<-Seurat::Read10X("../Downloads/10xExample/",)
+
+#Generate a Seurat object
+pbmc_Seurat <- CreateSeuratObject(counts = PBMCs.10x.data$`Gene Expression`, 
+                  min.cells = 3, 
+                  min.features  = 200, 
+                  project = "10X_PBMC", 
+                  assay = "RNA")
+
+#Compute the percentage of mitochondrial rates
+mito.genes<-grep(pattern="^MT-",x=rownames(pbmc_Seurat@assays[["RNA"]]),value=T)
+percent.mito <- Matrix::colSums(pbmc_Seurat@assays[["RNA"]][mito.genes, ])/Matrix::colSums(pbmc_Seurat@assays[["RNA"]])
+pbmc_Seurat <- AddMetaData(object = pbmc_Seurat, metadata = percent.mito, col.name = "percent.mito")
+
+#Perform QC using the same parameters as above
+pbmc_Seurat <- subset(pbmc_Seurat, nFeature_RNA >300 & nFeature_RNA < 5000 &
+                        nCount_RNA > 400 & nCount_RNA<30000 &
+                        percent.mito > 0.025 & percent.mito < 0.2)
+
+#Normalize the data
+pbmc_Seurat <- NormalizeData(object = pbmc_Seurat, normalization.method = "LogNormalize", scale.factor = 10000)
 ```
+
+To run RCA, no further processing steps would be needed. However, we want to also compare the RCA result to the Seurat based clustering, therefore we first go on with a Seurat based analysis:
+```{r}
+
+#Find HVGs
+pbmc_Seurat <- FindVariableFeatures(object = pbmc_Seurat, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.0125, x.high.cutoff = 3, y.cutoff = 0.5, nfeatures = 2000)
+
+#Center and scale the data
+pbmc_Seurat <- ScaleData(object = pbmc_Seurat)
+
+#Run PCA on the data
+pbmc_Seurat <- RunPCA(object = pbmc_Seurat,  npcs = 50, verbose = FALSE)
+
+#Plot different aspsects of the pca
+ElbowPlot(object = pbmc_Seurat,ndims = 50)
+```
+
+![](Tutorial/Elbow.png)
+
+Judging based on the Elbowplot shown above, we use 20 PCs for further analysis. 
+```{r}
+#Find Neighbors
+pbmc_Seurat <- FindNeighbors(pbmc_Seurat, reduction = "pca", dims = 1:20)
+
+#Find Clusters
+pbmc_Seurat <- FindClusters(pbmc_Seurat, resolution = 0.2, algorithm = 1)
+```
+
+We generate a UMAP of the data stored in the Seurat object using the umap R package:
+```{r}
+#Load required libraries
+library(umap)
+library(ggplot2)
+library(randomcoloR)
+
+#Compute Umap from first 20PCs
+umap_resultS<- umap(pbmc_Seurat@reductions$pca@cell.embeddings[,c(1:20)])
+umap_resultSL<-as.data.frame(umap_resultS$layout)
+
+#Derive distinguishable colors for the seurat clusters
+myColors<-distinctColorPalette(length(unique(pbmc_Seurat$seurat_clusters)))
+
+#Generate a UMAP
+umapAll_Seurat_RCA<-ggplot(umap_resultSL,aes(x=V1,y=V2,color=pbmc_Seurat$seurat_clusters))+theme_bw(30)+
+  geom_point(size=1.5)+labs(colour="ClusterID")+theme(legend.title = element_text(size=10))+
+  guides(colour = guide_legend(override.aes = list(size=4)))+theme(legend.position = "right")+
+  theme(legend.text=element_text(size=10))+scale_color_manual(values=myColors)+xlab("UMAP1")+ylab("UMAP2")
+umapAll_Seurat_RCA
+```
+We obtain the following UMAP:
+![](Tutorial/UMAP_Seurat.png)
 
 ### Generate a RCA object and perform RCA analysis
 We use the RCA function *createRCAObject* to generate a RCA object from the count data stored in our Seurat object.
 
 ```{r}
-Add code
+library(RCAv2)
+RCA_from_Seurat<-RCAv2::createRCAObject(pbmc_Seurat@assays$RNA@counts)
 ```
+Next, we can compute the projection, cluster the data, and estimate the most likely cell type for each cell as above:
+```{r}
+#Compute projection
+RCA_from_Seurat<-RCAv2::dataProject(rca.obj = RCA_from_Seurat)
+
+#Cluster the projection
+RCA_from_Seurat<-RCAv2::dataClust(RCA_from_Seurat)
+
+#Estimate most likely cell type
+RCA_from_Seurat<-RCAv2::estimateCellTypeFromProjection(RCA_from_Seurat)
+```
+
+Using the RCA cell type labels, RCA and Seurat clusters, we generate two new UMAPs whose coordinates are based on the PCs derived from HVGs and that are colored according to RCA clusters and cell type labels.
+
+```{r}
+#Simplify the cell type annotation
+SimplifiedAnnotation<-unlist(RCA_from_Seurat$cell.Type.Estimate)
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD33._Myeloid")]<-"Myeloid"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD4._Tcells")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD8._Tcells")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD14._Monocytes")]<- "Monocytes"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="BDCA4._DentriticCells")]<-"Dentritic cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L93_B.Cell_Plasma.Cell")]<- "B cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L52_Platelet")]<-"Myeloid"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L74_T.Cell_CD4.Centr..Memory")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L51_B.Cell_Bone.Marrow")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L75_T.Cell_CD4.Centr..Memory")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L85_NK.Cell_CD56Hi")]<-"NK cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD34.")]<-"Progenitor"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L45_CMP_Bone.Marrow")]<- "Progenitor"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="WholeBlood")]<- "Myeloid"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L69_Dendritic.Cell_Monocyte.derived")]<- "Myeloid"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L80_T.Cell_CD8.Eff..Memory")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L60_Monocyte_CD16")]<- "Monocytes"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L86_NK.Cell_CD56Lo")]<-"NK cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="L73_T.Cell_CD4.Naive")]<-"T cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD56._NKCells")]<-"NK cells"
+SimplifiedAnnotation[which(SimplifiedAnnotation=="CD19._BCells.neg._sel..")]<- "B cells"
+
+#Plot a umap colored by the simplified cell type labels
+myColors<-distinctColorPalette(length(unique(SimplifiedAnnotation)))
+umapAll_Seurat_Estimated_CT<-ggplot(umap_resultSL,aes(x=V1,y=V2,color=SimplifiedAnnotation))+theme_bw(30)+
+  geom_point(size=1.5)+theme(legend.position = "bottom")+labs(colour="Cell type")+
+  guides(colour = guide_legend(override.aes = list(size=4)))+theme(legend.position = "bottom")+
+  theme(legend.text=element_text(size=10))+scale_color_manual(values=myColors)+ggtitle("b)")+xlab("UMAP1")+ylab("UMAP2")+theme(legend.title = element_text(size=12))
+
+#Plot a umap colored by the RCA cluster ID
+umapAll_Seurat_RCA_Clusters<-ggplot(umap_resultSL,aes(x=V1,y=V2,color=RCA_from_Seurat$clustering.out$dynamicColorsList[[1]]))+theme_bw(30)+
+  geom_point(size=1.5)+theme(legend.position = "bottom")+labs(colour="RCA Cluster ID")+
+  guides(colour = guide_legend(override.aes = list(size=4)))+theme(legend.position = "bottom")+
+  theme(legend.text=element_text(size=10))+xlab("UMAP1")+ylab("UMAP2")+scale_color_identity(guide=guides(color=RCA_from_Seurat$clustering.out$dynamicColorsList[[1]]))+ggtitle("a)")+theme(legend.title = element_text(size=12))
+
+#Combine the Figures into one
+library(gridExtra)
+grid.arrange(umapAll_Seurat_RCA_Clusters,umapAll_Seurat_Estimated_CT,nrow=1)
+```
+The RCA clusters show a high concordance to the Seurat clusters shown in the previous UMAP.
 
 ### Add UMAP coordinates and annotations to the Seurat object
 For greater convenience the results of RCA can be saved within the Seurat object for further analysis.
-Especially keeping the UMAP coordinates is recommened for reasons for reproduciblity and efficiency.
 
 ```{r}
-Add code
+pbmc_Seurat[["RCA.clusters"]]<-RCA_from_Seurat$clustering.out$dynamicColorsList
+pbmc_Seurat[["cellTypeLabel"]]<-RCA_from_Seurat$cell.Type.Estimate
+pbmc_Seurat[["Projection"]]<-CreateAssayObject(data=RCA_from_Seurat$projection.data)
 ```
 
 ## FAQ
@@ -309,13 +446,8 @@ Add code
 
 **The cell-type I am interested in are not part of the provided panels, can I generate and use my own reference data set in RCA?**
 
-*Yes you can. Any custom panel can be considered in RCA:*
-**ADD CODE EXAMPLE**
+*Yes you can. Any custom panel can be considered in RCA. An example is shown above.*
 
 **I do not have 10X data, can I just use a count matrix as input for RCA?**
 
 *Yes, that is possible as well. You can generate a RCA object from a custom count matrix using. Guidelines are provided above (Compute a projection to a reference data set)*
-
-**How to cite RCA version 2?**
-
-*Answer here*
