@@ -28,9 +28,8 @@ plotRCAClusterComposition <- function(rca.obj, folderpath = ".", filename = "RCA
         install.packages("gridExtra", repos = "http://cran.us.r-project.org")
     require(gridExtra)
 
-
     enrichmentAll<-c()
-    for(type in unique(clusterColors){
+    for(type in unique(clusterColors)){
 	index=which(clusterColors==type)
         enrichmentAll<-rbind(enrichmentAll,(cbind(type,table(unlist(rca.obj$cell.Type.Estimate)[index]))))
     }
