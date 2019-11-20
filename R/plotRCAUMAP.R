@@ -81,7 +81,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
                 # Create the plot
 		if (class(umap.df[[CellPropertyName]])=="numeric"){
-	                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, alpha= umap.df[[CellPropertyName]], colour = umap.df[[CellPropertyName]])) + geom_point(size = .5) + labs(colour = CellPropertyName,alpha="") + theme_bw()+scale_color_gradient(low="grey",high="blue")+guides(colour = guide_legend(override.aes = list(size=2.5)))
+	                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, alpha= umap.df[[CellPropertyName]], colour = umap.df[[CellPropertyName]])) + geom_point(size = .5) + labs(colour = CellPropertyName,alpha="") + theme_bw()+scale_color_gradient(low="grey",high="blue")+guides(colour = guide_legend(override.aes = list(size=5)))
 
 		}
 		else{
