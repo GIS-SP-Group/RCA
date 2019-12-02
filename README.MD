@@ -1,7 +1,7 @@
 # RCA version 2.0
 RCA, (Reference Component Analysis), is a computational approach for robust cell type annotation of single cell RNA sequencing data (scRNAseq). 
 It is developed by the Prabhakar lab at the Genome Institute of Singapore (GIS). 
-The original version of RCa was published in Nature Genetics (doi: 10.1038/ng.3818, Li et al., 2017).
+The original version of RCA is published in Nature Genetics (doi: 10.1038/ng.3818, Li et al., 2017).
 
 ## Release notes
 Version 2.0 
