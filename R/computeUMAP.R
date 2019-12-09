@@ -1,10 +1,9 @@
 #' Compute a umap projection into 2 or 3 dimensions
 #'
 #' @param rca.obj RCA object
-#' @param nDIMS
+#' @param nDIMS number of UMAP dimensions
 #' @export
 #'
-
 computeUMAP <- function(rca.obj, nDIMS=2) {
 
     ### Extract projection data from RCA object

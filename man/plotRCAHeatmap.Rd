@@ -4,13 +4,17 @@
 \alias{plotRCAHeatmap}
 \title{Plot heatmap of projection to the RCA panel}
 \usage{
-plotRCAHeatmap(rca.obj, cellPropertyList = NULL, folderpath = ".",
-  filename = "RCA_Heatmap.pdf")
+plotRCAHeatmap(rca.obj, var.thrs = 0.1, width = 20, height = 20,
+  folderpath = ".", filename = "RCA_Heatmap.pdf")
 }
 \arguments{
 \item{rca.obj}{data matrix (genes x cells)}
 
-\item{cellPropertyList}{list of cell properties to plot}
+\item{var.thrs}{Minimum threshold of variance for cell type correlations.}
+
+\item{width}{width of plot in inches. Default is 20.}
+
+\item{height}{height of plot in inches. Default is 20.}
 
 \item{folderpath}{path to save heatmap to}
 

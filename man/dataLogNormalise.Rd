@@ -4,10 +4,12 @@
 \alias{dataLogNormalise}
 \title{Log-transform and normalise data by sequencing depth}
 \usage{
-dataLogNormalise(rca.obj)
+dataLogNormalise(rca.obj, scale.factor = 10000)
 }
 \arguments{
 \item{rca.obj}{RCA object.}
+
+\item{scale.factor}{scaling factor for log-normalization}
 }
 \value{
 RCA object.
