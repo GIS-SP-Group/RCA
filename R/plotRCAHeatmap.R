@@ -90,6 +90,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         names(clusterColorDf) <- names(clusterColorList)
 
         # Create cell property list - list of NODG, nUMI and percent.mito
+	print(head(rca.obj$raw.data))
         nUMI <- colSums(rca.obj$raw.data)
         nodg <- colSums(rca.obj$data > 0)
 
