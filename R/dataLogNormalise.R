@@ -14,13 +14,14 @@ dataLogNormalise <- function(rca.obj, scale.factor = 10000) {
     seqDepthVec <- Matrix::colSums(data)
 
     # Normalise data by cell
-    pb <- txtProgressBar(style = 3)
+#    pb <- txtProgressBar(style = 3)
 
-    norm.data <- sapply(seq_along(seqDepthVec), function(index) {
-        norm <- scale.factor*data[,index]/seqDepthVec[index]
-        setTxtProgressBar(pb = pb, value = index/length(seqDepthVec))
-        return(norm)
-    })
+#    norm.data <- sapply(seq_along(seqDepthVec), function(index) {
+   #     norm <- scale.factor*data[,index]/seqDepthVec[index]
+  #      setTxtProgressBar(pb = pb, value = index/length(seqDepthVec))
+ #       return(norm)
+#    })
+    norm.data<-data/seqDepthVec*scale.factor
     colnames(norm.data) <- colnames(data)
 
     # Log-transform normalised data
