@@ -29,7 +29,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
     require(plotly)
 
     # Compute UMAP projection from cell type projection
-    umap.projection <- umap(t(projection),n_dimensions=3)
+    umap.projection <- umap(t(as.matrix(projection)),n_components=3)
 
     # Store UMAP layout in data frame for plotting
     umap.df <- as.data.frame(umap.projection$layout)
