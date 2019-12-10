@@ -59,7 +59,7 @@ createRCAObjectFrom10X <- function(dataDir, cellrangerVersion = 3.0, min.barcode
     rawData <- rawData[, filt.cells]
 
     # Create RCA object using RCAConstruct and the raw data provided
-    rca.obj <- RCAConstruct$new(raw.data = rawData, data = NULL)
+    rca.obj <- RCAConstruct$new(raw.data = rawData)
 
     # Return RCA object
     return(rca.obj)

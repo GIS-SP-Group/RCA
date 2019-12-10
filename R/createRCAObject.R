@@ -7,7 +7,7 @@
 createRCAObject <- function(rawData) {
 
     # Create RCA object using RCAConstruct and the raw data provided
-    rca.obj <- RCAConstruct$new(raw.data = rawData, data = rawData)
+    rca.obj <- RCAConstruct$new(raw.data = rawData)
 
     # Return RCA object
     return(rca.obj)
