@@ -18,7 +18,7 @@ RCAConstruct$methods(show=function(){
 			    }
                      if (!(is.null(data))){
 			     dataSize=dim(data);
-			     print(paste0("Filtered data: ",dataSize[2]," cells and ",dataSize[1]," features."))
+			     print(paste0("Normalized data: ",dataSize[2]," cells and ",dataSize[1]," features."))
 		     }
 		     if (!(is.null(projection.data))){
 			     dataSize=dim(projection.data);
