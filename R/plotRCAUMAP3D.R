@@ -34,11 +34,16 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
     # Store UMAP layout in data frame for plotting
     umap.df <- as.data.frame(umap.projection$layout)
     colnames(umap.df) <- c("UMAP1", "UMAP2","UMAP3")
-
+    print(head(umap.df))
     # If no cluster colors or cell properties are to be plotted
     if(is.null(clusterColorList) & is.null(cellPropertyList)) {
         # Plot UMAP of cells without annotations
-        
+        	umap3dPlot<-plot_ly(data = umap.df,
+	            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
+		    type = "scatter3d",
+		    mode = "markers",
+		    marker = list(size = 5, width=2))
+
 	# Save UMAP
 	htmlwidgets::saveWidget(as_widget(umap3dPlot),  paste0(folderpath, "/", filename))
 
@@ -47,7 +52,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 
         # If cluster colors are to be plotted
         if(!is.null(clusterColorList)) {
-
+	    print("Color by cluster id")
             # Create a list of UMAP plots for each cluster coloring
             for(index in seq_along(clusterColorList)) {
 
