@@ -90,8 +90,8 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         names(clusterColorDf) <- names(clusterColorList)
 
         # Create cell property list - list of NODG, nUMI and percent.mito
-        nUMI <- colSums(as.matrix(rca.obj$raw.data))
-        nodg <- colSums(rca.obj$data > 0)
+        nUMI <- Matrix::colSums(rca.obj$raw.data)
+        nodg <- Matrix::colSums(rca.obj$data > 0)
 
         mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$data), value = T)
         pMito <- Matrix::colSums(rca.obj$data[mito.genes, ])/Matrix::colSums(rca.obj$data)
