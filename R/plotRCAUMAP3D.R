@@ -63,7 +63,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
                 umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
                 # Create the plot
-		if (require("randomcolorR")){
+		if (require("randomcoloR")){
 		dColors=distinctColorPalette(length(unique(umap.df[[clusterColorName]])))
 		umap3dPlot<-plot_ly(data = umap.df,
 		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
