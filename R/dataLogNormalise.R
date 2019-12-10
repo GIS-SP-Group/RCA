@@ -8,21 +8,15 @@
 dataLogNormalise <- function(rca.obj, scale.factor = 10000) {
 
     # Extract data from RCA object
-    data <- rca.obj$raw.data
+    raw.data <- rca.obj$raw.data
 
     # Compute sequencing depth vector
-    seqDepthVec <- Matrix::colSums(data)
+    seqDepthVec <- Matrix::colSums(raw.data)
 
     # Normalise data by cell
-#    pb <- txtProgressBar(style = 3)
+    norm.data<-raw.data/seqDepthVec*scale.factor
 
-#    norm.data <- sapply(seq_along(seqDepthVec), function(index) {
-   #     norm <- scale.factor*data[,index]/seqDepthVec[index]
-  #      setTxtProgressBar(pb = pb, value = index/length(seqDepthVec))
- #       return(norm)
-#    })
-    norm.data<-data/seqDepthVec*scale.factor
-    colnames(norm.data) <- colnames(data)
+    colnames(norm.data) <- colnames(raw.data)
 
     # Log-transform normalised data
     logNorm.data <- log(1+norm.data)
