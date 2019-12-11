@@ -57,7 +57,7 @@ dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
     # Assign clustering result to RCA object
     rca.obj$clustering.out <- list(
         "d" = d,
-        "cellTree" = order(clusteringResult$cluster,decreasing = F)
+        "cellTree" = order(clusteringResult$cluster,decreasing = F),
         "dynamicColorsList" = dynamicColorsList
     )
 
