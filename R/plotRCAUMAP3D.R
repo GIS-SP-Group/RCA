@@ -10,7 +10,6 @@
 plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_UMAP.pdf") {
 
     ### Extract projection data from RCA object
-    projection = as.matrix(rca.obj$projection.data)
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
 
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
@@ -28,13 +27,19 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
         install.packages("plotly", repos = "http://cran.us.r-project.org")
     require(plotly)
 
-    # Compute UMAP projection from cell type projection
-    umap.projection <- umap(t(as.matrix(projection)),n_components=3)
-
-    # Store UMAP layout in data frame for plotting
-    umap.df <- as.data.frame(umap.projection$layout)
-    colnames(umap.df) <- c("UMAP1", "UMAP2","UMAP3")
-    print(head(umap.df))
+    if (is.null(rca.obj$umap.coordinates)){
+	print("UMAP has not been computed yet")
+    	return NULL
+    }
+    if (dim(rca.obj$umap.coordinates)[2]<3){
+	print("UMAP projection does not have 3 dimensions")
+    	return NULL
+    }
+    else{
+        # Store UMAP layout in data frame for plotting
+        umap.df <- as.data.frame(rca.obj$umap.coordinates)
+        colnames(umap.df) <- c("UMAP1", "UMAP2","UMAP3")
+    }
     # If no cluster colors or cell properties are to be plotted
     if(is.null(clusterColorList) & is.null(cellPropertyList)) {
         # Plot UMAP of cells without annotations
