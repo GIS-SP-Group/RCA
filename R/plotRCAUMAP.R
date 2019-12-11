@@ -15,8 +15,6 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
     # umap
-    if (!require(umap))
-        install.packages("umap", repos = "http://cran.us.r-project.org")
     require(umap)
     if (!require(ggplot2))
         install.packages("ggplot2", repos = "http://cran.us.r-project.org")
@@ -27,11 +25,15 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
     # Compute UMAP projection from cell type projection
     umap.projection <- umap(t(projection))
-
-    # Store UMAP layout in data frame for plotting
-    umap.df <- as.data.frame(umap.projection$layout)
-    colnames(umap.df) <- c("UMAP1", "UMAP2")
-
+    if (is.null(rca.obj$umap.coordinates )){
+	    print("UMAP coordinates have not been computed yet")
+	    return NULL
+    }
+    else{
+        # Store UMAP layout in data frame for plotting
+         umap.df <- as.data.frame(rca.obj$umap.coordinates[,1:2])
+         colnames(umap.df) <- c("UMAP1", "UMAP2")
+    }
     umapPlots<-list()
     # If no cluster colors or cell properties are to be plotted
     if(is.null(clusterColorList) & is.null(cellPropertyList)) {

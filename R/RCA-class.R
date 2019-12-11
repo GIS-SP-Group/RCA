@@ -24,9 +24,16 @@ RCAConstruct$methods(show=function(){
 			     dataSize=dim(projection.data);
 			     print(paste0("Projection data: ",dataSize[2]," cells to ",dataSize[1]," cell-types."))
 		     }
+
+		     if (!(is.null(umap.coordinates))){
+			     nDim=dim(umap.coordinates)[2]
+			     print(paste0("UMAP coordinates are available for ",nDim," dimensions."))
+		     }
+
 		     if (!(is.null(clustering.out))){
 			     dataSize=length(unique(clustering.out$dynamicColorsList[[1]]));
 			     print(paste0("The data set contains ",dataSize," RCA clusters."))}
+
 		     if (!(is.null(cell.Type.Estimate))){
 			     dataSize=length(unique(cell.Type.Estimate));
 			     print(paste0("The data set contains ",dataSize," unique cell types."))}
