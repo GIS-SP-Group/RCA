@@ -29,11 +29,11 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 
     if (is.null(rca.obj$umap.coordinates)){
 	print("UMAP has not been computed yet")
-    	return NULL
+    	return(NA)
     }
     if (dim(rca.obj$umap.coordinates)[2]<3){
 	print("UMAP projection does not have 3 dimensions")
-    	return NULL
+    	return(NA)
     }
     else{
         # Store UMAP layout in data frame for plotting

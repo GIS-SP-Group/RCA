@@ -27,7 +27,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
     umap.projection <- umap(t(projection))
     if (is.null(rca.obj$umap.coordinates )){
 	    print("UMAP coordinates have not been computed yet")
-	    return NULL
+	    return(NA)
     }
     else{
         # Store UMAP layout in data frame for plotting
