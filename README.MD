@@ -177,6 +177,12 @@ The *plotRCAUMAP* returns a list of *ggplot2* objects to allow for simple modifi
 
 ![](Tutorial/Umap_clusters_Example.png)
 
+In addition to the standard 2D umaps, RCA also allows the generation of 3D umaps.
+```{r}
+RCAv2::plotRCAUMAP3D(PBMCs,filename = "UMAP3D_PBMCs.html")
+```
+3D umaps are stored as *html* files that can be interactively inspected with any browser. 
+
 To better understand the composition of each cluster we generate a stacked bar plot Figure using the *plotRCAClusterComposition* function:
 ```{r}
 #Estimate the most probable cell type label for each cell
