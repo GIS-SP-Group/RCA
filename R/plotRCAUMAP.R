@@ -88,7 +88,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 		    theme(legend.position="left")
 
             # Save plot
-	    pdf(filename = paste0(folderpath, "/", "RelativeRank_", clusterColorName,"_", filename),width=14,height=7,units="in")
+	    pdf(paste0(folderpath, "/", "RelativeRank_", filename),width=14,height=7)
 	    grid.arrange(umapClusterColorsPlot,umapClusterColorsPlot2,widths=c(1,1.2))
 	    dev.off()
 	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot, umapClusterColorsPlot2))       
