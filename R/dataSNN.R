@@ -30,7 +30,6 @@ dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
     require(HiClimR)
 
     ### Cluster cells
-
     # If HiClimR is available, use fastCor to compute distance matrix
     if (require(HiClimR)) {
         d = as.dist(1 - fastCor(
@@ -52,12 +51,12 @@ dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
     clusterColors<-distinctColorPalette(length(unique(clusteringResult$cluster)))
     names(clusterColors)<-unique(clusteringResult$cluster)
 
-    dynamicColorsList<-list(Colors=clusterColors[clusteringResult$cluster[order(clusteringResult$cluster,decreasing = F)]])
+    dynamicColorsList<-list(Colors=clusterColors[as.character(clusteringResult$cluster)])
 
     # Assign clustering result to RCA object
     rca.obj$clustering.out <- list(
         "d" = d,
-        "cellTree" = order(clusteringResult$cluster,decreasing = F),
+        "cellTree" = clusteringResult$cluster,
         "dynamicColorsList" = dynamicColorsList
     )
 
