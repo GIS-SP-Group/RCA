@@ -84,7 +84,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
             # Create the plot
             umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rRank))) + geom_point(size = .5) + scale_color_identity() +  theme_bw() +ggtitle("a)")
 
-            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_manual(values=sort(unique(rBaseColors))) +  theme_bw() + ggtitle("b)")+
+            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_manual(values=sort(unique(unlist(rBaseColors)))) +  theme_bw() + ggtitle("b)")+
 		    theme(legend.position="left")
 
             # Save plot
