@@ -58,7 +58,7 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL, ctRank=F, c
         for (i in c(1:dim(rca.obj$projection.data)[2])){
             confidenceScore<-c(confidenceScore,cTIdfAlpha(rca.obj$projection.data[,i]))
         }
-	rca.obj$cScore <- unlist(confidenceScore)
+	rca.obj$cScore <-confidenceScore
     }else{
     rca.obj$cScore <- list()
     }
@@ -70,7 +70,7 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL, ctRank=F, c
         for (i in c(1:dim(rca.obj$projection.data)[2])){
             relativeColorRank<-c(relativeColorRank,cTIdfConfCol(rca.obj$projection.data,i,baseColors[i]))
         }
-	rca.obj$rRank <- unlist(relativeColorRank)
+	rca.obj$rRank <- relativeColorRank
     }else{
     rca.obj$rRank <- list()
     }
