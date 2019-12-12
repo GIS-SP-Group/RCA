@@ -37,6 +37,7 @@ The current release of RCA requires the following packages to be available on yo
 * BiocManager
 * ggplot2
 * plotly
+* plotrix
 * gridExtra
 * dplyr
 * ComplexHeatmap

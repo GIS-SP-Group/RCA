@@ -159,7 +159,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
     }
     }
     else{
-    heatmapIn<-heatmapIn[,order(cellTree)]	    
+    heatmapIn<-heatmapIn[]	    
     #graph based clustering
     if(is.null(clusterColorList)) {
         # Initialize heatmap object
@@ -168,6 +168,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             col = colorScheme,
 
             cluster_columns = FALSE,
+	    column_order = order(cellTree),
             cluster_rows = TRUE,
 
             row_dend_side = "left",
@@ -190,7 +191,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 
         # Ensure each cluster color list is a list of named vectors
         for(index in 1:length(clusterColorList)) {
-	    clusterColorList[[index]]<-clusterColorList[[index]][order(cellTree)]
+#	    clusterColorList[[index]]<-clusterColorList[[index]][order(cellTree)]
             names(clusterColorList[[index]]) <- clusterColorList[[index]]
         }
         clusterColorDf <- data.frame(clusterColorList)
@@ -237,8 +238,10 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         ht <- Heatmap(
             matrix = heatmapIn,
             col = colorScheme,
+            
+	    cluster_columns = FALSE,
+	    column_order = order(cellTree),
 
-            cluster_columns = FALSE,
             cluster_rows = TRUE,
 
             row_dend_side = "left",
