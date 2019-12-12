@@ -83,8 +83,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
             # Save plot
             ggsave(filename = paste0(folderpath, "/", "RelativeRank_", clusterColorName,"_", filename), plot = umapClusterColorsPlot,width=9,height=7,units="in")
-	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot))
-            }
+	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot))       
 
         }
 
