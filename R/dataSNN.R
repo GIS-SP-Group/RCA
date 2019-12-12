@@ -29,6 +29,12 @@ dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
     }
     require(HiClimR)
 
+    # plotrix
+    if (!require(plotrix)){
+	install.packages("plotrix")
+    }
+    require(plotrix)
+
     ### Cluster cells
     # If HiClimR is available, use fastCor to compute distance matrix
     if (require(HiClimR)) {
@@ -49,6 +55,7 @@ dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
     # Convert labels to colours for each tree cut
 
     clusterColors<-distinctColorPalette(length(unique(clusteringResult$cluster)))
+    clusterColors<-sapply(clusterColors,color.id)
     names(clusterColors)<-unique(clusteringResult$cluster)
 
     dynamicColorsList<-list(Colors=clusterColors[as.character(clusteringResult$cluster)])
