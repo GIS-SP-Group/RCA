@@ -13,6 +13,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
     projection = as.matrix(rca.obj$projection.data)
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
     rRank=rca.obj$rRank
+    rBaseColors<-rca.obj$baseColors
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
     # umap
     require(umap)
@@ -79,11 +80,16 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
             umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
             # Create the plot
-            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rRank))) + geom_point(size = .5) + scale_color_identity() +  theme_bw() 
+            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rRank))) + geom_point(size = .5) + scale_color_identity() +  theme_bw() +ggtitle(a)
+
+            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_manual(values=sort(unique(rBaseColors))) +  theme_bw() + ggtitle(b)+
+		    theme(legend.position="left")
 
             # Save plot
-            ggsave(filename = paste0(folderpath, "/", "RelativeRank_", clusterColorName,"_", filename), plot = umapClusterColorsPlot,width=9,height=7,units="in")
-	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot))       
+	    pdf(filename = paste0(folderpath, "/", "RelativeRank_", clusterColorName,"_", filename),width=14,height=7,units="in")
+	    grid.arrange(umapClusterColorsPlot,umapClusterColorsPlot2,widths=c(1,1.2))
+	    dev.off()
+	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot, umapClusterColorsPlot2))       
 
         }
 

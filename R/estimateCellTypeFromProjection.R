@@ -2,6 +2,8 @@
 #'
 #' @param rca.obj RCA object.
 #' @param confidence: a parameter indicating the difference between z-scores. If the difference is below this threshold, the cell type will be set to unknown. Default is NULL.
+#' @param ctRank: parameter indicating whether a relative rank coloring for each cell type shall be computed. Default is FALSE.
+#' @param cSCompute: parameter indicating wheter the confidence score should be computed for each cell. Default is FALSE.
 #' @return RCA object.
 #' @export
 #'
@@ -67,12 +69,14 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL, ctRank=F, c
         myColors<-distinctColorPalette(length(unique(cellTypes)))
         names(myColors)<-unique(cellTypes)
         baseColors<-myColors[unlist(cellTypes)]
+	rca.obj$baseColors<-list(Colors=baseColors)
         for (i in c(1:dim(rca.obj$projection.data)[2])){
             relativeColorRank<-c(relativeColorRank,cTIdfConfCol(rca.obj$projection.data,i,baseColors[i]))
         }
 	rca.obj$rRank <- relativeColorRank
     }else{
     rca.obj$rRank <- list()
+    rca.obj$baseColors<-list()
     }
 
 
