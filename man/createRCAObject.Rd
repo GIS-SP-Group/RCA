@@ -4,7 +4,7 @@
 \alias{createRCAObject}
 \title{Create RCA object}
 \usage{
-createRCAObject(rawData)
+createRCAObject(rawData, dataIsNormalized = FALSE)
 }
 \arguments{
 \item{rawData}{A matrix of expression values}
