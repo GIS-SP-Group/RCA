@@ -9,7 +9,7 @@ RCAConstruct <- setRefClass(Class = "RCA",
 					  clustering.out = "list",
 					  umap.coordinates = "data.frame",
 					  cell.Type.Estimate = "list",
-					  baseColors = "list"
+					  baseColors = "list",
 					  rRank = "list",
 					  cScore = "list"))
 
