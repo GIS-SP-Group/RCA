@@ -66,7 +66,7 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL, ctRank=F, c
 	require("randomcoloR")
         myColors<-distinctColorPalette(length(unique(cellTypes)))
         names(myColors)<-unique(cellTypes)
-        baseColors<-myColors[cellTypes]
+        baseColors<-myColors[unlist(cellTypes)]
         for (i in c(1:dim(rca.obj$projection.data)[2])){
             relativeColorRank<-c(relativeColorRank,cTIdfConfCol(rca.obj$projection.data,i,baseColors[i]))
         }
