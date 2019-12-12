@@ -89,7 +89,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 	    colorOrder<-order(unique(unlist(rBaseColors)))
 	    colorVec<-unique(unlist(rBaseColors))[colorOrder]
 	    names(colorVec)<-unique(names(unlist(rBaseColors)))[colorOrder]
-            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_identity(labels=names(colorVec),guide="legend") +  theme_bw() + ggtitle("b)")+   theme(legend.position="right")+labs(color="Cell type")
+            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_identity(labels=names(colorVec),guide="legend") +  theme_bw() + ggtitle("b)")+   theme(legend.position="right")+labs(color="Cell type")+guides(colour = guide_legend(override.aes = list(size=4)))
 
             # Save plot
 	    pdf(paste0(folderpath, "/", "RelativeRank_", filename),width=14,height=7)
