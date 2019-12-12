@@ -45,7 +45,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
               "#7F0000",
               "#2F0000")
         )
-    if (class(cellTree == "hclust")){
+    if (class(cellTree) == "hclust"){
     # If no cluster colors or cell properties are to be plotted
     if(is.null(clusterColorList)) {
 
