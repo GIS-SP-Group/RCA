@@ -90,10 +90,10 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 
         # Create cell property list - list of NODG, nUMI and percent.mito
         nUMI <- Matrix::colSums(rca.obj$raw.data)
-        nodg <- Matrix::colSums(rca.obj$data > 0)
+        nodg <- Matrix::colSums(rca.obj$raw.data > 0)
 
-        mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$data), value = T)
-        pMito <- Matrix::colSums(rca.obj$data[mito.genes, ])/Matrix::colSums(rca.obj$data)
+        mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$raw.data), value = T)
+        pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
 
         cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
 
@@ -199,10 +199,10 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 
         # Create cell property list - list of NODG, nUMI and percent.mito
         nUMI <- Matrix::colSums(rca.obj$raw.data)
-        nodg <- Matrix::colSums(rca.obj$data > 0)
+        nodg <- Matrix::colSums(rca.obj$raw.data > 0)
 
-        mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$data), value = T)
-        pMito <- Matrix::colSums(rca.obj$data[mito.genes, ])/Matrix::colSums(rca.obj$data)
+        mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$raw.data), value = T)
+        pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
 
         cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
 
