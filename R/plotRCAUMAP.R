@@ -16,10 +16,12 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
     rBaseColors<-rca.obj$baseColors
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
     # umap
-    require(umap)
     if (!require(ggplot2))
         install.packages("ggplot2", repos = "http://cran.us.r-project.org")
     require(ggplot2)
+    if (!require(gridExtra))
+        install.packages("gridExtra", repos = "http://cran.us.r-project.org")
+    require(gridExtra)
     if (!require(ggpubr))
         install.packages("ggpubr", repos = "http://cran.us.r-project.org")
     require(ggpubr)
@@ -80,9 +82,9 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
             umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
             # Create the plot
-            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rRank))) + geom_point(size = .5) + scale_color_identity() +  theme_bw() +ggtitle(a)
+            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rRank))) + geom_point(size = .5) + scale_color_identity() +  theme_bw() +ggtitle("a)")
 
-            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_manual(values=sort(unique(rBaseColors))) +  theme_bw() + ggtitle(b)+
+            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_manual(values=sort(unique(rBaseColors))) +  theme_bw() + ggtitle("b)")+
 		    theme(legend.position="left")
 
             # Save plot
