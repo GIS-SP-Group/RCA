@@ -60,7 +60,7 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL, ctRank=F, c
         }
 	rca.obj$cScore <- confidenceScore
     }else{
-    rca.obj$cScore <- NULL
+    rca.obj$cScore <- list()
     }
     if (ctRank){
 	require("randomcoloR")
@@ -72,7 +72,7 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL, ctRank=F, c
         }
 	rca.obj$rRank <- relativeColorRank
     }else{
-    rca.obj$rRank <- NULL
+    rca.obj$rRank <- list()
     }
 
 
