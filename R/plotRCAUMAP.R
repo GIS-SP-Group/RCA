@@ -12,7 +12,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
     ### Extract projection data from RCA object
     projection = as.matrix(rca.obj$projection.data)
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
-
+    rRank=rca.obj$rRank
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
     # umap
     require(umap)
@@ -68,6 +68,26 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
             }
 
         }
+
+      # If cluster colors are to be plotted
+        if(!is.null(rRank) & length(rRank) != 0) {
+
+            #Get the name of this cluster annotation
+            clusterColorName = names(clusterColorList[index])
+
+            # Set the data frame column to the color vector
+            umap.df[[clusterColorName]] <- clusterColorList[[index]]
+
+            # Create the plot
+            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rRank))) + geom_point(size = .5) + scale_color_identity() +  theme_bw() 
+
+            # Save plot
+            ggsave(filename = paste0(folderpath, "/", "RelativeRank_", clusterColorName,"_", filename), plot = umapClusterColorsPlot,width=9,height=7,units="in")
+	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot))
+            }
+
+        }
+
 
         # If cell properties are to be plotted
         if(!is.null(cellPropertyList)) {
