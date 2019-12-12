@@ -5,7 +5,7 @@
 #' @return RCA object.
 #' @export
 #'
-estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL) {
+estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL, ctRank=F, cSCompute=F) {
 
     projection <- rca.obj$projection.data
 
@@ -24,9 +24,28 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL) {
          return(names(x)[which(x==max(x))])
     }
 
+    cTIdfAlpha<-function(x){
+        temp<-x
+        tempMax<-max(temp)
+        index<-which(temp==tempMax)
+        temp<-temp[-index]
+        deltaMax<-max(temp)/tempMax
+        return(1.0-abs(deltaMax))
+    }
 
+    cTIdfConfCol<-function(x,index,bC){
+        colorVec<-colorRampPalette(c("grey",bC))(100)
+        maxVal<-max(x[,index])
+        maxIndex<-which(x[,index]==maxVal)
+        cellTypeOrder<-order(x[maxIndex,])
+	ratio<-max(1,(which(cellTypeOrder==index)/length(cellTypeOrder))*100)
+	result<-colorVec[ratio]
+	return(result)
+    }
 
     cellTypes<-list()
+    confidenceScore<-list()
+    relativeColorRank<-list()
     for (i in c(1:dim(rca.obj$projection.data)[2])){
     	  if (is.null(confidence)){
           cellTypes<-c(cellTypes,cTIdfWU(rca.obj$projection.data[,i]))
@@ -35,11 +54,30 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL) {
 	  cellTypes<-c(cellTypes,cTIdf(rca.obj$projection.data[,i],confidence))
 	  }
     }
+    if (cSCompute){
+        for (i in c(1:dim(rca.obj$projection.data)[2])){
+            confidenceScore<-c(confidenceScore,cTIdfAlpha(rca.obj$projection.data[,i]))
+        }
+	rca.obj$cScore <- confidenceScore
+    }else{
+    rca.obj$cScore <- NULL
+    }
+    if (ctRank){
+	require("randomcoloR")
+        myColors<-distinctColorPalette(length(unique(cellTypes)))
+        names(myColors)<-unique(cellTypes)
+        baseColors<-myColors[cellTypes]
+        for (i in c(1:dim(rca.obj$projection.data)[2])){
+            relativeColorRank<-c(relativeColorRank,cTIdfConfCol(rca.obj$projection.data,i,baseColors[i]))
+        }
+	rca.obj$rRank <- relativeColorRank
+    }else{
+    rca.obj$rRank <- NULL
+    }
+
 
     # Assign projection result to RCA object
     rca.obj$cell.Type.Estimate <- cellTypes
-
     ### Return RCA object
-
     return(rca.obj)
 }

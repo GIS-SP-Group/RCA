@@ -8,7 +8,9 @@ RCAConstruct <- setRefClass(Class = "RCA",
 					  projection.data = "Matrix", 
 					  clustering.out = "list",
 					  umap.coordinates = "data.frame",
-					  cell.Type.Estimate = "list"))
+					  cell.Type.Estimate = "list",
+					  rRank = "list",
+					  cScore = "list"))
 
 RCAConstruct$methods(show=function(){
 		     print("RCA reference class object")
