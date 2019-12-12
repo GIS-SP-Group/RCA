@@ -10,7 +10,7 @@ plotRCAClusterComposition <- function(rca.obj, folderpath = ".", filename = "RCA
     ### Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
     cellTree = rca.obj$clustering.out$cellTree
-    clusterColorList = rca.obj$clustering.out$dynamicColorsList[[1]]
+    clusterColors = rca.obj$clustering.out$dynamicColorsList[[1]]
 
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
     # dplyr Package
