@@ -191,7 +191,6 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 
         # Ensure each cluster color list is a list of named vectors
         for(index in 1:length(clusterColorList)) {
-#	    clusterColorList[[index]]<-clusterColorList[[index]][order(cellTree)]
             names(clusterColorList[[index]]) <- clusterColorList[[index]]
         }
         clusterColorDf <- data.frame(clusterColorList)

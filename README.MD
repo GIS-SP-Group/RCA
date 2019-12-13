@@ -34,6 +34,7 @@ The current release of RCA requires the following packages to be available on yo
 * qlcMatrix
 * WGCNA
 * fastcluster
+* dbscan
 * BiocManager
 * ggplot2
 * plotly
@@ -155,7 +156,7 @@ PBMCs<-RCAv2::dataProject(PBMCs,
 ### Cluster the projection and visualize it
 The projected data can be clustered using the command:
 ```{r}
-PBMCs<-RCAv2::dataClust(PBMCs)
+PBMCs<-RCAv2::dataClust(PBMCs,var.thrs=1)
 ```
 The clustering can be influenced by the parameters *deepSplitValues* and *minClustSize*, indicating the deepness of the cut in the clustering and the minimum number of cells within a cluster, respectively. 
 
@@ -183,7 +184,7 @@ In addition to the standard 2D umaps, RCA also allows the generation of 3D umaps
 ```{r}
 RCAv2::plotRCAUMAP3D(PBMCs,filename = "UMAP3D_PBMCs.html")
 ```
-3D umaps are stored as *html* files that can be interactively inspected with any browser. 
+3D umaps are stored as *html* files that can be interactively inspected with any browser. An example is shown [here](Tutorial/Example_3D_UMAP.html).
 
 To better understand the composition of each cluster we generate a stacked bar plot Figure using the *plotRCAClusterComposition* function:
 ```{r}
@@ -228,6 +229,18 @@ Each UMAP will be stored in a separate *pdf* where the filename indicates which 
 
 For numerical data, the dots are transparent for low values to avoid overplotting issues. In our example, we can see that *CD56* expression corresponds to the NK annotation.
 
+### Graph based clustering as an alternative to hierarchical clustering
+Due to the increasing size of single cell datasets, hierarchical clustering requires machines with large main memory. To overcome this putative limitation, RCAv2 also offers graph based clustering using a shared neirest neighbour (snn) approach (Halser et al., Journal of Statistical Software, 2019).
+To cluster the PBMC projection using the snn approach run
+```{r}
+PBMCs<-RCAv2::dataSNN(PBMCs,k=100,eps=25,minPts=30)
+```
+This function has three parameters:
+* *k* as the number of considered neighbours per cell,
+* *eps* as the minimum number of shared neighbours between to cells,
+* *minPts* minimum number of points that share *eps* neighbours such that a point is considered a core point.
+
+As for the hierarchical clustering, heatmaps and umaps can be generated as well.
 ### Clustering free analysis of the projection
 Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering indepent cell-type assignment approach that is purely based on each cells z-score distribution.
 A call to the function 
@@ -462,7 +475,7 @@ grid.arrange(umapAll_Seurat_RCA_Clusters,umapAll_Seurat_Estimated_CT,nrow=1)
 
 The RCA clusters show a high concordance to the Seurat clusters shown in the previous UMAP.
 
-### Add UMAP coordinates and annotations to the Seurat object
+### Add projection and annotations to the Seurat object
 For greater convenience the results of RCA can be saved within the Seurat object for further analysis.
 
 ```{r}
@@ -474,7 +487,7 @@ pbmc_Seurat[["Projection"]]<-CreateAssayObject(data=RCA_from_Seurat$projection.d
 ## FAQ
 **What is the difference between the original RCA version (Li et al., Nat Genet, 2017) and RCA version 2?**
 
-*RCA version 2 improves upon version 1 in terms of performance, applicability, functionality and usability. We reimplented the algorithm more efficiently and use faster packages. We considerably extended the included reference data sets and provide new ways of cluster free cell type annotation for large data sets. Also the automated generation of figures has been improved to scale better with the size of current data sets.*
+*RCA version 2 improves upon version 1 in terms of performance, applicability, functionality and usability. We reimplented the algorithm more efficiently and use faster packages. We considerably extended the included reference data sets and provide new ways of cluster free cell type annotation for large data sets and added graph based clustering in addition to the previously used hierachical clustering. Also the automated generation of figures has been improved to scale better with the size of current data sets.*
 
 **The clustering is very slow (or it doesn't work at all), what can I do?**
 
