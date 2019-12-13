@@ -184,7 +184,9 @@ In addition to the standard 2D umaps, RCA also allows the generation of 3D umaps
 ```{r}
 RCAv2::plotRCAUMAP3D(PBMCs,filename = "UMAP3D_PBMCs.html")
 ```
-3D umaps are stored as *html* files that can be interactively inspected with any browser. An example is shown [here](Tutorial/Example_3D_UMAP.html).
+3D umaps are stored as *html* files that can be interactively inspected with any browser. Due to github limitations, only a screenshot is shown below:
+![](Tutorial/Example_3D_Umap.png)
+
 
 To better understand the composition of each cluster we generate a stacked bar plot Figure using the *plotRCAClusterComposition* function:
 ```{r}
