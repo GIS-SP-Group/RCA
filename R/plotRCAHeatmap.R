@@ -93,9 +93,14 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         nodg <- Matrix::colSums(rca.obj$raw.data > 0)
 
         mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$raw.data), value = T)
-        pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
-
-        cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
+        if(length(mito.genes) == 0) {
+            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg)
+        } else {
+            pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
+            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
+        }
+            
+        
 
         # Create list of annotation bar plots from cell property list
         annoBarPlotList <- lapply(cellPropertyList, function(cellPropertyVec){
@@ -248,7 +253,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             show_row_dend = TRUE,
             row_dend_width = unit(30, "mm"),
 
-            show_column_dend = FALSE,,
+            show_column_dend = FALSE,
             show_column_names = FALSE,
 
             show_row_names = TRUE,

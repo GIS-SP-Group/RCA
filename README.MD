@@ -168,7 +168,7 @@ RCAv2::plotRCAHeatmap(PBMCs,filename = "Heatmap_PBMCs.pdf")
 
 The heatmap can be used to manually assign cell-types based on the projection.
 
-![](Tutorial/Heatmap_Example.png)
+![](Tutorial/Heatmap_Example_With_Threshold.png)
 
 In addition to the visuzalization in the heatmap, it can make sense to look at the projection using a UMAP.
 To do so, simple use the function
