@@ -11,6 +11,8 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 
     ### Extract projection data from RCA object
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
+    rRank=rca.obj$rRank
+    rBaseColors<-rca.obj$baseColors
 
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
     # umap
@@ -93,6 +95,43 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
             }
 
         }
+
+
+        if(!is.null(rRank) & length(rRank) != 0) {
+
+            #Get the name of this cluster annotation
+            clusterColorName = names(clusterColorList[index])
+
+            # Set the data frame column to the color vector
+            umap.df[[clusterColorName]] <- clusterColorList[[index]]
+
+            # Create the plot
+            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rRank))) + geom_point(size = .5) + scale_color_identity() +  theme_bw() +ggtitle("a)")
+
+
+	    names(rBaseColors)<-NULL
+	    colorOrder<-order(unique(unlist(rBaseColors)))
+	    colorVec<-unique(unlist(rBaseColors))[colorOrder]
+	    names(colorVec)<-unique(names(unlist(rBaseColors)))[colorOrder]
+            umap3dPlot<-plot_ly(data = umap.df,
+		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
+		            color = ~unlist(rRank),
+			    colors = colorVec,
+		            type = "scatter3d",
+		            mode = "markers",
+		            marker = list(size = 5, width=2),
+			    text = ~names(unlist(rRank)),
+			    hoverinfo="text")
+
+
+            # Save plot
+            htmlwidgets::saveWidget(as_widget(umap3dPlot),  paste0(folderpath, "/RelativeColoring_CellTypes_",filename))
+
+
+        }
+
+
+
 
         # If cell properties are to be plotted
         if(!is.null(cellPropertyList)) {
