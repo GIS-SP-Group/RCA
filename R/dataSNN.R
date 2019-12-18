@@ -49,11 +49,11 @@ dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
         d = as.dist(1 - cor(projection.data, method = "pearson"))
     }
 
-    print("Computing PCA")
-    pcaD = prcomp(d)
-    components=c(1:max(which(summary(pcaD)$importance[1,]>1)))
-    print("Using the following PCA components for clustering")
-    print(components)
+    cat("Computing PCA")
+    pcaD = prcomp(projection.data)
+    components=c(1:(max(which(summary(pcaD)$importance[3,]>0.9))+1))
+    cat("Using the following PCA components for clustering")
+    cat(components)
     # Obtain cell tree using distance matrix
     print("Computing clustering")
     clusteringResult<-sNNclust(pcaD$rotation[,components],k,eps,minPts,borderPoints = T)
