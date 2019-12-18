@@ -52,7 +52,7 @@ dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
     pcaD = prcomp(d)
     components=c(1:max(which(summary(pcaD)$importance[1,]>1)))
     # Obtain cell tree using distance matrix
-    clusteringResult<-sNNclust(pcaD$rotation[,1:components],k,eps,minPts,borderPoints = T)
+    clusteringResult<-sNNclust(pcaD$rotation[,components],k,eps,minPts,borderPoints = T)
 
     # Convert labels to colours for each tree cut
 
