@@ -49,8 +49,10 @@ dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
         d = as.dist(1 - cor(projection.data, method = "pearson"))
     }
 
+    pcaD = prcomp(d)
+    components=c(1:5)
     # Obtain cell tree using distance matrix
-    clusteringResult<-sNNclust(d,k,eps,minPts,borderPoints = T)
+    clusteringResult<-sNNclust(pcaD[,components],k,eps,minPts,borderPoints = T)
 
     # Convert labels to colours for each tree cut
 
