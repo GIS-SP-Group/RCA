@@ -171,9 +171,10 @@ The heatmap can be used to manually assign cell-types based on the projection.
 ![](Tutorial/Heatmap_Example_With_Threshold.png)
 
 In addition to the visuzalization in the heatmap, it can make sense to look at the projection using a UMAP.
-To do so, simple use the function
+To do so, simple use the functions
 
 ```{r}
+PBMCs<-computeUMAP(PBMCs)
 RCAv2::plotRCAUMAP(PBMCs,filename = "UMAP_PBMCs.pdf")
 ```
 The *plotRCAUMAP* returns a list of *ggplot2* objects to allow for simple modification of the generated figures. 

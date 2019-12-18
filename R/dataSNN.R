@@ -23,52 +23,28 @@ dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
     }
     require(randomcoloR)
 
-    # HiClimR
-    if (!require(HiClimR)) {
-        install.packages("HiClimR")
-    }
-    require(HiClimR)
-
     # plotrix
     if (!require(plotrix)){
 	install.packages("plotrix")
     }
     require(plotrix)
 
-    ### Cluster cells
-    # If HiClimR is available, use fastCor to compute distance matrix
-    if (require(HiClimR)) {
-        d = as.dist(1 - fastCor(
-            projection.data,
-            upperTri = TRUE,
-            nSplit = 5,
-            optBLAS = T
-        ))
-    } else {
-        # else, use cor
-        d = as.dist(1 - cor(projection.data, method = "pearson"))
-    }
-
-    cat("Computing PCA")
     pcaD = prcomp(projection.data)
     components=c(1:(max(which(summary(pcaD)$importance[3,]<0.99))+1))
-    cat("Using the following PCA components for clustering")
-    cat(components)
     # Obtain cell tree using distance matrix
-    print("Computing clustering")
     clusteringResult<-sNNclust(pcaD$rotation[,components],k,eps,minPts,borderPoints = T)
 
     # Convert labels to colours for each tree cut
-
     clusterColors<-distinctColorPalette(length(unique(clusteringResult$cluster)))
     clusterColors<-sapply(clusterColors,color.id)
+    clusterColors<-sapply(clusterColors,function(x){return(x[1])})
     names(clusterColors)<-unique(clusteringResult$cluster)
 
     dynamicColorsList<-list(Colors=clusterColors[as.character(clusteringResult$cluster)])
 
     # Assign clustering result to RCA object
     rca.obj$clustering.out <- list(
-        "d" = d,
+        "d" = pcaD$rotation[,components],
         "cellTree" = clusteringResult$cluster,
         "dynamicColorsList" = dynamicColorsList
     )
