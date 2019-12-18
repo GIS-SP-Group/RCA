@@ -51,7 +51,7 @@ dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
 
     cat("Computing PCA")
     pcaD = prcomp(projection.data)
-    components=c(1:(max(which(summary(pcaD)$importance[3,]>0.9))+1))
+    components=c(1:(max(which(summary(pcaD)$importance[3,]<0.9))+1))
     cat("Using the following PCA components for clustering")
     cat(components)
     # Obtain cell tree using distance matrix
