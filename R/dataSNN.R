@@ -1,12 +1,13 @@
 #' Generate cell clusters using hierarchical clustering and dynamic tree cutting.
 #'
 #' @param rca.obj RCA object.
-#' @param deepSplitValues integer vector indicating how deep the dendrogram should be cut. Values can range from 0 to 4.
-#' @param minClustSize integer value indicating the minimum size of the resulting clusters. Default is 5.
+#' @param k. Number of cells to consider in the neirest neighbour graph. Default is 10.
+#' @param eps. Number of cells that have to be similar to connect 2 cells in a network. Default is 8
+#' @param minPts. Number of cells with at least eps neighbours to be considered a core point. Default is 5.
 #' @return RCA object.
 #' @export
 #'
-dataSNN <- function(rca.obj,k=50,eps=20,minPts=10) {
+dataSNN <- function(rca.obj,k=10,eps=8,minPts=5) {
 
     ### Extract projection data
     projection.data <- as.matrix(rca.obj$projection.data)
