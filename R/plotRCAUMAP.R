@@ -10,7 +10,6 @@
 plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_UMAP.pdf") {
 
     ### Extract projection data from RCA object
-    projection = as.matrix(rca.obj$projection.data)
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
     rRank=rca.obj$rRank
     rBaseColors<-rca.obj$baseColors
@@ -27,8 +26,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
     require(ggpubr)
 
     # Compute UMAP projection from cell type projection
-    umap.projection <- umap(t(projection))
-    if (is.null(rca.obj$umap.coordinates )){
+    if (is.null(rca.obj$umap.coordinates)){
 	    print("UMAP coordinates have not been computed yet")
 	    return(NA)
     }

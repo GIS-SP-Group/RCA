@@ -171,9 +171,10 @@ The heatmap can be used to manually assign cell-types based on the projection.
 ![](Tutorial/Heatmap_Example_With_Threshold.png)
 
 In addition to the visuzalization in the heatmap, it can make sense to look at the projection using a UMAP.
-To do so, simple use the function
+To do so, simple use the functions
 
 ```{r}
+PBMCs<-computeUMAP(PBMCs)
 RCAv2::plotRCAUMAP(PBMCs,filename = "UMAP_PBMCs.pdf")
 ```
 The *plotRCAUMAP* returns a list of *ggplot2* objects to allow for simple modification of the generated figures. 
@@ -394,11 +395,11 @@ We obtain the following UMAP:
 ![](Tutorial/UMAP_Seurat.png)
 
 ### Generate a RCA object and perform RCA analysis
-We use the RCA function *createRCAObject* to generate a RCA object from the count data stored in our Seurat object.
+We use the RCA function *createRCAObject* to generate a RCA object from the normalized data stored in our Seurat object.
 
 ```{r}
 library(RCAv2)
-RCA_from_Seurat<-RCAv2::createRCAObject(pbmc_Seurat@assays$RNA@counts)
+RCA_from_Seurat<-RCAv2::createRCAObject(pbmc_Seurat@assays$RNA@data,dataIsNormalized=T)
 ```
 Next, we can compute the projection, cluster the data, and estimate the most likely cell type for each cell as above:
 ```{r}
