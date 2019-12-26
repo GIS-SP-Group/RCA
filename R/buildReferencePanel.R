@@ -8,7 +8,7 @@
 #' @export
 #' 
 
-buildReferencePanel <- function(bulk.rna.data, celltype.vec, folder.path = ".", filename = "my_reference_panel.rds") {
+buildReferencePanel <- function(bulk.rna.data, celltype.vec = colnames(bulk.rna.data), fc.thrs = 7.5, fdr.thrs = 0.0001, folder.path = ".", filename = "my_reference_panel.rds") {
     
     if(ncol(bulk.rna.data) != length(celltype.vec)) {
         stop("Data doesn't match cell type vector.")
@@ -53,6 +53,7 @@ buildReferencePanel <- function(bulk.rna.data, celltype.vec, folder.path = ".", 
             # Perform exact test
             etObj <- exactTest(object = dgeObj, pair = c(i, j))
             etObj$table$FDR <- p.adjust(p = etObj$table$PValue, method = "fdr")
+            print(paste0(i, ", ", j))
             
             etList[paste0(i, "_", j)] <- etObj
         }
@@ -60,7 +61,7 @@ buildReferencePanel <- function(bulk.rna.data, celltype.vec, folder.path = ".", 
     
     # Get list of DE genes
     de.list <- lapply(etList, function(etTable) {
-        rownames(etTable)[which((abs(etTable$logFC) > 7.5) & (etTable$FDR < 0.0001))]
+        rownames(etTable)[which((abs(etTable$logFC) > fc.thrs) & (etTable$FDR < fdr.thrs))]
     })
     
     # Get union of DE genes
@@ -81,7 +82,11 @@ buildReferencePanel <- function(bulk.rna.data, celltype.vec, folder.path = ".", 
         }
         
     }
+
     
     # Save reference panel
     saveRDS(object = average.ref.panel, file = paste0(folder.path, "/", filename))
+    
+    # Return object
+    return(average.ref.panel)
 }
