@@ -7,7 +7,7 @@
 #' @export
 #'
 
-plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_UMAP.pdf") {
+plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_UMAP.html") {
 
     ### Extract projection data from RCA object
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
@@ -75,9 +75,11 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
 			            color = ~umap.df[[clusterColorName]],
 			            colors = dColors,
-				            type = "scatter3d",
-				            mode = "markers",
-					            marker = list(size = 5, width=2))
+			            type = "scatter3d",
+			            mode = "markers",
+			            marker = list(size = 5, width=2)
+				    text = ~umap.df[[clusterColorName]],
+				    hoverinfo="text")
 		
     
                 # Save plot
