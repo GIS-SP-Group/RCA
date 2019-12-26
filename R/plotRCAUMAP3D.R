@@ -149,17 +149,21 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
 			            color = ~umap.df[[CellPropertyName]],
 			            colors = dColors,
-				            type = "scatter3d",
-				            mode = "markers",
-					            marker = list(size = 5, width=2))
+			            type = "scatter3d",
+			            mode = "markers",
+			            marker = list(size = 5, width=2),
+				    text = ~umap.df[[CellPropertyName]],
+				    hoverinfo="text")
 		}
 		else{
 		umap3dPlot<-plot_ly(data = umap.df,
 		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
 			            color = ~umap.df[[CellPropertyName]],
-				            type = "scatter3d",
-				            mode = "markers",
-					            marker = list(size = 5, width=2))
+			            type = "scatter3d",
+			            mode = "markers",
+			            marker = list(size = 5, width=2),
+				    text = ~umap.df[[CellPropertyName]],
+				    hoverinfo="text")
 		}
  
 		}
