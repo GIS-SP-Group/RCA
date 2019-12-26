@@ -78,7 +78,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 				            type = "scatter3d",
 				            mode = "markers",
 					            marker = list(size = 5, width=2))
-		}
+		
     
                 # Save plot
     	        htmlwidgets::saveWidget(as_widget(umap3dPlot),  paste0(folderpath, "/ClusterColors_",clusterColorName,"_",filename))
