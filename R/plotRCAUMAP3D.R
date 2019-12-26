@@ -77,7 +77,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 			            colors = dColors,
 			            type = "scatter3d",
 			            mode = "markers",
-			            marker = list(size = 5, width=2)
+			            marker = list(size = 5, width=2),
 				    text = ~umap.df[[clusterColorName]],
 				    hoverinfo="text")
 		
@@ -94,7 +94,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
             #Get the name of this cluster annotation
             clusterColorName = names(clusterColorList[index])
 
-            # Set the data frame column to the color vector
+            
             umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
             # Create the plot
