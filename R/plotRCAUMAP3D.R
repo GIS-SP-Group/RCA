@@ -69,9 +69,8 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
                 # Set the data frame column to the color vector
                 umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
+		dColors = sort(unique(umap.df[[clusterColorName]]))
                 # Create the plot
-		if (require("randomcoloR")){
-		dColors=distinctColorPalette(length(unique(umap.df[[clusterColorName]])))
 		umap3dPlot<-plot_ly(data = umap.df,
 		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
 			            color = ~umap.df[[clusterColorName]],
@@ -79,15 +78,6 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 				            type = "scatter3d",
 				            mode = "markers",
 					            marker = list(size = 5, width=2))
-		}
-		else{
-		umap3dPlot<-plot_ly(data = umap.df,
-		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
-			            color = ~umap.df[[clusterColorName]],
-				            type = "scatter3d",
-				            mode = "markers",
-					            marker = list(size = 5, width=2))
-
 		}
     
                 # Save plot
