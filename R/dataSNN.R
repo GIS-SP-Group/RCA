@@ -46,7 +46,6 @@ dataSNN <- function(rca.obj,k=10,eps=8,minPts=5) {
 
     # Assign clustering result to RCA object
     rca.obj$clustering.out <- list(
-        "d" = pcaD$rotation[,components],
         "cellTree" = clusteringResult$cluster,
         "dynamicColorsList" = dynamicColorsList
     )

@@ -18,11 +18,13 @@ RCAConstruct$methods(show=function(){
 		     if (!(is.null(raw.data))){
 			     dataSize=dim(raw.data);
 			     print(paste0("Raw data: ",dataSize[2]," cells and ",dataSize[1]," features."))
-			    }
+		    }
+
                      if (!(is.null(data))){
 			     dataSize=dim(data);
 			     print(paste0("Normalized data: ",dataSize[2]," cells and ",dataSize[1]," features."))
 		     }
+
 		     if (!(is.null(projection.data))){
 			     dataSize=dim(projection.data);
 			     print(paste0("Projection data: ",dataSize[2]," cells to ",dataSize[1]," cell-types."))
@@ -35,11 +37,13 @@ RCAConstruct$methods(show=function(){
 
 		     if (!(is.null(clustering.out))){
 			     dataSize=length(unique(clustering.out$dynamicColorsList[[1]]));
-			     print(paste0("The data set contains ",dataSize," RCA clusters."))}
+			     print(paste0("The data set contains ",dataSize," RCA clusters."))
+		     }
 
 		     if (!(is.null(cell.Type.Estimate))){
 			     dataSize=length(unique(cell.Type.Estimate));
-			     print(paste0("The data set contains ",dataSize," unique cell types."))}
+			     print(paste0("The data set contains ",dataSize," unique cell types."))
+		     }
 		})
 
 		      

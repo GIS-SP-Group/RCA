@@ -68,7 +68,6 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
 
     # Assign clustering result to RCA object
     rca.obj$clustering.out <- list(
-        "d" = d,
         "cellTree" = cellTree,
         "dynamicColorsList" = dynamicColorsList
     )
