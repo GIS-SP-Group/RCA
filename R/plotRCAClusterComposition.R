@@ -45,14 +45,15 @@ plotRCAClusterComposition <- function(rca.obj, folderpath = ".", filename = "RCA
     
     if (require(randomcoloR)){
        dColors<-distinctColorPalette(length(unique(enrichmentAll$CT)))
+       nCols<-ceiling(length(unique(enrichmentAll$CT))/26)
        ratioPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Ratio,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Percentage")+coord_flip()+ggtitle("a)")+theme(legend.position = "none")+scale_fill_manual(values=dColors)
-       countPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Count,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Count")+coord_flip()+ggtitle("b)")+scale_fill_manual(values=dColors)+labs(fill="Cell type")+guides(fill=guide_legend(ncol=1))
+       countPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Count,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Count")+coord_flip()+ggtitle("b)")+scale_fill_manual(values=dColors)+labs(fill="Cell type")+guides(fill=guide_legend(ncol=nCols))
     }
     else{
        ratioPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Ratio,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Percentage")+coord_flip()+ggtitle("a)")+theme(legend.position = "none")
-       countPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Count,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Count")+coord_flip()+ggtitle("b)")+labs(fill="Cell type")+guides(fill=guide_legend(ncol=1))
+       countPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Count,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Count")+coord_flip()+ggtitle("b)")+labs(fill="Cell type")+guides(fill=guide_legend(ncol=nCols))
     }
-   pdf(paste0(folderpath,"/Heatmap_Composition_",filename),width=15,height=7)
-   grid.arrange(ratioPlot,countPlot,widths=c(1,1.4),nrow=1)
+   pdf(paste0(folderpath,"/Heatmap_Composition_",filename),width=15+(nCols-1),height=7)
+   grid.arrange(ratioPlot,countPlot,widths=c(1,(1.4+(nCols-1)/10),nrow=1)
    dev.off()
 }
