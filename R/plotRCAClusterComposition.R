@@ -55,6 +55,6 @@ plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", fi
        countPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Count,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Count")+coord_flip()+ggtitle("b)")+labs(fill="Cell type")+guides(fill=guide_legend(ncol=nCols))
     }
    pdf(paste0(folderpath,"/Heatmap_Composition_",filename),width=15+(nCols-1),height=7)
-   grid.arrange(ratioPlot,countPlot,widths=c(1,(1.4+(nCols-1)/10),nrow=1)
+   grid.arrange(ratioPlot,countPlot,widths=c(1,(1.4+(nCols-1)/10),nrow=1))
    dev.off()
 }
