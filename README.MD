@@ -8,11 +8,10 @@ Version 2.0
 Release date: September 3, 2019
 
 ## Functionality of RCA
-Features: 
-* clustering analysis of scRNAseq data from Human samples
-* Provided reference panels:
-  * "GlobalPanel": default option for clusterig general single cell data sets that include a wide spectrum of cell types.          
-  * "ColonEpitheliumPanel": suitable for analyzing human colon/intestine derived samples.
+RCA takes scRNA-seq data as input. For 10X Genomics data processed with CellRanger, build in quality control and preprocessing functions are available. Other data sets that have been preprocessed elsewhere can be incorporated as a count matrix. Reference datasets that can be included in RCA include (sorted) bulk RNA-seq, microarray and scRNA-seq data sets. Within RCA, we provide a function that allows users to easily generate custom reference panels from raw count data. Additionally we provide several reference panels for human cell types as well as one panel for mouse. RCA considers a selected reference panel as well as query single cell data to compute a correlation matrix indicating the similarity of single cell transcriptomes to the reference transcriptomes. This, so called, reference projection, can be clustered and visualized in a heatmap, and/or directly visualized in a UMAP. The most likely cell type can be calculated either per cell or per cluster.
+
+An overview on all features of RCA is provided in the Figure below:
+![](Tutorial/OverviewFig.png)
 
 
 ## A beginner's guide to RCA
