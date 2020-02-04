@@ -9,7 +9,7 @@
 #' @return a data frame holding parameter values and resulting cluster numbers.
 #' @export
 #'
-parameterSpaceSNN <- function(rca.obj,kL=c(10:50),epsL=c(5:20),minPtsL=c(5:10),folderpath=".",filename="Graph_based_Clustering_Parameter_Space.html") {
+parameterSpaceSNN <- function(rca.obj,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),folderpath=".",filename="Graph_based_Clustering_Parameter_Space.html") {
 
     ### Extract projection data
     projection.data <- as.matrix(rca.obj$projection.data)
