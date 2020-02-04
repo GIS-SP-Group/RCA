@@ -8,11 +8,10 @@ Version 2.0
 Release date: September 3, 2019
 
 ## Functionality of RCA
-Features: 
-* clustering analysis of scRNAseq data from Human samples
-* Provided reference panels:
-  * "GlobalPanel": default option for clusterig general single cell data sets that include a wide spectrum of cell types.          
-  * "ColonEpitheliumPanel": suitable for analyzing human colon/intestine derived samples.
+RCA takes scRNA-seq data as input. For 10X Genomics data processed with CellRanger, build in quality control and preprocessing functions are available. Other data sets that have been preprocessed elsewhere can be incorporated as a count matrix. Reference datasets that can be included in RCA include (sorted) bulk RNA-seq, microarray and scRNA-seq data sets. Within RCA, we provide a function that allows users to easily generate custom reference panels from raw count data. Additionally we provide several reference panels for human cell types as well as one panel for mouse. RCA considers a selected reference panel as well as query single cell data to compute a correlation matrix indicating the similarity of single cell transcriptomes to the reference transcriptomes. This, so called, reference projection, can be clustered and visualized in a heatmap, and/or directly visualized in a UMAP. The most likely cell type can be calculated either per cell or per cluster.
+
+An overview on all features of RCA is provided in the Figure below:
+![](Tutorial/OverviewFig.png)
 
 
 ## A beginner's guide to RCA
@@ -244,6 +243,17 @@ This function has three parameters:
 * *minPts* minimum number of points that share *eps* neighbours such that a point is considered a core point.
 
 As for the hierarchical clustering, heatmaps and umaps can be generated as well.
+
+To help the user choosing the parameters for clustering, we provide a parameter space exploration feature leading to a 3D umap illustrating the number of clusters depending on the three parameters, as shown below.
+
+![](Tutorial/ParameterPlotDBSCAN.PNG)
+
+This figure can be generated using the function
+```{r}
+parameterSpaceSNN(PBMCs,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),folderpath=".",filename="Graph_based_Clustering_Parameter_Space.html") 
+```
+where *kL*, *epsL* and *minPtsL* define the search space for *k*, *eps* and *minPts* respectively. Note that executing this function will take longer for large search spaces.
+
 ### Clustering free analysis of the projection
 Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering indepent cell-type assignment approach that is purely based on each cells z-score distribution.
 A call to the function 
