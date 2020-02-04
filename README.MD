@@ -243,6 +243,17 @@ This function has three parameters:
 * *minPts* minimum number of points that share *eps* neighbours such that a point is considered a core point.
 
 As for the hierarchical clustering, heatmaps and umaps can be generated as well.
+
+To help the user choosing the parameters for clustering, we provide a parameter space exploration feature leading to a 3D umap illustrating the number of clusters depending on the three parameters, as shown below.
+
+![](Tutorial/ParameterPlotDBSCAN.png)
+
+This figure can be generated using the function
+```{r}
+parameterSpaceSNN(PBMCs,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),folderpath=".",filename="Graph_based_Clustering_Parameter_Space.html") 
+```
+where *kL*, *epsL* and *minPtsL* define the search space for *k*, *eps* and *minPts* respectively. Note that executing this function will take longer for large search spaces.
+
 ### Clustering free analysis of the projection
 Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering indepent cell-type assignment approach that is purely based on each cells z-score distribution.
 A call to the function 
