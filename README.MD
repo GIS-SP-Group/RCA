@@ -246,7 +246,7 @@ As for the hierarchical clustering, heatmaps and umaps can be generated as well.
 
 To help the user choosing the parameters for clustering, we provide a parameter space exploration feature leading to a 3D umap illustrating the number of clusters depending on the three parameters, as shown below.
 
-![](Tutorial/ParameterPlotDBSCAN.png)
+![](Tutorial/ParameterPlotDBSCAN.PNG)
 
 This figure can be generated using the function
 ```{r}
