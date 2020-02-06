@@ -101,7 +101,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
         }
 
       # If cluster confidence is to be plotted
-        if(!is.null(confScore) & length(cofnScore) != 0) {
+        if(!is.null(confScore) & length(confScore) != 0) {
 
             #Get the name of this cluster annotation
             clusterColorName = names(clusterColorList[index])
