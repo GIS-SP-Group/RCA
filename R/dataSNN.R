@@ -1,9 +1,9 @@
 #' Generate cell clusters using hierarchical clustering and dynamic tree cutting.
 #'
 #' @param rca.obj RCA object.
-#' @param k. Number of cells to consider in the neirest neighbour graph. Default is 10.
-#' @param eps. Number of cells that have to be similar to connect 2 cells in a network. Default is 8
-#' @param minPts. Number of cells with at least eps neighbours to be considered a core point. Default is 5.
+#' @param k Number of cells to consider in the neirest neighbour graph. Default is 10.
+#' @param eps Number of cells that have to be similar to connect 2 cells in a network. Default is 8
+#' @param minPts Number of cells with at least eps neighbours to be considered a core point. Default is 5.
 #' @return RCA object.
 #' @export
 #'

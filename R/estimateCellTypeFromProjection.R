@@ -1,9 +1,9 @@
 #' Estimate the most likely cell type from the projection to the reference panel
 #'
 #' @param rca.obj RCA object.
-#' @param confidence: a parameter indicating the difference between z-scores. If the difference is below this threshold, the cell type will be set to unknown. Default is NULL.
-#' @param ctRank: parameter indicating whether a relative rank coloring for each cell type shall be computed. Default is FALSE.
-#' @param cSCompute: parameter indicating wheter the confidence score should be computed for each cell. Default is FALSE.
+#' @param confidence a parameter indicating the difference between z-scores. If the difference is below this threshold, the cell type will be set to unknown. Default is NULL.
+#' @param ctRank parameter indicating whether a relative rank coloring for each cell type shall be computed. Default is FALSE.
+#' @param cSCompute parameter indicating wheter the confidence score should be computed for each cell. Default is FALSE.
 #' @return RCA object.
 #' @export
 #'
@@ -36,11 +36,11 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence=NULL, ctRank=F, c
     }
 
     cTIdfConfCol<-function(x,index,bC){
-        colorVec<-colorRampPalette(c("grey",bC))(100)
+        colorVec<-colorRampPalette(c("grey",bC))(50)
         maxVal<-max(x[,index])
         maxIndex<-which(x[,index]==maxVal)
         cellTypeOrder<-order(x[maxIndex,])
-	ratio<-max(1,(which(cellTypeOrder==index)/length(cellTypeOrder))*100)
+	ratio<-max(1,(which(cellTypeOrder==index)/length(cellTypeOrder))*50)
 	result<-colorVec[ratio]
 	return(result)
     }

@@ -1,18 +1,21 @@
 #' Plot umap of projection to the RCA panel
-#'
+#' 
+#' The presence of cell type estimates, relative ranks and confindence scores are detected automatically and are plotted accordingly.
 #' @param rca.obj RCA object
 #' @param cellPropertyList list of cell properties to plot
 #' @param folderpath path to save umap to
 #' @param filename file name of saved umap
+#' @param fontsize Size of the font used for plotting
 #' @export
 #'
 
-plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_UMAP.pdf") {
+plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_UMAP.pdf",fontsize=10) {
 
     ### Extract projection data from RCA object
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
     rRank=rca.obj$rRank
     rBaseColors<-rca.obj$baseColors
+    confScore=unlist(rca.obj$cScore)
     ### Check if package dependencies are available; if not, download from CRAN and require those packages
     # umap
     if (!require(ggplot2))
@@ -40,7 +43,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
     if(is.null(clusterColorList) & is.null(cellPropertyList)) {
 
         # Plot UMAP of cells without annotations
-        umap.plot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2)) + geom_point(size = .5) + theme_classic()
+        umap.plot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2)) + geom_point(size = .5) + theme_classic(fontsize)
 	umapPlots<-c(umapPlots,list(umap.plot))
         # Save UMAP
         ggsave(filename = paste0(folderpath, "/", filename), plot = umap.plot)
@@ -60,7 +63,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
                 umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
                 # Create the plot
-                umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[clusterColorName]])) + geom_point(size = .5) + scale_color_manual(values = sort(unique(umap.df[[clusterColorName]]))) + labs(colour = clusterColorName) + theme_bw() + guides(colour = guide_legend(override.aes = list(size=5)))
+                umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[clusterColorName]])) + geom_point(size = .5) + scale_color_manual(values = sort(unique(umap.df[[clusterColorName]]))) + labs(colour = clusterColorName) + theme_bw(fontsize) + guides(colour = guide_legend(override.aes = list(size=5)))
 
                 # Save plot
                 ggsave(filename = paste0(folderpath, "/", "ClusterColors_", clusterColorName,"_", filename), plot = umapClusterColorsPlot,width=9,height=7,units="in")
@@ -80,14 +83,14 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
             umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
             # Create the plot
-            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rRank))) + geom_point(size = .5) + scale_color_identity() +  theme_bw() +ggtitle("a)")
+            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rRank))) + geom_point(size = .5) + scale_color_identity() +  theme_bw(fontsize) +ggtitle("a)")
 
 
 	    names(rBaseColors)<-NULL
 	    colorOrder<-order(unique(unlist(rBaseColors)))
 	    colorVec<-unique(unlist(rBaseColors))[colorOrder]
 	    names(colorVec)<-unique(names(unlist(rBaseColors)))[colorOrder]
-            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_identity(labels=names(colorVec),guide="legend") +  theme_bw() + ggtitle("b)")+   theme(legend.position="right")+labs(color="Cell type")+guides(colour = guide_legend(override.aes = list(size=4)))
+            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_identity(labels=names(colorVec),guide="legend") +  theme_bw(fontsize) + ggtitle("b)")+   theme(legend.position="right")+labs(color="Cell type")+guides(colour = guide_legend(override.aes = list(size=4)))
 
             # Save plot
 	    pdf(paste0(folderpath, "/", "RelativeRank_", filename),width=14,height=7)
@@ -96,6 +99,37 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot, umapClusterColorsPlot2))       
 
         }
+
+      # If cluster confidence is to be plotted
+        if(!is.null(confScore) & length(cofnScore) != 0) {
+
+            #Get the name of this cluster annotation
+            clusterColorName = names(clusterColorList[index])
+
+            # Set the data frame column to the color vector
+            umap.df[[clusterColorName]] <- clusterColorList[[index]]
+
+            # Create the plot
+	    names(rBaseColors)<-NULL
+	    colorOrder<-order(unique(unlist(rBaseColors)))
+	    colorVec<-unique(unlist(rBaseColors))[colorOrder]
+	    names(colorVec)<-unique(names(unlist(rBaseColors)))[colorOrder]
+            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, alpha=confScore, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_identity(labels=names(colorVec)) +  theme_bw(fontsize) + ggtitle("a)")+theme(legend.position="none")
+
+ 
+
+            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_identity(labels=names(colorVec),guide="legend") +  theme_bw(fontsize) + ggtitle("b)")+   theme(legend.position="right")+labs(color="Cell type")+guides(colour = guide_legend(override.aes = list(size=4)))
+
+            # Save plot
+	    pdf(paste0(folderpath, "/", "ConfidenceScore_", filename),width=14,height=7)
+	    grid.arrange(umapClusterColorsPlot,umapClusterColorsPlot2,widths=c(1,1.2))
+	    dev.off()
+	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot, umapClusterColorsPlot2))       
+
+        }
+
+
+
 
 
         # If cell properties are to be plotted
@@ -112,11 +146,11 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
                 # Create the plot
 		if (class(umap.df[[CellPropertyName]])=="numeric"){
-	                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, alpha= umap.df[[CellPropertyName]], colour = umap.df[[CellPropertyName]])) + geom_point(size = .5) + labs(colour = CellPropertyName,alpha="") + theme_bw()+scale_color_gradient(low="grey",high="blue")+guides(colour = guide_legend(override.aes = list(size=5)))
+	                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, alpha= umap.df[[CellPropertyName]], colour = umap.df[[CellPropertyName]])) + geom_point(size = .5) + labs(colour = CellPropertyName,alpha="") + theme_bw(fontsize)+scale_color_gradient(low="grey",high="blue")+guides(colour = guide_legend(override.aes = list(size=5)))
 
 		}
 		else{
-                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[CellPropertyName]])) + geom_point(size = .5) + labs(colour = CellPropertyName) + theme_bw()+guides(colour = guide_legend(override.aes = list(size=5)))
+                umapCellPropertyPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[CellPropertyName]])) + geom_point(size = .5) + labs(colour = CellPropertyName) + theme_bw(fontsize)+guides(colour = guide_legend(override.aes = list(size=5)))
 		}
 
                 # Save plot

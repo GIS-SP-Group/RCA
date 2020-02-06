@@ -1,7 +1,7 @@
 #' Estimate the most likely cell type from the projection to the reference panel
 #'
 #' @param rca.obj RCA object.
-#' @param homogeneity: a parameter indicating the homogeneity of the cluster. If the difference is below this threshold, the cell type will be set to unknown. Default is NULL.
+#' @param homogeneity a parameter indicating the homogeneity of the cluster. If the difference is below this threshold, the cell type will be set to unknown. Default is NULL.
 #' @return RCA object.
 #' @export
 #'
