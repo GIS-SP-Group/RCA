@@ -4,11 +4,13 @@
 \alias{plotRCAClusterComposition}
 \title{Plot bar plots showing the composition of RCA clusters}
 \usage{
-plotRCAClusterComposition(rca.obj, folderpath = ".",
+plotRCAClusterComposition(rca.obj, deepSplit = 1, folderpath = ".",
   filename = "RCA_Heatmap.pdf")
 }
 \arguments{
 \item{rca.obj}{data matrix (genes x cells)}
+
+\item{deepSplit}{provides the index of the clustering to use for different cuts in the hierarchical clustering (default is 1)}
 
 \item{folderpath}{path to save heatmap to}
 

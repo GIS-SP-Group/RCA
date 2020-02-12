@@ -10,28 +10,7 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
 
     ### Extract projection data
     projection.data <- as.matrix(rca.obj$projection.data)
-    ### Load packages
-
-    # fastcluster
-    if (!require(fastcluster))
-        install.packages("fastcluster", repos = "http://cran.us.r-project.org")
-    require(fastcluster)
-
-    # WGCNA
-    if (!require(WGCNA)) {
-        if(!require(BiocManager))
-            install.packages("BiocManager")
-        BiocManager::install(c("impute", "GO.db", "preprocessCore"))
-        install.packages("WGCNA")
-    }
-    require(WGCNA)
-
-    # HiClimR
-    if (!require(HiClimR)) {
-        install.packages("HiClimR")
-    }
-    require(HiClimR)
-
+    
     ### Cluster cells
 
     # If HiClimR is available, use fastCor to compute distance matrix

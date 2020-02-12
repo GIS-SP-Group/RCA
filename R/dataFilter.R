@@ -13,20 +13,6 @@
 #'
 dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0.0, 0.2), min.cell.exp = 10, plot = T, folderpath = ".", filename = "RCA_Filter.pdf") {
 
-    # Packages for plotting, if plot is True
-    if (plot) {
-
-        # ggplot2
-        if (!require(ggplot2))
-            install.packages("ggplot2", repos = "http://cran.us.r-project.org")
-        require(ggplot2)
-
-        # gridExtra
-        if (!require(gridExtra))
-            install.packages("gridExtra", repos = "http://cran.us.r-project.org")
-        require(gridExtra)
-    }
-
     # Extract data from RCA object
     data <- rca.obj$raw.data
 

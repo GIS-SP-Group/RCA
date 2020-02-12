@@ -4,13 +4,19 @@
 \alias{buildReferencePanel}
 \title{Function to build a reference panel from your bulk RNA sequencing data}
 \usage{
-buildReferencePanel(bulk.rna.data, celltype.vec, folder.path = ".",
+buildReferencePanel(bulk.rna.data,
+  celltype.vec = colnames(bulk.rna.data), fc.thrs = 7.5,
+  fdr.thrs = 1e-04, folder.path = ".",
   filename = "my_reference_panel.rds")
 }
 \arguments{
 \item{bulk.rna.data}{Bulk RNA sequencing data - ideally TPM normalized.}
 
 \item{celltype.vec}{Vector of cell type names of each bulk RNA sequencing sample.}
+
+\item{fc.thrs}{fold change threshold}
+
+\item{fdr.thrs}{FDR threshold}
 
 \item{folder.path}{path to store reference panel}
 

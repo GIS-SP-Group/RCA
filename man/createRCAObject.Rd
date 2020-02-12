@@ -8,6 +8,8 @@ createRCAObject(rawData, dataIsNormalized = FALSE)
 }
 \arguments{
 \item{rawData}{A matrix of expression values}
+
+\item{dataIsNormalized}{A flag indicating whether the provided data is already normalized}
 }
 \value{
 RCA object.

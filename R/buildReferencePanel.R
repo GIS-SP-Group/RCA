@@ -2,6 +2,8 @@
 #' 
 #' @param bulk.rna.data Bulk RNA sequencing data - ideally TPM normalized.
 #' @param celltype.vec Vector of cell type names of each bulk RNA sequencing sample.
+#' @param fc.thrs fold change threshold
+#' @param fdr.thrs FDR threshold
 #' @param folder.path path to store reference panel
 #' @param filename file name of reference panel (should end with .rds)
 #' 

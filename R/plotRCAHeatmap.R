@@ -21,16 +21,6 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 
     heatmapIn <- heatmapIn[varVec >= var.thrs, ]
 
-    ### Check if package dependencies are available; if not, download from CRAN and require those packages
-    # ComplexHeatmap
-    if (!require(ComplexHeatmap))
-        install.packages("ComplexHeatmap", repos = "http://cran.us.r-project.org")
-    require(ComplexHeatmap)
-
-    # ComplexHeatmap
-    if (!require(circlize))
-        install.packages("circlize", repos = "http://cran.us.r-project.org")
-    require(circlize)
     # Set color scheme of heatmap
     colorScheme <-
         colorRamp2(

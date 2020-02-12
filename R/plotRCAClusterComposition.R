@@ -8,27 +8,12 @@
 #'
 
 plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", filename = "RCA_Heatmap.pdf") {
+    
     ### Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
     cellTree = rca.obj$clustering.out$cellTree
     clusterColors = rca.obj$clustering.out$dynamicColorsList[[deepSplit]]
-
-    ### Check if package dependencies are available; if not, download from CRAN and require those packages
-    # dplyr Package
-    if (!require(dplyr))
-        install.packages("dplyr", repos = "http://cran.us.r-project.org")
-    require(dplyr)
-
-    # ggplot2 Package
-    if (!require(ggplot2))
-        install.packages("ggplot2", repos = "http://cran.us.r-project.org")
-    require(ggplot2)
-
-    # ggplot2 Package
-    if (!require(gridExtra))
-        install.packages("gridExtra", repos = "http://cran.us.r-project.org")
-    require(gridExtra)
-
+    
     enrichmentAll<-c()
     for(type in unique(clusterColors)){
 	index=which(clusterColors==type)

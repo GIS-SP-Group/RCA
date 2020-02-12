@@ -5,7 +5,7 @@
 \title{Plot umap of projection to the RCA panel}
 \usage{
 plotRCAUMAP3D(rca.obj, cellPropertyList = NULL, folderpath = ".",
-  filename = "RCA_UMAP.pdf")
+  filename = "RCA_UMAP.html")
 }
 \arguments{
 \item{rca.obj}{RCA object}

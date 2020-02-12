@@ -11,29 +11,10 @@ dataSNN <- function(rca.obj,k=10,eps=8,minPts=5) {
 
     ### Extract projection data
     projection.data <- as.matrix(rca.obj$projection.data)
-    ### Load packages
-
-    # fastcluster
-    if (!require(dbscan))
-        install.packages("dbscan", repos = "http://cran.us.r-project.org")
-    require(dbscan)
-
-    # randomColorR
-    if (!require(randomcoloR)) {
-        install.packages("randomcoloR")
-    }
-    require(randomcoloR)
-
-    # plotrix
-    if (!require(plotrix)){
-	install.packages("plotrix")
-    }
-    require(plotrix)
-
-
     pcaD = prcomp(projection.data)
     components=c(1:(max(which(summary(pcaD)$importance[3,]<0.99))+1))
-    # Obtain cell tree using a reduced projection matrix.
+    
+    # Obtain cell tree using a reduced projection matrix
     clusteringResult<-sNNclust(pcaD$rotation[,components],k,eps,minPts,borderPoints = T)
 
     # Convert labels to colours for each tree cut

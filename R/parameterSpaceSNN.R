@@ -13,22 +13,6 @@ parameterSpaceSNN <- function(rca.obj,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),f
 
     ### Extract projection data
     projection.data <- as.matrix(rca.obj$projection.data)
-    ### Load packages
-
-    # fastcluster
-    if (!require(dbscan))
-        install.packages("dbscan", repos = "http://cran.us.r-project.org")
-    require(dbscan)
-    if (!require(ggplot2))
-        install.packages("ggplot2", repos = "http://cran.us.r-project.org")
-    require(ggplot2)
-    if (!require(ggpubr))
-        install.packages("ggpubr", repos = "http://cran.us.r-project.org")
-    require(ggpubr)
-    if (!require(plotly))
-        install.packages("plotly", repos = "http://cran.us.r-project.org")
-    require(plotly)
-
 
     pcaD = prcomp(projection.data)
     components=c(1:(max(which(summary(pcaD)$importance[3,]<0.99))+1))

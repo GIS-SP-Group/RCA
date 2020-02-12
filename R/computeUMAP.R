@@ -9,13 +9,7 @@ computeUMAP <- function(rca.obj, nDIMS=2) {
     ### Extract projection data from RCA object
     projection = as.matrix(rca.obj$projection.data)
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
-
-    ### Check if package dependencies are available; if not, download from CRAN and require those packages
-    # umap
-    if (!require(umap))
-        install.packages("umap", repos = "http://cran.us.r-project.org")
-    require(umap)
-
+    
     # Compute UMAP projection from cell type projection
     if ((nDIMS < 2) | (nDIMS > 3)){
 	print("Error: nDIMS must be set to 2 or 3")

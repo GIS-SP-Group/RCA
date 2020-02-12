@@ -13,11 +13,6 @@ createRCAObjectFrom10X <- function(dataDir, cellrangerVersion = 3.0, min.barcode
         stop("10X Directory provided does not exist")
     }
 
-    # Matrix
-    if (!require(Matrix))
-        install.packages("Matrix", repos = "http://cran.us.r-project.org")
-    require(Matrix)
-
     # Load file paths
     barcodeFilePath <- file.path(dataDir, "barcodes.tsv.gz")
 

@@ -5,7 +5,7 @@
 \title{Plot umap of projection to the RCA panel}
 \usage{
 plotRCAUMAP(rca.obj, cellPropertyList = NULL, folderpath = ".",
-  filename = "RCA_UMAP.pdf")
+  filename = "RCA_UMAP.pdf", fontsize = 10)
 }
 \arguments{
 \item{rca.obj}{RCA object}
@@ -15,7 +15,9 @@ plotRCAUMAP(rca.obj, cellPropertyList = NULL, folderpath = ".",
 \item{folderpath}{path to save umap to}
 
 \item{filename}{file name of saved umap}
+
+\item{fontsize}{Size of the font used for plotting}
 }
 \description{
-Plot umap of projection to the RCA panel
+The presence of cell type estimates, relative ranks and confindence scores are detected automatically and are plotted accordingly.
 }

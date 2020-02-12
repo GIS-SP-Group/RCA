@@ -14,11 +14,6 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
     # Extract data
     sc_data <- rca.obj$data
 
-    # dplyr
-    if (!require(dplyr))
-        install.packages("dplyr", repos = "http://cran.us.r-project.org")
-    require(dplyr)
-
     # If panel for correlation is GlobalPanel
     if (method == "GlobalPanel") {
         

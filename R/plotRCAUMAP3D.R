@@ -14,21 +14,6 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
     rRank=rca.obj$rRank
     rBaseColors<-rca.obj$baseColors
 
-    ### Check if package dependencies are available; if not, download from CRAN and require those packages
-    # umap
-    if (!require(umap))
-        install.packages("umap", repos = "http://cran.us.r-project.org")
-    require(umap)
-    if (!require(ggplot2))
-        install.packages("ggplot2", repos = "http://cran.us.r-project.org")
-    require(ggplot2)
-    if (!require(ggpubr))
-        install.packages("ggpubr", repos = "http://cran.us.r-project.org")
-    require(ggpubr)
-    if (!require(plotly))
-        install.packages("plotly", repos = "http://cran.us.r-project.org")
-    require(plotly)
-
     if (is.null(rca.obj$umap.coordinates)){
 	print("UMAP has not been computed yet")
     	return(NA)
