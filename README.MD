@@ -155,17 +155,17 @@ PBMCs<-RCAv2::dataProject(PBMCs,
 ### Cluster the projection and visualize it
 The projected data can be clustered using the command:
 ```{r}
-PBMCs<-RCAv2::dataClust(PBMCs,var.thrs=1)
+PBMCs<-RCAv2::dataClust(PBMCs)
 ```
 The clustering can be influenced by the parameters *deepSplitValues* and *minClustSize*, indicating the deepness of the cut in the clustering and the minimum number of cells within a cluster, respectively. 
 
 RCA offers a heatmap plotting function using the *ComplexHeatmap* package:
 
 ```{r}
-RCAv2::plotRCAHeatmap(PBMCs,filename = "Heatmap_PBMCs.pdf")
+RCAv2::plotRCAHeatmap(PBMCs,filename = "Heatmap_PBMCs.pdf",var.thrs=1)
 ```
 
-The heatmap can be used to manually assign cell-types based on the projection.
+The heatmap can be used to manually assign cell-types based on the projection. Via the *var.thrs* parameter, the heatmap can be reduced to show only cell-types with the indicated degree of variation.
 
 ![](Tutorial/Heatmap_Example_With_Threshold.png)
 
