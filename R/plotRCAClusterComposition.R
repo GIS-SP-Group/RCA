@@ -7,14 +7,14 @@
 #' @export
 #'
 
-plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", filename = "RCA_Heatmap.pdf") {
+plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", filename = "Cluster_Composition.pdf") {
     
-    ### Extract projection data and clustering result from RCA object
+    # Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
     cellTree = rca.obj$clustering.out$cellTree
     clusterColors = rca.obj$clustering.out$dynamicColorsList[[deepSplit]]
     
-    # TODO: Comments
+    # Compute the composition of each clust with respect to per cell cell type predictions
     enrichmentAll<-c()
     for(type in unique(clusterColors)){
 	index=which(clusterColors==type)
@@ -29,7 +29,8 @@ plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", fi
     enrichmentAll<-cbind(enrichmentAll,enrichmentAll$Count/enrichmentAll$n*100)
     colnames(enrichmentAll)[5]<-"Ratio"
     enrichmentAll$Ratio<-as.numeric(as.character(enrichmentAll$Ratio))
-    
+
+    #Generate the cluster composition plots using the randomcolorR package if available
     if (require(randomcoloR)){
        dColors<-randomcoloR::distinctColorPalette(length(unique(enrichmentAll$CT)))
        nCols<-ceiling(length(unique(enrichmentAll$CT))/26)

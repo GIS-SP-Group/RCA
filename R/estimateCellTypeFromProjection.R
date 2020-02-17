@@ -12,7 +12,7 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence = NULL, ctRank = 
         # Extract projection data
         projection <- rca.obj$projection.data
         
-        # TODO: Comments
+        # Returns the likeliest cell type of a cell with respect to a confidence threshold
         cTIdf <- function(x, confidence) {
             temp <- x
             tempMax <- max(temp)
@@ -25,12 +25,12 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence = NULL, ctRank = 
                 return("Unkown")
         }
         
-        # TODO: Comments
+        # Returns the likeliest cell type of a cell neglecting any confidence value.
         cTIdfWU <- function(x) {
             return(names(x)[which(x == max(x))])
         }
         
-        # TODO: Comments
+        # Returns a alpha value for each cell, depending on the confidence score for the cell's cell type annotation among all possible cell types.
         cTIdfAlpha <- function(x) {
             temp <- x
             tempMax <- max(temp)
@@ -39,7 +39,8 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence = NULL, ctRank = 
             deltaMax <- max(temp) / tempMax
             return(1.0 - abs(deltaMax))
         }
-        
+
+        # Returns a color for each cell in a grey to 'cell type base color' color scheme, indicating the relative confidence of the annotation for a particular cell among all other cells of the same cell type
         cTIdfConfCol <- function(x, index, bC) {
             colorVec <- colorRampPalette(c("grey", bC))(50)
             maxVal <- max(x[, index])
@@ -51,7 +52,7 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence = NULL, ctRank = 
             return(result)
         }
         
-        # TODO: Comments
+        # Compute cell type assignments and confidence Scores (alpha values for transparency and relative color scale).
         cellTypes <- list()
         confidenceScore <- list()
         relativeColorRank <- list()

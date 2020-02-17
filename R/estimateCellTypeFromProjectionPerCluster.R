@@ -8,35 +8,23 @@
 
 estimateCellTypeFromProjectionPerCluster <- function(rca.obj, homogeneity=NULL) {
 
-    # TODO: Comments
+    # Assign data to tmp variables
     projection <- rca.obj$projection.data
     clusterColors <- rca.obj$clustering.out$dynamicColorsList[[1]]
 
-    # TODO: Comments
-    cTIdf<-function(x,confidence){
-	  temp<-x
-          tempMax<-max(temp)
-          index<-which(temp==tempMax)
-          temp<-temp[-index]
-          deltaMax<-max(temp)/tempMax
-          if (deltaMax < confidence)
-            return(names(x)[index])
-          else return("Unkown")
-    }
-
-    # TODO: Comments
+    # Returning the likeliest cell type of a cell irrespective of a confidence score
     cTIdfWU<-function(x){
          return(names(x)[which(x==max(x))])
     }
 
-    # TODO: Comments
+    # Determine the likeliest cell type for each cell.
     cellTypes<-list()
     for (i in c(1:dim(projection)[2])){
           cellTypes<-c(cellTypes,cTIdfWU(projection[,i]))
     }
 
 
-    # TODO: Comments
+    # Compute the cell type compositions of each cluster using per cell cell type predictions
     enrichmentAll<-c()
     for(type in unique(clusterColors)){
 	index=which(clusterColors==type)
@@ -52,7 +40,7 @@ estimateCellTypeFromProjectionPerCluster <- function(rca.obj, homogeneity=NULL) 
     colnames(enrichmentAll)[5]<-"Ratio"
     enrichmentAll$Ratio<-as.numeric(as.character(enrichmentAll$Ratio))
  
-    # TODO: Comments
+    # Determine the identity of a cluster with or without the option to set the cluster identity to unkown
     maxCellTypeCluster<-list()
     homologyScores<-list()
     for (type in unique(clusterColors)){
