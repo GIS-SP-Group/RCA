@@ -30,14 +30,12 @@ buildReferencePanel <- function(bulk.rna.data, celltype.vec = colnames(bulk.rna.
         colnames(bulk.rna.data)[i] <- paste0(celltype.vec[i], "_", ct.list[[celltype.vec[i]]])
     }
     
-    library(edgeR)
-    
     # Convert to an edgeR object
-    dgeObj <- DGEList(bulk.rna.data, group = celltype.vec)
+    dgeObj <- edgeR::DGEList(bulk.rna.data, group = celltype.vec)
     
     
     ## Identify genes with at least 1 cpm in at least 2 samples
-    cpm.bulk.rna.data <- cpm(dgeObj)
+    cpm.bulk.rna.data <- edgeR::cpm(dgeObj)
     thresh <- cpm.bulk.rna.data > 1
     keep <- rowSums(thresh) >= 2
     
@@ -45,19 +43,19 @@ buildReferencePanel <- function(bulk.rna.data, celltype.vec = colnames(bulk.rna.
     dgeObj <- dgeObj[keep, ]
     
     # Estimate common and tag-wise dispersion for the pair of clusters
-    dgeObj <- estimateCommonDisp(dgeObj)
-    dgeObj <- estimateTagwiseDisp(dgeObj)
+    dgeObj <- edgeR::estimateCommonDisp(dgeObj)
+    dgeObj <- edgeR::estimateTagwiseDisp(dgeObj)
     
     # Calculate norm factors for data
-    dgeObj <- calcNormFactors(dgeObj, method = "TMM")
+    dgeObj <- edgeR::calcNormFactors(dgeObj, method = "TMM")
     
     etList <- list()
     for(i in 1:(length(unique.ct)-1)) {
         for(j in (i+1):length(unique.ct)) {
             
             # Perform exact test
-            etObj <- exactTest(object = dgeObj, pair = c(i, j))
-            etObj$table$FDR <- p.adjust(p = etObj$table$PValue, method = "fdr")
+            etObj <- edgeR::exactTest(object = dgeObj, pair = c(i, j))
+            etObj$table$FDR <- stats::p.adjust(p = etObj$table$PValue, method = "fdr")
             print(paste0(i, ", ", j))
             
             etList[paste0(i, "_", j)] <- etObj
