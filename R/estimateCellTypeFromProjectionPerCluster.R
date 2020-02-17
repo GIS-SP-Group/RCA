@@ -8,9 +8,11 @@
 
 estimateCellTypeFromProjectionPerCluster <- function(rca.obj, homogeneity=NULL) {
 
+    # TODO: Comments
     projection <- rca.obj$projection.data
     clusterColors <- rca.obj$clustering.out$dynamicColorsList[[1]]
 
+    # TODO: Comments
     cTIdf<-function(x,confidence){
 	  temp<-x
           tempMax<-max(temp)
@@ -22,16 +24,19 @@ estimateCellTypeFromProjectionPerCluster <- function(rca.obj, homogeneity=NULL) 
           else return("Unkown")
     }
 
+    # TODO: Comments
     cTIdfWU<-function(x){
          return(names(x)[which(x==max(x))])
     }
 
+    # TODO: Comments
     cellTypes<-list()
     for (i in c(1:dim(projection)[2])){
           cellTypes<-c(cellTypes,cTIdfWU(projection[,i]))
     }
 
 
+    # TODO: Comments
     enrichmentAll<-c()
     for(type in unique(clusterColors)){
 	index=which(clusterColors==type)
@@ -47,7 +52,7 @@ estimateCellTypeFromProjectionPerCluster <- function(rca.obj, homogeneity=NULL) 
     colnames(enrichmentAll)[5]<-"Ratio"
     enrichmentAll$Ratio<-as.numeric(as.character(enrichmentAll$Ratio))
  
-
+    # TODO: Comments
     maxCellTypeCluster<-list()
     homologyScores<-list()
     for (type in unique(clusterColors)){
@@ -72,7 +77,8 @@ estimateCellTypeFromProjectionPerCluster <- function(rca.obj, homogeneity=NULL) 
 
     clusterConfidence<-homologyScores[clusterColors]
     estimatedCellTypes<-maxCellTypeCluster[clusterColors]
-    ### Return RCA object
+    
+    # Return RCA object
     return(rca.obj)
 }
 
