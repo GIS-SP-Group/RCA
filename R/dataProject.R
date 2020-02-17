@@ -16,9 +16,6 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
 
     # If panel for correlation is GlobalPanel
     if (method == "GlobalPanel") {
-        
-        # Load reference panel data from environment
-        data(ReferencePanel, envir = environment())
 
         # Initialise variable to store projection data from the two fragments of the Global Panel
         projection_list = list()
@@ -73,9 +70,6 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
     # If panel for correlation is ColonEpitheliumPanel
     else if (method == "ColonEpitheliumPanel") {
         
-        # Load reference panel data from environment
-        data(ReferencePanel, envir = environment())
-        
         # Scale panel by median
         fc = apply(ReferencePanel$ColonEpiPanel, 1, function(x) x - median(x))
 
@@ -92,13 +86,10 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
                                scale = TRUE)
         }
     }
-    # If panel for correlation is ENCODEPanel
-    else if (method == "ENCODEPanel") {
+    # If any other panel is chosen
+    else if (method %in% names(ReferencePanel)) {
         
-        # Load reference panel data from environment
-        data("ENCODEPanel", envir = environment())
-        
-        panel <- ENCODEPanel
+        panel <- ReferencePanel[[method]]
         
         # Initialise variable to store projection data from the two fragments of the Global Panel
         projection_list = list()
