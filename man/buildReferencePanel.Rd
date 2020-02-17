@@ -6,7 +6,7 @@
 \usage{
 buildReferencePanel(bulk.rna.data,
   celltype.vec = colnames(bulk.rna.data), fc.thrs = 7.5,
-  fdr.thrs = 1e-04, folder.path = ".",
+  fdr.thrs = 0.01, gene.nomenclature = "SYMBOL", folder.path = ".",
   filename = "my_reference_panel.rds")
 }
 \arguments{
@@ -17,6 +17,8 @@ buildReferencePanel(bulk.rna.data,
 \item{fc.thrs}{fold change threshold}
 
 \item{fdr.thrs}{FDR threshold}
+
+\item{gene.nomenclature}{Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols.}
 
 \item{folder.path}{path to store reference panel}
 
