@@ -13,9 +13,6 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
 
     # Extract data
     sc_data <- rca.obj$data
-    
-    # Load reference panel data from environment
-    data(ReferencePanel, envir = environment())
 
     # If panel for correlation is GlobalPanel
     if (method == "GlobalPanel") {
@@ -72,9 +69,6 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
     }
     # If panel for correlation is ColonEpitheliumPanel
     else if (method == "ColonEpitheliumPanel") {
-        
-        # Load reference panel data from environment
-        data(ReferencePanel, envir = environment())
         
         # Scale panel by median
         fc = apply(ReferencePanel$ColonEpiPanel, 1, function(x) x - median(x))
