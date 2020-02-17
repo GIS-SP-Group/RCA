@@ -6,8 +6,8 @@
 \usage{
 buildReferencePanel(bulk.rna.data,
   celltype.vec = colnames(bulk.rna.data), fc.thrs = 7.5,
-  fdr.thrs = 0.01, gene.nomenclature = "SYMBOL", folder.path = ".",
-  filename = "my_reference_panel.rds")
+  fdr.thrs = 0.01, gene.nomenclature = "SYMBOL", species = "HUMAN",
+  folder.path = ".", filename = "my_reference_panel.rds")
 }
 \arguments{
 \item{bulk.rna.data}{Bulk RNA sequencing data - ideally TPM normalized.}
@@ -18,7 +18,9 @@ buildReferencePanel(bulk.rna.data,
 
 \item{fdr.thrs}{FDR threshold}
 
-\item{gene.nomenclature}{Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols.}
+\item{gene.nomenclature}{Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols. Default is "SYMBOL".}
+
+\item{species}{"HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".}
 
 \item{folder.path}{path to store reference panel}
 
