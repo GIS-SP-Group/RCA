@@ -11,22 +11,11 @@
 
 plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", filename = "RCA_UMAP.pdf",fontsize=10) {
 
-    ### Extract projection data from RCA object
+    # Extract projection data from RCA object
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
     rRank=rca.obj$rRank
     rBaseColors<-rca.obj$baseColors
     confScore=unlist(rca.obj$cScore)
-    ### Check if package dependencies are available; if not, download from CRAN and require those packages
-    # umap
-    if (!require(ggplot2))
-        install.packages("ggplot2", repos = "http://cran.us.r-project.org")
-    require(ggplot2)
-    if (!require(gridExtra))
-        install.packages("gridExtra", repos = "http://cran.us.r-project.org")
-    require(gridExtra)
-    if (!require(ggpubr))
-        install.packages("ggpubr", repos = "http://cran.us.r-project.org")
-    require(ggpubr)
 
     # Compute UMAP projection from cell type projection
     if (is.null(rca.obj$umap.coordinates)){
