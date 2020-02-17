@@ -11,10 +11,11 @@
 #'
 parameterSpaceSNN <- function(rca.obj,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),folderpath=".",filename="Graph_based_Clustering_Parameter_Space.html") {
 
-    ### Extract projection data
+    # Extract projection data
     projection.data <- as.matrix(rca.obj$projection.data)
 
-    pcaD = prcomp(projection.data)
+    
+    pcaD = stats::prcomp(projection.data)
     components=c(1:(max(which(summary(pcaD)$importance[3,]<0.99))+1))
     d=pcaD$rotation[,components]
 
@@ -35,7 +36,7 @@ parameterSpaceSNN <- function(rca.obj,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),f
 	    }
     }
 
-    # Generate a complet data frame
+    # Generate a complete data frame
     paramcolors<-colorRampPalette(c("blue","red"))(length(unique(cNumbers)))
     cNumbersf<-factor(cNumbers)
     hoverInfo<-paste0("k: ",kList,"\neps: ",epsList, "\nminPts: ",minPtsList,"\n#clusters: ", cNumbers)

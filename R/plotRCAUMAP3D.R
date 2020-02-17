@@ -76,7 +76,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 
         if(!is.null(rRank) & length(rRank) != 0) {
 
-            #Get the name of this cluster annotation
+            # Get the name of this cluster annotation
             clusterColorName = names(clusterColorList[index])
 
             

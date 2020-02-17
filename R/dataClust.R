@@ -15,7 +15,7 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
 
     # If HiClimR is available, use fastCor to compute distance matrix
     if (require(HiClimR)) {
-        d = as.dist(1 - fastCor(
+        d = as.dist(1 - HiClimR::fastCor(
             projection.data,
             upperTri = TRUE,
             nSplit = 5,
@@ -32,7 +32,7 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
     # For each deepsplit value given, compute dynamic groups
     dynamicGroupsList <-
         lapply(X = deepSplitValues, function(deepSplit) {
-            cutreeDynamic(
+            dynamicTreeCut::cutreeDynamic(
                 dendro = cellTree,
                 distM = as.matrix(d),
                 deepSplit = deepSplit,
@@ -42,7 +42,7 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
         })
 
     # Convert labels to colours for each tree cut
-    dynamicColorsList <- lapply(dynamicGroupsList, labels2colors)
+    dynamicColorsList <- lapply(dynamicGroupsList, WGCNA::labels2colors)
     names(dynamicColorsList) <- paste0("deepSplit ", deepSplitValues)
 
     # Assign clustering result to RCA object

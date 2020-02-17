@@ -44,7 +44,7 @@ createRCAObjectFrom10X <- function(dataDir, cellrangerVersion = 3.0, min.barcode
     featureNames <- read.table(featureFilePath, header = FALSE, stringsAsFactors = FALSE)[[2]]
 
     # Load 10X data
-    rawData <- readMM(file = matrixFilePath)
+    rawData <- Matrix::readMM(file = matrixFilePath)
     rownames(rawData) <- featureNames
     colnames(rawData) <- cellNames
 

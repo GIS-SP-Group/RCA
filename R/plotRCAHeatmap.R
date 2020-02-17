@@ -11,19 +11,19 @@
 
 plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, folderpath = ".", filename = "RCA_Heatmap.pdf") {
 
-    ### Extract projection data and clustering result from RCA object
+    # Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
     cellTree = rca.obj$clustering.out$cellTree
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
 
-    ### Subset projection data to remove unnecessary cell types
+    # Subset projection data to remove unnecessary cell types
     varVec <- apply(heatmapIn, 1, var)
 
     heatmapIn <- heatmapIn[varVec >= var.thrs, ]
 
     # Set color scheme of heatmap
     colorScheme <-
-        colorRamp2(
+        circlize::colorRamp2(
             seq(min(abs(
                 heatmapIn
             )), max(abs(
@@ -40,7 +40,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
     if(is.null(clusterColorList)) {
 
         # Initialize heatmap object
-        ht <- Heatmap(
+        ht <- ComplexHeatmap::Heatmap(
             matrix = heatmapIn,
             col = colorScheme,
 
@@ -51,16 +51,16 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             row_dend_side = "left",
 
             show_row_dend = TRUE,
-            row_dend_width = unit(30, "mm"),
+            row_dend_width = grid::unit(30, "mm"),
 
             show_column_dend = TRUE,
-            column_dend_height = unit(100, "mm"),
+            column_dend_height = grid::unit(100, "mm"),
             column_dend_reorder = FALSE,
 
             show_column_names = FALSE,
 
             show_row_names = TRUE,
-            row_names_gp = gpar(fontsize = 15),
+            row_names_gp = grid::gpar(fontsize = 15),
 
             heatmap_legend_param = list(title = "legend", color_bar = "continuous"),
             use_raster = TRUE,
@@ -94,9 +94,9 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 
         # Create list of annotation bar plots from cell property list
         annoBarPlotList <- lapply(cellPropertyList, function(cellPropertyVec){
-            anno_barplot(
+            ComplexHeatmap::anno_barplot(
                 cellPropertyVec,
-                gp = gpar(fill = "#777777", col = "#777777"),
+                gp = grid::gpar(fill = "#777777", col = "#777777"),
                 axis = TRUE,
                 axis_param = list(side = "right"),
                 which = "column"
@@ -111,17 +111,17 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
                           col = clusterColorList,
                           show_annotation_name = TRUE,
                           annotation_name_side = "left",
-                          gap = unit(5, "mm"),
+                          gap = grid::unit(5, "mm"),
                           which = "column")
 
         # Add cell property plots
         paramList <- append(paramList, annoBarPlotList)
 
         # Create HeatmapAnnotation object
-        columnColorBar <- do.call(what = HeatmapAnnotation, args = paramList)
+        columnColorBar <- do.call(what = ComplexHeatmap::HeatmapAnnotation, args = paramList)
 
         # Initialize heatmap object
-        ht <- Heatmap(
+        ht <- ComplexHeatmap::Heatmap(
             matrix = heatmapIn,
             col = colorScheme,
 
@@ -132,16 +132,16 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             row_dend_side = "left",
 
             show_row_dend = TRUE,
-            row_dend_width = unit(30, "mm"),
+            row_dend_width = grid::unit(30, "mm"),
 
             show_column_dend = TRUE,
-            column_dend_height = unit(100, "mm"),
+            column_dend_height = grid::unit(100, "mm"),
             column_dend_reorder = FALSE,
 
             show_column_names = FALSE,
 
             show_row_names = TRUE,
-            row_names_gp = gpar(fontsize = 10),
+            row_names_gp = grid::gpar(fontsize = 10),
 
             top_annotation = columnColorBar,
 
@@ -158,7 +158,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
     #graph based clustering
     if(is.null(clusterColorList)) {
         # Initialize heatmap object
-        ht <- Heatmap(
+        ht <- ComplexHeatmap::Heatmap(
             matrix = heatmapIn,
             col = colorScheme,
 
@@ -168,13 +168,13 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 
             row_dend_side = "left",
             show_row_dend = TRUE,
-            row_dend_width = unit(30, "mm"),
+            row_dend_width = grid::unit(30, "mm"),
 
             show_column_dend = FALSE,
             show_column_names = FALSE,
 
             show_row_names = TRUE,
-            row_names_gp = gpar(fontsize = 15),
+            row_names_gp = grid::gpar(fontsize = 15),
 
             heatmap_legend_param = list(title = "legend", color_bar = "continuous"),
             use_raster = TRUE,
@@ -202,9 +202,9 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 
         # Create list of annotation bar plots from cell property list
         annoBarPlotList <- lapply(cellPropertyList, function(cellPropertyVec){
-            anno_barplot(
+            ComplexHeatmap::anno_barplot(
                 cellPropertyVec,
-                gp = gpar(fill = "#777777", col = "#777777"),
+                gp = grid::gpar(fill = "#777777", col = "#777777"),
                 axis = TRUE,
                 axis_param = list(side = "right"),
                 which = "column"
@@ -219,7 +219,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
                           col = clusterColorList,
                           show_annotation_name = TRUE,
                           annotation_name_side = "left",
-                          gap = unit(5, "mm"),
+                          gap = grid::unit(5, "mm"),
                           which = "column")
 
         # Add cell property plots
@@ -229,7 +229,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         columnColorBar <- do.call(what = HeatmapAnnotation, args = paramList)
 
         # Initialize heatmap object
-        ht <- Heatmap(
+        ht <- ComplexHeatmap::Heatmap(
             matrix = heatmapIn,
             col = colorScheme,
             
@@ -241,13 +241,13 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             row_dend_side = "left",
 
             show_row_dend = TRUE,
-            row_dend_width = unit(30, "mm"),
+            row_dend_width = grid::unit(30, "mm"),
 
             show_column_dend = FALSE,
             show_column_names = FALSE,
 
             show_row_names = TRUE,
-            row_names_gp = gpar(fontsize = 10),
+            row_names_gp = grid::gpar(fontsize = 10),
 
             top_annotation = columnColorBar,
 
@@ -266,7 +266,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         height = height)
 
     # Draw heatmap inside pdf device
-    draw(ht,
+    ComplexHeatmap::draw(ht,
          heatmap_legend_side = "left",
          annotation_legend_side = "left")
 

@@ -14,6 +14,7 @@ plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", fi
     cellTree = rca.obj$clustering.out$cellTree
     clusterColors = rca.obj$clustering.out$dynamicColorsList[[deepSplit]]
     
+    # TODO: Comments
     enrichmentAll<-c()
     for(type in unique(clusterColors)){
 	index=which(clusterColors==type)
@@ -30,7 +31,7 @@ plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", fi
     enrichmentAll$Ratio<-as.numeric(as.character(enrichmentAll$Ratio))
     
     if (require(randomcoloR)){
-       dColors<-distinctColorPalette(length(unique(enrichmentAll$CT)))
+       dColors<-randomcoloR::distinctColorPalette(length(unique(enrichmentAll$CT)))
        nCols<-ceiling(length(unique(enrichmentAll$CT))/26)
        ratioPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Ratio,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Percentage")+coord_flip()+ggtitle("a)")+theme(legend.position = "none")+scale_fill_manual(values=dColors)
        countPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Count,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Count")+coord_flip()+ggtitle("b)")+scale_fill_manual(values=dColors)+labs(fill="Cell type")+guides(fill=guide_legend(ncol=nCols))

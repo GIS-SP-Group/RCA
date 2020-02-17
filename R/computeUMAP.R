@@ -15,7 +15,7 @@ computeUMAP <- function(rca.obj, nDIMS=2) {
 	print("Error: nDIMS must be set to 2 or 3")
     	return(rca.obj)}
     else{
-        umap.projection <- umap(t(projection),n_components=nDIMS)
+        umap.projection <- umap::umap(t(projection),n_components=nDIMS)
     }
 
     # Store UMAP layout in data frame for plotting

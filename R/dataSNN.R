@@ -9,17 +9,17 @@
 #'
 dataSNN <- function(rca.obj,k=10,eps=8,minPts=5) {
 
-    ### Extract projection data
+    # Extract projection data
     projection.data <- as.matrix(rca.obj$projection.data)
-    pcaD = prcomp(projection.data)
+    pcaD = stats::prcomp(projection.data)
     components=c(1:(max(which(summary(pcaD)$importance[3,]<0.99))+1))
     
     # Obtain cell tree using a reduced projection matrix
-    clusteringResult<-sNNclust(pcaD$rotation[,components],k,eps,minPts,borderPoints = T)
+    clusteringResult<-dbscan::sNNclust(pcaD$rotation[,components],k,eps,minPts,borderPoints = T)
 
     # Convert labels to colours for each tree cut
-    clusterColors<-distinctColorPalette(length(unique(clusteringResult$cluster)))
-    clusterColors<-sapply(clusterColors,color.id)
+    clusterColors<-randomcoloR::distinctColorPalette(length(unique(clusteringResult$cluster)))
+    clusterColors<-sapply(clusterColors,plotrix::color.id)
     clusterColors<-sapply(clusterColors,function(x){return(x[1])})
     names(clusterColors)<-unique(clusteringResult$cluster)
 
@@ -31,7 +31,6 @@ dataSNN <- function(rca.obj,k=10,eps=8,minPts=5) {
         "dynamicColorsList" = dynamicColorsList
     )
 
-    ### Return RCA object
-
+    # Return RCA object
     return(rca.obj)
 }
