@@ -9,7 +9,7 @@
 #' @export
 #'
 
-plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, folderpath = ".", filename = "RCA_Heatmap.pdf") {
+plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, folderpath = ".", filename = "RCA_Heatmap.pdf", extraCellProperty=NULL) {
 
     # Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
@@ -84,10 +84,17 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 
         mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$raw.data), value = T)
         if(length(mito.genes) == 0) {
-            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg)
-        } else {
-            pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
-            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
+	    if (extraCellProperty==NULL){
+	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg)}
+            else{
+	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg,"extra",extraCellProperty)}
+	} else {
+	        pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
+		if (extraCellProperty==NULL){
+	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)}
+		else{
+	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito, "extra"=extraCellProperty)}
+		}
         }
             
         
@@ -198,7 +205,11 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$raw.data), value = T)
         pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
 
-        cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
+	if (extraCellProperty==NULL){
+	        cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
+	}else{
+		cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito,"extra"=extraCellProperty)
+	}
 
         # Create list of annotation bar plots from cell property list
         annoBarPlotList <- lapply(cellPropertyList, function(cellPropertyVec){
