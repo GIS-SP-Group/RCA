@@ -85,20 +85,20 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$raw.data), value = T)
         if(length(mito.genes) == 0) {
 	    if (extraCellProperty==NULL){
-	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg)}
-            else{
-	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg,"extra",extraCellProperty)}
+	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg)
+	    }else{
+	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg,"extra",extraCellProperty)
+	    }
 	} else {
 	        pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
 		if (extraCellProperty==NULL){
-	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)}
-		else{
-	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito, "extra"=extraCellProperty)}
+	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
+		}else{
+	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito, "extra"=extraCellProperty)
 		}
-        }
-            
-        
-
+	}
+       
+               
         # Create list of annotation bar plots from cell property list
         annoBarPlotList <- lapply(cellPropertyList, function(cellPropertyVec){
             ComplexHeatmap::anno_barplot(
@@ -157,10 +157,8 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             raster_device = "png",
             raster_quality = 1
         )
-
     }
-    }
-    else{
+    } else{
     heatmapIn<-heatmapIn[]	    
     #graph based clustering
     if(is.null(clusterColorList)) {
