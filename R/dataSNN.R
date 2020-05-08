@@ -9,10 +9,10 @@
 #' @export
 #'
 dataSNN <- function(rca.obj,k=10,eps=8,minPts=5,dist.fun="All") {
+    projection.data <- as.matrix(rca.obj$projection.data)
     if (dist.fun=="PCA"){
     # Extract projection data 
     print("Computing PCA on projection")
-    projection.data <- as.matrix(rca.obj$projection.data)
     pcaD = stats::prcomp(projection.data)
     components=c(1:(max(which(summary(pcaD)$importance[3,]<0.99))+1))
 
