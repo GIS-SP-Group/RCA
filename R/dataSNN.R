@@ -25,7 +25,7 @@ dataSNN <- function(rca.obj,k=10,eps=8,minPts=5,dist.fun="All") {
         ))
     } else {
         # else, use cor
-        d = as.dist(1 - cor(pcaD$rotation[,components], method = "pearson"))
+        d = as.dist(1 - cor(pcaD$rotation[,components], method = "spearman"))
     }
  
     # Obtain cell tree using a reduced projection matrix
@@ -42,7 +42,7 @@ dataSNN <- function(rca.obj,k=10,eps=8,minPts=5,dist.fun="All") {
         ))
     } else {
         # else, use cor
-        d = as.dist(1 - cor(projection.data, method = "pearson"))
+        d = as.dist(1 - cor(projection.data, method = "spearman"))
     }
     
     # Obtain cell tree using a reduced projection matrix
