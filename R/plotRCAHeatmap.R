@@ -203,7 +203,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$raw.data), value = T)
         pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
 
-	if (extraCellProperty==NULL){
+	if (is.null(extraCellProperty)){
 	        cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
 	}else{
 		cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito,"extra"=extraCellProperty)
