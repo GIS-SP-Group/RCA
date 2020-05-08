@@ -8,7 +8,7 @@
 #'
 
 plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", filename = "Cluster_Composition.pdf") {
-    
+    require(dplyr)    
     # Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
     cellTree = rca.obj$clustering.out$cellTree
