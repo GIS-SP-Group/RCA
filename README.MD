@@ -138,6 +138,17 @@ PBMCs
 	Filtered data: 4973 cells and 17120 features.
 	Projection data: 4973 cells to 179 cell-types
 
+In addition to the *GlobalPanel*, RCA now provides *6* additional reference panels:
+
+
+* *ColonEpiPanel*: 9 colon epithelial samples from Li et al. (Nature genetics, 2017).
+* *MonacoPanel*: 29 PBMC cell types from Monaco, G., et al. (Cell reports, 2019).
+* *ENCODEMousePanel*: 15 mouse cell types from ENCODE.
+* *ENCODEHumanPanel*: 93 human cell types from ENCODE.
+* *ZhangMouseBrainPanel*: 7 mouse brain cell types from Tasic et al. (Nature neuroscience, 2016).
+* *NovershternPanel*: 15 PBMC cell types from Novershtern et al. (Cell, 2011).
+
+
 RCAv2 directly allows the user to utilize any custom panel. A user generated panel **has to** have a distinct structure:
 * the panel has to be a R *data.frame* that is stored in *RDS* format,
 * row names of the *data.frame* are gene names that match the gene names present in the RNA-seq data,
