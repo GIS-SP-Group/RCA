@@ -235,7 +235,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         paramList <- append(paramList, annoBarPlotList)
 
         # Create HeatmapAnnotation object
-        columnColorBar <- do.call(what = HeatmapAnnotation, args = paramList)
+        columnColorBar <- do.call(what = ComplexHeatmap::HeatmapAnnotation, args = paramList)
 
         # Initialize heatmap object
         ht <- ComplexHeatmap::Heatmap(
