@@ -14,9 +14,9 @@ plotClusterQuality(
 )
 }
 \arguments{
-\item{rca.obj}{data matrix (genes x cells)}
+\item{rca.obj}{RCA object}
 
-\item{cluster.labels}{Minimum threshold of variance for cell type correlations.}
+\item{cluster.labels}{vector of cluster labels}
 
 \item{width}{width of plot in inches. Default is 20.}
 
