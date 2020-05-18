@@ -4,9 +4,14 @@
 \alias{parameterSpaceSNN}
 \title{Generate cell clusters using hierarchical clustering and dynamic tree cutting.}
 \usage{
-parameterSpaceSNN(rca.obj, kL = c(30:50), epsL = c(5:20),
-  minPtsL = c(5:10), folderpath = ".",
-  filename = "Graph_based_Clustering_Parameter_Space.html")
+parameterSpaceSNN(
+  rca.obj,
+  kL = c(30:50),
+  epsL = c(5:20),
+  minPtsL = c(5:10),
+  folderpath = ".",
+  filename = "Graph_based_Clustering_Parameter_Space.html"
+)
 }
 \arguments{
 \item{rca.obj}{RCA object.}

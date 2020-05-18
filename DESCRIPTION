@@ -5,10 +5,10 @@ Version: 2.0.0
 Author: Bobby Ranjan, Florian Schmidt
 Maintainer: Bobby Ranjan <ranjanb@gis.a-star.edu.sg>
 Description: RCA correlates single-cell gene expression data with bulk reference transcriptomes for cell type annotation.
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: BiocManager, qlcMatrix, fastcluster, WGCNA, dynamicTreeCut, dplyr, ComplexHeatmap, circlize, umap, ggplot2, gridExtra, plotly, Hmisc, dbscan, randomcoloR, plotrix, HiClimR, htmlwidgets
-Depends: Matrix, methods
+Depends: Matrix, methods, R (>= 2.10)
 biocViews: impute, preprocessCore, GO.db,  edgeR, ensembldb, EnsDb.Mmusculus.v79, EnsDb.Hsapiens.v86
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0

@@ -4,8 +4,15 @@
 \alias{plotRCAHeatmap}
 \title{Plot heatmap of projection to the RCA panel}
 \usage{
-plotRCAHeatmap(rca.obj, var.thrs = 0.1, width = 20, height = 20,
-  folderpath = ".", filename = "RCA_Heatmap.pdf")
+plotRCAHeatmap(
+  rca.obj,
+  var.thrs = 0.1,
+  width = 20,
+  height = 20,
+  folderpath = ".",
+  filename = "RCA_Heatmap.pdf",
+  extraCellProperty = NULL
+)
 }
 \arguments{
 \item{rca.obj}{data matrix (genes x cells)}
@@ -19,6 +26,8 @@ plotRCAHeatmap(rca.obj, var.thrs = 0.1, width = 20, height = 20,
 \item{folderpath}{path to save heatmap to}
 
 \item{filename}{file name of saved heatmap}
+
+\item{extraCellProperty}{vector indicating cell property to be plotted in heatmap}
 }
 \description{
 Plot heatmap of projection to the RCA panel

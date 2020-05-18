@@ -14,7 +14,7 @@ parameterSpaceSNN <- function(rca.obj,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),f
     # Extract projection data
     projection.data <- as.matrix(rca.obj$projection.data)
 
-    
+
     pcaD = stats::prcomp(projection.data)
     components=c(1:(max(which(summary(pcaD)$importance[3,]<0.99))+1))
     d=pcaD$rotation[,components]
@@ -30,7 +30,7 @@ parameterSpaceSNN <- function(rca.obj,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),f
 	        kList<-c(kList,k)
 		      epsList<-c(epsList,eps)
 		      minPtsList<-c(minPtsList,minPts)
-		      clusteringResult<-sNNclust(d,k,eps,minPts,borderPoints = T)
+		      clusteringResult<-dbscan::sNNclust(d,k,eps,minPts,borderPoints = T)
 		      cNumbers<-c(cNumbers,length(unique(clusteringResult$cluster)))
 		      }
 	    }
@@ -41,7 +41,7 @@ parameterSpaceSNN <- function(rca.obj,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),f
     cNumbersf<-factor(cNumbers)
     hoverInfo<-paste0("k: ",kList,"\neps: ",epsList, "\nminPts: ",minPtsList,"\n#clusters: ", cNumbers)
     snnDataO<-data.frame(cbind(kList,epsList,minPtsList))
-    parameterSpace3D<-plot_ly(data = snnDataO,
+    parameterSpace3D<-plotly::plot_ly(data = snnDataO,
 	        x = ~kList, y = ~epsList, z = ~minPtsList,
 	        color = ~cNumbersf,
 	        colors = paramcolors,

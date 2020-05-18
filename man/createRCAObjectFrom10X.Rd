@@ -4,8 +4,7 @@
 \alias{createRCAObjectFrom10X}
 \title{Create RCA Object from 10X data}
 \usage{
-createRCAObjectFrom10X(dataDir, cellrangerVersion = 3,
-  min.barcode.umi = 100)
+createRCAObjectFrom10X(dataDir, cellrangerVersion = 3, min.barcode.umi = 100)
 }
 \arguments{
 \item{dataDir}{Directory containing 10X data}

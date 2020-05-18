@@ -4,10 +4,16 @@
 \alias{dataFilter}
 \title{Filter the dataset and remove genes and cells that could be of poor quality using user-defined thresholds}
 \usage{
-dataFilter(rca.obj, nGene.thresholds = c(100, NULL),
-  nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0, 0.2),
-  min.cell.exp = 10, plot = T, folderpath = ".",
-  filename = "RCA_Filter.pdf")
+dataFilter(
+  rca.obj,
+  nGene.thresholds = c(100, NULL),
+  nUMI.thresholds = c(1000, NULL),
+  percent.mito.thresholds = c(0, 0.2),
+  min.cell.exp = 10,
+  plot = T,
+  folderpath = ".",
+  filename = "RCA_Filter.pdf"
+)
 }
 \arguments{
 \item{rca.obj}{RCA object.}

@@ -4,8 +4,12 @@
 \alias{plotRCAClusterComposition}
 \title{Plot bar plots showing the composition of RCA clusters}
 \usage{
-plotRCAClusterComposition(rca.obj, deepSplit = 1, folderpath = ".",
-  filename = "RCA_Heatmap.pdf")
+plotRCAClusterComposition(
+  rca.obj,
+  deepSplit = 1,
+  folderpath = ".",
+  filename = "Cluster_Composition.pdf"
+)
 }
 \arguments{
 \item{rca.obj}{data matrix (genes x cells)}

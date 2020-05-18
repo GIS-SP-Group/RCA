@@ -4,8 +4,13 @@
 \alias{plotRCAUMAP}
 \title{Plot umap of projection to the RCA panel}
 \usage{
-plotRCAUMAP(rca.obj, cellPropertyList = NULL, folderpath = ".",
-  filename = "RCA_UMAP.pdf", fontsize = 10)
+plotRCAUMAP(
+  rca.obj,
+  cellPropertyList = NULL,
+  folderpath = ".",
+  filename = "RCA_UMAP.pdf",
+  fontsize = 10
+)
 }
 \arguments{
 \item{rca.obj}{RCA object}

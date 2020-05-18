@@ -6,10 +6,12 @@
 #' @param height height of plot in inches. Default is 20.
 #' @param folderpath path to save heatmap to
 #' @param filename file name of saved heatmap
+#' @param extraCellProperty vector indicating cell property to be plotted in heatmap
+#'
 #' @export
 #'
 
-plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, folderpath = ".", filename = "RCA_Heatmap.pdf", extraCellProperty=NULL) {
+plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, folderpath = ".", filename = "RCA_Heatmap.pdf", extraCellProperty = NULL) {
     require(ComplexHeatmap)
     # Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
@@ -87,18 +89,18 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 	    if (is.null(extraCellProperty)){
 	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg)
 	    }else{
-	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg,"extra",extraCellProperty)
+	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg,"extra" = extraCellProperty)
 	    }
 	} else {
 	        pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
 		if (is.null(extraCellProperty)){
 	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
 		}else{
-	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito, "extra"=extraCellProperty)
+	            cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito, "extra" = extraCellProperty)
 		}
 	}
-       
-               
+
+
         # Create list of annotation bar plots from cell property list
         annoBarPlotList <- lapply(cellPropertyList, function(cellPropertyVec){
             ComplexHeatmap::anno_barplot(
@@ -159,7 +161,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         )
     }
     } else{
-    heatmapIn<-heatmapIn[]	    
+    heatmapIn<-heatmapIn[]
     #graph based clustering
     if(is.null(clusterColorList)) {
         # Initialize heatmap object
@@ -206,7 +208,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 	if (is.null(extraCellProperty)){
 	        cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
 	}else{
-		cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito,"extra"=extraCellProperty)
+		cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito,"extra" = extraCellProperty)
 	}
 
         # Create list of annotation bar plots from cell property list
@@ -241,7 +243,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         ht <- ComplexHeatmap::Heatmap(
             matrix = heatmapIn,
             col = colorScheme,
-            
+
 	    cluster_columns = FALSE,
 	    column_order = order(cellTree),
 
@@ -266,7 +268,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             raster_quality = 1
         )
 
-    }   	
+    }
 
     }
     # Create pdf object to hold heatmap

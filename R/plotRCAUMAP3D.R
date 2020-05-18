@@ -30,7 +30,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
     # If no cluster colors or cell properties are to be plotted
     if(is.null(clusterColorList) & is.null(cellPropertyList)) {
         # Plot UMAP of cells without annotations
-        	umap3dPlot<-plot_ly(data = umap.df,
+        	umap3dPlot<-plotly::plot_ly(data = umap.df,
 	            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
 		    type = "scatter3d",
 		    mode = "markers",
@@ -56,7 +56,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 
 		dColors = sort(unique(umap.df[[clusterColorName]]))
                 # Create the plot
-		umap3dPlot<-plot_ly(data = umap.df,
+		umap3dPlot<-plotly::plot_ly(data = umap.df,
 		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
 			            color = ~umap.df[[clusterColorName]],
 			            colors = dColors,
@@ -65,8 +65,8 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 			            marker = list(size = 5, width=2),
 				    text = ~umap.df[[clusterColorName]],
 				    hoverinfo="text")
-		
-    
+
+
                 # Save plot
     	        htmlwidgets::saveWidget(as_widget(umap3dPlot),  paste0(folderpath, "/ClusterColors_",clusterColorName,"_",filename))
             }
@@ -79,7 +79,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
             # Get the name of this cluster annotation
             clusterColorName = names(clusterColorList[index])
 
-            
+
             umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
             # Create the plot
@@ -129,8 +129,8 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 		}
 		else{
 		if (require("randomcoloR")){
-		dColors=distinctColorPalette(length(unique(umap.df[[CellPropertyName]])))
-		umap3dPlot<-plot_ly(data = umap.df,
+		dColors=randomcoloR::distinctColorPalette(length(unique(umap.df[[CellPropertyName]])))
+		umap3dPlot<-plotly::plot_ly(data = umap.df,
 		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
 			            color = ~umap.df[[CellPropertyName]],
 			            colors = dColors,
@@ -141,7 +141,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 				    hoverinfo="text")
 		}
 		else{
-		umap3dPlot<-plot_ly(data = umap.df,
+		umap3dPlot<-plotly::plot_ly(data = umap.df,
 		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,
 			            color = ~umap.df[[CellPropertyName]],
 			            type = "scatter3d",
@@ -150,7 +150,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 				    text = ~umap.df[[CellPropertyName]],
 				    hoverinfo="text")
 		}
- 
+
 		}
 
                 # Save plot

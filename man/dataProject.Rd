@@ -4,8 +4,14 @@
 \alias{dataProject}
 \title{Compute Reference Component features for clustering analysis}
 \usage{
-dataProject(rca.obj, method = "GlobalPanel", customPath = NULL,
-  corMeth = "pearson", power = 4, scale = T)
+dataProject(
+  rca.obj,
+  method = "GlobalPanel",
+  customPath = NULL,
+  corMeth = "pearson",
+  power = 4,
+  scale = T
+)
 }
 \arguments{
 \item{rca.obj}{RCA object.}

@@ -4,7 +4,7 @@
 \alias{dataSNN}
 \title{Generate cell clusters using hierarchical clustering and dynamic tree cutting.}
 \usage{
-dataSNN(rca.obj, k = 10, eps = 8, minPts = 5)
+dataSNN(rca.obj, k = 10, eps = 8, minPts = 5, dist.fun = "All")
 }
 \arguments{
 \item{rca.obj}{RCA object.}
@@ -14,6 +14,8 @@ dataSNN(rca.obj, k = 10, eps = 8, minPts = 5)
 \item{eps}{Number of cells that have to be similar to connect 2 cells in a network. Default is 8}
 
 \item{minPts}{Number of cells with at least eps neighbours to be considered a core point. Default is 5.}
+
+\item{dist.fun}{Either PCA or All. For PCA, a PCA reduction of the projection will be performed before the correlation matrix is computed.}
 }
 \value{
 RCA object.

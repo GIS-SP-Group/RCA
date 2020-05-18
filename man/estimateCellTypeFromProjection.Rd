@@ -4,8 +4,12 @@
 \alias{estimateCellTypeFromProjection}
 \title{Estimate the most likely cell type from the projection to the reference panel}
 \usage{
-estimateCellTypeFromProjection(rca.obj, confidence = NULL, ctRank = F,
-  cSCompute = F)
+estimateCellTypeFromProjection(
+  rca.obj,
+  confidence = NULL,
+  ctRank = F,
+  cSCompute = F
+)
 }
 \arguments{
 \item{rca.obj}{RCA object.}
