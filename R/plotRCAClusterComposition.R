@@ -9,6 +9,7 @@
 
 plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", filename = "Cluster_Composition.pdf") {
     require(dplyr)    
+    if (!(is.null(rca.obj$cell.Type.Estimate))){
     # Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
     cellTree = rca.obj$clustering.out$cellTree
@@ -44,4 +45,6 @@ plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", fi
    pdf(paste0(folderpath,"/Heatmap_Composition_",filename),width=15+(nCols-1),height=7)
    grid.arrange(ratioPlot,countPlot,widths=c(1,(1.4+(nCols-1)/10),nrow=1))
    dev.off()
-}
+}else{
+	print("Cell specific estimates are not computed yet")
+}}
