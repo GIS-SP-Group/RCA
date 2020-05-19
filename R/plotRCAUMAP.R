@@ -62,7 +62,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
         }
 
-      # If cluster colors are to be plotted
+      # If cluster rank is to be plotted
         if(!is.null(rRank) & length(rRank) != 0) {
 
             #Get the name of this cluster annotation
@@ -99,15 +99,9 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
             umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
             # Create the plot
-	    names(rBaseColors)<-NULL
-	    colorOrder<-order(unique(unlist(rBaseColors)))
-	    colorVec<-unique(unlist(rBaseColors))[colorOrder]
-	    names(colorVec)<-unique(names(unlist(rBaseColors)))[colorOrder]
-            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, alpha=confScore, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_identity(labels=names(colorVec)) +  theme_bw(fontsize) + ggtitle("a)")+theme(legend.position="none")
+            umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, alpha=confScore, colour = umap.df[[clusterColorName]])) + geom_point(size = .5) + theme_bw(fontsize) + ggtitle("a)")+theme(legend.position="none")+ scale_color_manual(values = sort(unique(umap.df[[clusterColorName]]))) + labs(colour = clusterColorName)
 
- 
-
-            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = unlist(rBaseColors))) + geom_point(size = .5) + scale_color_identity(labels=names(colorVec),guide="legend") +  theme_bw(fontsize) + ggtitle("b)")+   theme(legend.position="right")+labs(color="Cell type")+guides(colour = guide_legend(override.aes = list(size=4)))
+            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[clusterColorName]])) + geom_point(size = .5) +  theme_bw(fontsize) + ggtitle("b)")+   theme(legend.position="right")+labs(color="Cell type")+guides(colour = guide_legend(override.aes = list(size=4)))+ scale_color_manual(values = sort(unique(umap.df[[clusterColorName]])))
 
             # Save plot
 	    pdf(paste0(folderpath, "/", "ConfidenceScore_", filename),width=14,height=7)

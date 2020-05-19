@@ -74,7 +74,7 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence = NULL, ctRank = 
             }
             rca.obj$cScore <- confidenceScore
         } else{
-            rca.obj$cScore <- NULL
+            rca.obj$cScore <- list()
         }
         if (ctRank) {
             myColors <-
@@ -91,8 +91,8 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence = NULL, ctRank = 
             }
             rca.obj$rRank <- relativeColorRank
         } else{
-            rca.obj$rRank <- NULL
-            rca.obj$baseColors <- NULL
+            rca.obj$rRank <- list()
+            rca.obj$baseColors <- list()
         }
         
         
