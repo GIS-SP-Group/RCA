@@ -90,7 +90,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
         }
 
       # If cluster confidence is to be plotted
-        if(!is.null(confScore) & length(confScore) != 0) {
+        if(!is.null(confScore) & length(confScore) != 0 & length(rca.obj$cell.Type.Estimate != 0)) {
 
             #Get the name of this cluster annotation
             clusterColorName = names(clusterColorList[index])
@@ -101,7 +101,10 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
             # Create the plot
             umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, alpha=confScore, colour = umap.df[[clusterColorName]])) + geom_point(size = .5) + theme_bw(fontsize) + ggtitle("a)")+theme(legend.position="none")+ scale_color_manual(values = sort(unique(umap.df[[clusterColorName]]))) + labs(colour = clusterColorName)
 
-            umapClusterColorsPlot2 <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[clusterColorName]])) + geom_point(size = .5) +  theme_bw(fontsize) + ggtitle("b)")+   theme(legend.position="right")+labs(color="Cell type")+guides(colour = guide_legend(override.aes = list(size=4)))+ scale_color_manual(values = sort(unique(umap.df[[clusterColorName]])))
+
+	    umapClusterColorsPlot2<-ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = names(rca.obj$cell.Type.Estimate))) +
+	    geom_point(size = .5) +  theme(legend.position="right")+labs(color="Cell type")+theme_bw(fontsize)+ggtitle("b)")+
+	    guides(colour = guide_legend(override.aes = list(size=4)))+ scale_color_identity(labels=unlist(rca.obj$cell.Type.Estimate),guide="legend") 
 
             # Save plot
 	    pdf(paste0(folderpath, "/", "ConfidenceScore_", filename),width=14,height=7)
