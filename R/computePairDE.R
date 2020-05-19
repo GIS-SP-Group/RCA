@@ -117,19 +117,15 @@ dataDE <- function(rca.obj,
     ######################################
     #Determine top x DE genes per Cluster#
     ######################################
-    mC1 <-
-        df %>% group_by(group1, group2) %>% dplyr::top_n(n = topGenesPerCluster, wt = avg_logFC)
+    mC1 <- df %>% group_by(group1, group2) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC)
     markers2 <- df
     markers2$avg_logFC <- (-1) * (markers2$avg_logFC)
-    mC2 <-
-        markers2 %>% group_by(group2, group1) %>% dplyr::top_n(n = topGenesPerCluster, wt = avg_logFC)
-    topMarkers <-
-        data.frame(rbind(
+    mC2 <- markers2 %>% group_by(group2, group1) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC)
+    topMarkers <- data.frame(rbind(
             cbind(Cluster = mC1$group1, Gene = mC1$gene),
             cbind(Cluster = mC2$group2, Gene = mC2$gene)
         ))
-    topMarkers <-
-        topMarkers %>% group_by(Cluster) %>% distinct(.keep_all = T)
+    topMarkers <- topMarkers %>% group_by(Cluster) %>% distinct(.keep_all = T)
     topMarkers <- topMarkers[order(topMarkers$Cluster, decreasing = F), ]
 
     rca.obj$DE.genes <- list(All.DE.genes = df, Top.DE.genes = topMarkers)
