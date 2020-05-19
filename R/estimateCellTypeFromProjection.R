@@ -98,7 +98,7 @@ estimateCellTypeFromProjection <- function(rca.obj, confidence = NULL, ctRank = 
         
         # Assign projection result to RCA object
         rca.obj$cell.Type.Estimate <- cellTypes
-        
+       
         
         # Return RCA object
         return(rca.obj)

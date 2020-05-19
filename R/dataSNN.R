@@ -56,7 +56,7 @@ dataSNN <- function(rca.obj,k=10,eps=8,minPts=5,dist.fun="All") {
     names(clusterColors)<-unique(clusteringResult$cluster)
 
     dynamicColorsList<-list(Colors=clusterColors[as.character(clusteringResult$cluster)])
-
+    names(dynamicColorsList)<-c("Clusters")
     # Assign clustering result to RCA object
     rca.obj$clustering.out <- list(
         "cellTree" = clusteringResult$cluster,

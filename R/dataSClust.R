@@ -32,7 +32,7 @@ dataSClust <- function(rca.obj,res=0.5) {
 			dynamicColorsList<-list(WGCNA::labels2colors(tempS$seurat_clusters))	
 			}
 	}
-	names(dynamicColorsList)<-c("Seurat")
+	names(dynamicColorsList)<-c("Clusters")
 	# Assign clustering result to RCA object
 	rca.obj$clustering.out <- list(
 	"cellTree" = tempS$seurat_clusters,

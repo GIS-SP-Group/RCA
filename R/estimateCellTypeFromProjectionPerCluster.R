@@ -60,12 +60,13 @@ estimateCellTypeFromProjectionPerCluster <- function(rca.obj, homogeneity=NULL) 
     names(homologyScores)<-unique(clusterColors)
     names(maxCellTypeCluster)<-unique(clusterColors)
  
+    clusterConfidence<-homologyScores[clusterColors]
+    estimatedCellTypes<-maxCellTypeCluster[clusterColors]
+
     rca.obj$cell.Type.Estimate <- estimatedCellTypes
     rca.obj$cScore <- clusterConfidence
 
-    clusterConfidence<-homologyScores[clusterColors]
-    estimatedCellTypes<-maxCellTypeCluster[clusterColors]
-    
+
     # Return RCA object
     return(rca.obj)
 }
