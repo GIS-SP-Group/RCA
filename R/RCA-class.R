@@ -11,7 +11,8 @@ RCAConstruct <- setRefClass(Class = "RCA",
 					  cell.Type.Estimate = "list",
 					  baseColors = "list",
 					  rRank = "list",
-					  cScore = "list"))
+					  cScore = "list",
+					  DE.genes = "list"))
 
 RCAConstruct$methods(show=function(){
 		     print("RCA reference class object")
@@ -44,6 +45,13 @@ RCAConstruct$methods(show=function(){
 			     dataSize=length(unique(cell.Type.Estimate));
 			     print(paste0("The data set contains ",dataSize," unique cell types."))
 		     }
+
+		     if (!(is.null(DE.genes))){
+			     totalDE=length(DE.genes[[1]]$gene)
+			     topDE=length(DE.genes[[2]]$Gene)
+			     print(paste0("The data set contains ",totalDE," DE genes and ",topDE ," selected top unique DE genes."))
+		     }
+
 		})
 
 		      
