@@ -1,7 +1,7 @@
 #' Compute Reference Component features for clustering analysis
 #'
 #' @param rca.obj RCA object.
-#' @param method Either "GlobalPanel"(default), "ColonEpitheliumPanel", or "Custom"
+#' @param method Either "GlobalPanel"(default), "ColonEpiPanel", "MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel" or "Custom"
 #' @param customPath directory path (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".
 #' @param corMeth Any of the correlation measures supported by R, defaults to pearson
 #' @param power power to raise up to for the RCA features before clustering, default is 4
