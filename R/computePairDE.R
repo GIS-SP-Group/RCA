@@ -62,7 +62,7 @@ dataDE <- function(rca.obj,
     if (class(rca.obj$clustering.out$cellTree) == "hclust") {
         clusters <- rca.obj$clustering.out$dynamicColorsList[[deepsplit]]
         total.clus <- length(unique(clusters))
-        remap <- c(0:total.clus)
+        remap <- c(1:total.clus)
         names(remap) <-
             unique(rca.obj$clustering.out$dynamicColorsList[[deepsplit]])
         clusters <- as.numeric(as.character(remap[clusters]))
