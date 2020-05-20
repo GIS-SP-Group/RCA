@@ -126,7 +126,7 @@ doEnrichGo<-function(rca.obj,
 				#Generate and save dotplot
 				ggplot2::ggsave(paste0("Dotplot_",names(allClusters)[1],"_",ontology,"_",filename),clusterProfiler::dotplot(ggo),width=15,height=8,units="in")
 				#Generate and save goplot
-				ggplot2::ggsave(paste0("gotplot_",names(allClusters)[1],"_",ontology,"_",filename),clusterProfiler::goplot(ggo),width=15,height=8,units="in")
+				ggplot2::ggsave(paste0("gotplot_",names(allClusters)[1],"_",ontology,"_",filename),clusterProfiler::goplot(ggo),width=25,height=8,units="in")
 		                }
 		        }
 	      }

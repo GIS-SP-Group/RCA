@@ -72,14 +72,14 @@ dataDE <- function(rca.obj,
         #############################
         clusters <- rca.obj$clustering.out$dynamicColorsList[[1]]
         total.clus <- length(unique(clusters))
-        remap <- c(0:total.clus)
+        remap <- c(1:total.clus)
         names(remap) <- unique(rca.obj$clustering.out$dynamicColorsList[[1]])
         clusters <- as.numeric(as.character(remap[clusters]))
     }
     ###########################
     #Compute pairwise DE genes#
     ###########################
-    for (clusteri in 0:(total.clus - 2)) {
+    for (clusteri in 1:(total.clus - 2)) {
         for (clusterj in (clusteri + 1):(total.clus - 1)) {
             print(c(clusteri, clusterj))
             cells.1 <- colnames(rca.obj$data)[which(clusters == clusteri)]
