@@ -55,7 +55,7 @@ doEnrichGo<-function(rca.obj,
         names(map)<-clusters
 	#Determine clusters to be subjected to go test
  	if(is.null(cluster.ID)){
-		allClusters<-map[unique(rca.obj$clustering.out$dynamicColorsList[[1]])]
+		allClusters<-map
 	}else{
 		allClusters<-map[cluster.ID]
 	    }
