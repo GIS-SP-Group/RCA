@@ -72,7 +72,6 @@ doEnrichGo<-function(rca.obj,
 		if (!(is.null(background.set.threshold))){
 			if(is.null(cluster.ID)){
 				clusterMeanExp<-apply(rca.obj$data[,which(rca.obj$clustering.out$dynamicColorsList[[1]]==names(allClusters)[cluster])],1,mean)
-				print(summary(clusterMeanExp))
 			}else{
 				clusterMeanExp<-apply(rca.obj$data[,which(rca.obj$clustering.out$dynamicColorsList[[1]]==names(allClusters)[1])],1,mean)
 			}
