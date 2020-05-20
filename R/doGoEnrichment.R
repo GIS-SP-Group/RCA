@@ -8,10 +8,10 @@
 #' @param p.Adjust.Method p-value adjustment method to be used, default BH
 #' @param gene.label.type Type of gene.labels used, default SYMBOL
 #' @param filename postfix of the plots generated, GoEnrichment.pdf
-#' @param background.set.threshold, minimum expression threshold used for mean gene-expression. Either a numerical value or one of the following thresholds computed on the mean gene-expression values across all genes: Min, 1stQ, Mean, Median, 3rdQ
-#' @param n.Cells.Expressed
-#' @param cluster.ID
-#' @param deep.split
+#' @param background.set.threshold, minimum expression threshold used for mean gene-expression. Either a numerical value or one of the following thresholds computed on the mean gene-expression values across all genes: Min, 1stQ, Mean, Median, 3rdQ. Default: 1stQ
+#' @param n.Cells.Expressed Alternative threshold to filter genes. Keep only genes that are expressed in at least n.Cells.Expressed cells
+#' @param cluster.ID ID of a cluster for which the GO enrichment should be computed. If this is not provided, enrichment will be computed for all clusters. Default: NULL
+#' @param deep.split Deep.split to be used if hierachical clustering was used to cluster the projection
 #' @return RCA object.
 #' @export
 #'
@@ -23,7 +23,7 @@ doEnrichGo<-function(rca.obj,
 		     p.Adjust.Method="BH",
 		     gene.label.type="SYMBOL",
 		     filename="GoEnrichment.pdf",
-		     background.set.threshold=NULL,
+		     background.set.threshold="1stQ",
 		     n.Cells.Expressed=NULL,
 		     cluster.ID=NULL,
 		     deep.split=NULL){
