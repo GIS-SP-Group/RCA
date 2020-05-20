@@ -9,6 +9,6 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: BiocManager, qlcMatrix, fastcluster, WGCNA, dynamicTreeCut, dplyr, ComplexHeatmap, circlize, umap, ggplot2, gridExtra, plotly, Hmisc, dbscan, randomcoloR, plotrix, HiClimR, htmlwidgets
-Depends: Matrix, methods, R (>= 2.10)
+Depends: Matrix, methods, R (>= 3.5.0)
 biocViews: impute, preprocessCore, GO.db,  edgeR, ensembldb, EnsDb.Mmusculus.v79, EnsDb.Hsapiens.v86
 RoxygenNote: 7.1.0
