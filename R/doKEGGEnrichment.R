@@ -18,7 +18,7 @@
 #'
 doEnrichKEGG<-function(rca.obj,
 		     annotation=NULL,
-		     org="hsa"
+		     org="hsa",
 		     key="kegg",
 		     p.Val=0.05,
 		     q.Val=0.2,
