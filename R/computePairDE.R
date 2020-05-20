@@ -79,8 +79,8 @@ dataDE <- function(rca.obj,
     ###########################
     #Compute pairwise DE genes#
     ###########################
-    for (clusteri in 1:(total.clus - 2)) {
-        for (clusterj in (clusteri + 1):(total.clus - 1)) {
+    for (clusteri in 1:(total.clus - 1)) {
+        for (clusterj in (clusteri + 1):(total.clus)) {
             print(c(clusteri, clusterj))
             cells.1 <- colnames(rca.obj$data)[which(clusters == clusteri)]
             cells.2 <-
