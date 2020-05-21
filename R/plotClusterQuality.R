@@ -50,7 +50,7 @@ plotClusterQuality <- function(rca.obj, cluster.labels, width = 20, height = 20,
 
     # nUMI vs pMito plot
     pdf(file = paste0(folderpath, "/", "nUMI_pMito_", filename), width = width, height = height)
-    nUMI_pMito_plot <- gggplot2::gplot(data = quality.df, ggplot2::aes(x = nUMI, y = pMito)) + ggplot2::geom_point(size = 1) +ggplot2::geom_jitter() + ggplot2::facet_wrap(.~Cluster, scales = "free",nrow=5) + ggplot2::theme_bw() + ggplot2::ggtitle("nUMI vs pMito")+ ggplot2::geom_densit2d()
+    nUMI_pMito_plot <- ggplot2::gplot(data = quality.df, ggplot2::aes(x = nUMI, y = pMito)) + ggplot2::geom_point(size = 1) +ggplot2::geom_jitter() + ggplot2::facet_wrap(.~Cluster, scales = "free",nrow=5) + ggplot2::theme_bw() + ggplot2::ggtitle("nUMI vs pMito")+ ggplot2::geom_densit2d()
     print(nUMI_pMito_plot)
     dev.off()
 
