@@ -15,14 +15,13 @@
 performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.thresholds = NULL, nGene.high.thresholds = NULL, nUMI.low.thresholds = NULL, nUMI.high.thresholds = NULL, pMito.low.thresholds = NULL, pMito.high.thresholds = NULL) {
 
     # Create data frame for cell-cluster mapping
-    cluster.df <- data.frame(Cell = colnames(rca.obj$data), Cluster = cluster.labels)
+    cluster.df <- data.frame(Cell = colnames(rca.obj$raw.data), Cluster = cluster.labels)
 
     # Create dataframe for QC parameters
     qc.df <- data.frame(row.names = unique(cluster.labels), nGene.low = if(is.null(nGene.low.thresholds)) rep(0, length(unique(cluster.labels))) else nGene.low.thresholds, nGene.high = if(is.null(nGene.high.thresholds)) rep(Inf, length(unique(cluster.labels))) else nGene.high.thresholds, nUMI.low = if(is.null(nUMI.low.thresholds)) rep(0, length(unique(cluster.labels))) else nUMI.low.thresholds, nUMI.high = if(is.null(nUMI.high.thresholds)) rep(Inf, length(unique(cluster.labels))) else nUMI.high.thresholds, pMito.low = if(is.null(pMito.low.thresholds)) rep(0, length(unique(cluster.labels))) else pMito.low.thresholds, pMito.high = if(is.null(pMito.high.thresholds)) rep(1, length(unique(cluster.labels))) else pMito.high.thresholds)
 
-    # Create empty filtered cell-cluster mapping data frame
-    filt.cluster.df <- data.frame(Cell = character(), Cluster = character())
-
+    # Create empty list to keep IDs of cells to keep
+    cellsToKeep <- c()
     # For each cluster
     for(cluster in unique(cluster.labels)) {
 
@@ -44,9 +43,8 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
             if(is.numeric(nGene.thresholds) && (length(nGene.thresholds) == 2)) {
 
                 nGene.filt.cells <- filt.cells[which((nGeneVec >= nGene.thresholds[1]) & (nGeneVec <= nGene.thresholds[2]))]
-            } else if(is.numeric(nGene.thresholds) && (length(nGene.thresholds) == 1)) {
-                nGene.filt.cells <- filt.cells[which(nGeneVec >= nGene.thresholds)]
-            } else {
+            } 
+            else {
                 warning("nGene.thresholds was not of the appropriate format. Please enter a numeric vector with lower and upper thresholds.")
                 nGene.filt.cells <- filt.cells
             }
@@ -67,10 +65,9 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
 
             if(is.numeric(nUMI.thresholds) && (length(nUMI.thresholds) == 2)) {
 
-                nUMI.filt.cells <- filt.cells[which((nUMIVec >= nUMI.thresholds[1]) & (nUMIVec <= nUMI.thresholds[2]))]
-            } else if(is.numeric(nGene.thresholds) && (length(nUMI.thresholds) == 1)) {
-                nUMI.filt.cells <- filt.cells[which(nUMIVec >= nUMI.thresholds)]
-            } else {
+                nUMI.filt.cells <- filt.cells[which((nUMIVec >= nUMI.thresholds[1]) & (nUMIVec <= nUMI.thresholds[2]))]    
+            } 
+	    else {
                 warning("nUMI.thresholds was not of the appropriate format. Please enter a numeric vector with lower and upper thresholds.")
                 nUMI.filt.cells <- filt.cells
             }
@@ -95,9 +92,8 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
             if(is.numeric(pMito.thresholds) && (length(pMito.thresholds) == 2)) {
 
                 pMito.filt.cells <- filt.cells[which((pMitoVec >= pMito.thresholds[1]) & (pMitoVec <= pMito.thresholds[2]))]
-            } else if(is.numeric(pMito.thresholds) && (length(pMito.thresholds) == 1)) {
-                pMito.filt.cells <- filt.cells[, which(pMitoVec >= pMito.thresholds)]
-            } else {
+            }
+	    else {
                 warning("percent.mito.thresholds was not of the appropriate format. Please enter a numeric vector with lower and upper thresholds.")
                 pMito.filt.cells <- filt.cells
 
@@ -109,17 +105,18 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
 
         # Select only the cells that satisfy all 3 cell filtering criteria
         filt.cells <- intersect(intersect(nGene.filt.cells, nUMI.filt.cells), pMito.filt.cells)
-        filt.cluster.df <- rbind(filt.cluster.df, subset(cluster.df, Cell %in% filt.cells))
+        cellsToKeep <- c(cellsToKeep,filt.cells)
 
     }
 
     # Subset data in RCA object
-    rca.obj$raw.data <- rca.obj$raw.data[, filt.cluster.df$Cell]
-    rca.obj$data <- rca.obj$data[, filt.cluster.df$Cell]
+    cellIDsToKeep <- which(cluster.df$Cell %in% cellsToKeep)
+    rca.obj$raw.data <- rca.obj$raw.data[, cellIndexToKeep]
+    rca.obj$data <- rca.obj$data[, cellIndexToKeep]
 
     # Subset cluster labels
     for(i in 1:length(rca.obj$clustering.out$dynamicColorsList)) {
-        rca.obj$clustering.out$dynamicColorsList[[i]] <- rca.obj$clustering.out$dynamicColorsList[[i]][which(cluster.df$Cell %in% filt.cluster.df$Cell)]
+        rca.obj$clustering.out$dynamicColorsList[[i]] <- rca.obj$clustering.out$dynamicColorsList[[i]][cellIndexToKeep]
     }
 
     # Return
