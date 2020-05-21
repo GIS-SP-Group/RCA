@@ -43,7 +43,7 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
 
             if(is.numeric(nGene.thresholds) && (length(nGene.thresholds) == 2)) {
 
-                nGene.filt.cells <- filt.cells[which((nGeneVec >= nGene.thresholds[1]) && (nGeneVec <= nGene.thresholds[2]))]
+                nGene.filt.cells <- filt.cells[which((nGeneVec >= nGene.thresholds[1]) & (nGeneVec <= nGene.thresholds[2]))]
             } else if(is.numeric(nGene.thresholds) && (length(nGene.thresholds) == 1)) {
                 nGene.filt.cells <- filt.cells[which(nGeneVec >= nGene.thresholds)]
             } else {
@@ -65,10 +65,10 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
             # Compute nUMI vector
             nUMIVec <- Matrix::colSums(data)
 
-            if(is.numeric(nUMI.thresholds) & (length(nUMI.thresholds) == 2)) {
+            if(is.numeric(nUMI.thresholds) && (length(nUMI.thresholds) == 2)) {
 
                 nUMI.filt.cells <- filt.cells[which((nUMIVec >= nUMI.thresholds[1]) & (nUMIVec <= nUMI.thresholds[2]))]
-            } else if(is.numeric(nGene.thresholds) & (length(nUMI.thresholds) == 1)) {
+            } else if(is.numeric(nGene.thresholds) && (length(nUMI.thresholds) == 1)) {
                 nUMI.filt.cells <- filt.cells[which(nUMIVec >= nUMI.thresholds)]
             } else {
                 warning("nUMI.thresholds was not of the appropriate format. Please enter a numeric vector with lower and upper thresholds.")
@@ -92,10 +92,10 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
             pMitoVec <- Matrix::colSums(data[mito.genes, ])/Matrix::colSums(data)
 
 
-            if(is.numeric(pMito.thresholds) & (length(pMito.thresholds) == 2)) {
+            if(is.numeric(pMito.thresholds) && (length(pMito.thresholds) == 2)) {
 
                 pMito.filt.cells <- filt.cells[which((pMitoVec >= pMito.thresholds[1]) & (pMitoVec <= pMito.thresholds[2]))]
-            } else if(is.numeric(pMito.thresholds) & (length(pMito.thresholds) == 1)) {
+            } else if(is.numeric(pMito.thresholds) && (length(pMito.thresholds) == 1)) {
                 pMito.filt.cells <- filt.cells[, which(pMitoVec >= pMito.thresholds)]
             } else {
                 warning("percent.mito.thresholds was not of the appropriate format. Please enter a numeric vector with lower and upper thresholds.")
