@@ -41,10 +41,10 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
             # Compute nGene vector
             nGeneVec <- Matrix::colSums(data>0)
 
-            if(is.numeric(nGene.thresholds) & (length(nGene.thresholds) == 2)) {
+            if(is.numeric(nGene.thresholds) && (length(nGene.thresholds) == 2)) {
 
-                nGene.filt.cells <- filt.cells[which((nGeneVec >= nGene.thresholds[1]) & (nGeneVec <= nGene.thresholds[2]))]
-            } else if(is.numeric(nGene.thresholds) & (length(nGene.thresholds) == 1)) {
+                nGene.filt.cells <- filt.cells[which((nGeneVec >= nGene.thresholds[1]) && (nGeneVec <= nGene.thresholds[2]))]
+            } else if(is.numeric(nGene.thresholds) && (length(nGene.thresholds) == 1)) {
                 nGene.filt.cells <- filt.cells[which(nGeneVec >= nGene.thresholds)]
             } else {
                 warning("nGene.thresholds was not of the appropriate format. Please enter a numeric vector with lower and upper thresholds.")
