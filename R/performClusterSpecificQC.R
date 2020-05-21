@@ -110,7 +110,7 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
     }
 
     # Subset data in RCA object
-    cellIDsToKeep <- which(cluster.df$Cell %in% cellsToKeep)
+    cellIndexToKeep <- which(cluster.df$Cell %in% cellsToKeep)
     rca.obj$raw.data <- rca.obj$raw.data[, cellIndexToKeep]
     rca.obj$data <- rca.obj$data[, cellIndexToKeep]
 
