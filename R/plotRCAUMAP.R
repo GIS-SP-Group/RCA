@@ -1,5 +1,5 @@
 #' Plot umap of projection to the RCA panel
-#' 
+#'
 #' The presence of cell type estimates, relative ranks and confindence scores are detected automatically and are plotted accordingly.
 #' @param rca.obj RCA object
 #' @param cellPropertyList list of cell properties to plot
@@ -52,7 +52,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
                 umap.df[[clusterColorName]] <- clusterColorList[[index]]
 
                 # Create the plot
-                umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = umap.df[[clusterColorName]])) + geom_point(size = .5) + scale_color_manual(values = sort(unique(umap.df[[clusterColorName]]))) + labs(colour = clusterColorName) + theme_bw(fontsize) + guides(colour = guide_legend(override.aes = list(size=5)))
+                umapClusterColorsPlot <- ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = .data[[clusterColorName]])) + geom_point(size = .5) + scale_color_manual(values = sort(unique(umap.df[[clusterColorName]]))) + labs(colour = clusterColorName) + theme_bw(fontsize) + guides(colour = guide_legend(override.aes = list(size=5)))
 
                 # Save plot
                 ggsave(filename = paste0(folderpath, "/", "ClusterColors_", clusterColorName,"_", filename), plot = umapClusterColorsPlot,width=9,height=7,units="in")
@@ -85,7 +85,7 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 	    pdf(paste0(folderpath, "/", "RelativeRank_", filename),width=14,height=7)
 	    grid.arrange(umapClusterColorsPlot,umapClusterColorsPlot2,widths=c(1,1.2))
 	    dev.off()
-	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot, umapClusterColorsPlot2))       
+	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot, umapClusterColorsPlot2))
 
         }
 
@@ -104,13 +104,13 @@ plotRCAUMAP <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", file
 
 	    umapClusterColorsPlot2<-ggplot(data = umap.df, mapping = aes(x = UMAP1, y = UMAP2, colour = names(rca.obj$cell.Type.Estimate))) +
 	    geom_point(size = .5) +  theme(legend.position="right")+labs(color="Cell type")+theme_bw(fontsize)+ggtitle("b)")+
-	    guides(colour = guide_legend(override.aes = list(size=4)))+ scale_color_identity(labels=unlist(rca.obj$cell.Type.Estimate),guide="legend") 
+	    guides(colour = guide_legend(override.aes = list(size=4)))+ scale_color_identity(labels=unlist(rca.obj$cell.Type.Estimate),guide="legend")
 
             # Save plot
 	    pdf(paste0(folderpath, "/", "ConfidenceScore_", filename),width=14,height=7)
 	    grid.arrange(umapClusterColorsPlot,umapClusterColorsPlot2,widths=c(1,1.2))
 	    dev.off()
-	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot, umapClusterColorsPlot2))       
+	    umapPlots<-c(umapPlots,list(umapClusterColorsPlot, umapClusterColorsPlot2))
 
         }
 
