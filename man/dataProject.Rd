@@ -16,7 +16,7 @@ dataProject(
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{method}{Either "GlobalPanel"(default), "ColonEpitheliumPanel", or "Custom"}
+\item{method}{Either "GlobalPanel"(default), "ColonEpiPanel", "MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel" or "Custom"}
 
 \item{customPath}{directory path (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".}
 

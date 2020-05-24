@@ -9,7 +9,7 @@ dataDE(
   logFoldChange = 1.5,
   method = "wilcox",
   mean.Exp = 0.5,
-  deep.Split.Values = 1,
+  deepsplit = 1,
   min.pct = 0.25,
   min.diff.pct = -Inf,
   random.seed = 1,
@@ -46,7 +46,7 @@ dataDE(
 
 \item{mean.Exp}{Minimum mean expression of a gene to be considered in the DE gene calculation}
 
-\item{deep.Split.Values}{If hclust was used for clustering, the desired deepsplit can be specified here.. Values can range from 0 to 4. Default is 1.}
+\item{deepsplit}{If hclust was used for clustering, the desired deepsplit can be specified here.. Values can range from 0 to 4. Default is 1.}
 
 \item{min.pct}{only test genes that are detected in a minimum fraction of
 min.pct cells in either of the two populations. Meant to speed up the function
