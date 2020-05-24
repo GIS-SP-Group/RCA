@@ -22,7 +22,7 @@
 #'  cells using the Student's t-test.
 #'  }
 #' @param mean.Exp Minimum mean expression of a gene to be considered in the DE gene calculation
-#' @param deep.Split.Values If hclust was used for clustering, the desired deepsplit can be specified here.. Values can range from 0 to 4. Default is 1.
+#' @param deepsplit If hclust was used for clustering, the desired deepsplit can be specified here.. Values can range from 0 to 4. Default is 1.
 #' @param min.pct  only test genes that are detected in a minimum fraction of
 #' min.pct cells in either of the two populations. Meant to speed up the function
 #' by not testing genes that are very infrequently expressed. Default is 0.25
@@ -42,7 +42,7 @@ dataDE <- function(rca.obj,
                    logFoldChange = 1.5,
                    method = "wilcox",
                    mean.Exp = 0.5,
-                   deep.Split.Values = 1,
+                   deepsplit = 1,
                    min.pct = 0.25,
                    min.diff.pct = -Inf,
                    random.seed = 1,
@@ -106,11 +106,14 @@ dataDE <- function(rca.obj,
             if (!(is.null(marker.genes))) {
                 if (colnames(marker.genes)[1] != 'myAUC') {
                     marker.genes = marker.genes[marker.genes$p_val_adj < 0.05, ]
+                    str(marker.genes)
                 }
-                marker.genes$group1 = clusteri
-                marker.genes$group2 = clusterj
-                marker.genes$gene = rownames(marker.genes)
-                df = rbind(df, marker.genes)
+                if(nrow(marker.genes) > 0) {
+                    marker.genes$group1 = clusteri
+                    marker.genes$group2 = clusterj
+                    marker.genes$gene = rownames(marker.genes)
+                    df = rbind(df, marker.genes)
+                }
             }
         }
     }
@@ -506,7 +509,6 @@ ComputePairWiseDE <-  function(object,
         ),
         stop("Unknown test: ", test.use)
     )
-
     diff.col <- "avg_logFC"
     de.results[, diff.col] <- total.diff[rownames(x = de.results)]
     de.results <-
