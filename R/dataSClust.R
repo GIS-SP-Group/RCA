@@ -13,9 +13,10 @@ dataSClust <- function(rca.obj,res=0.5) {
 	}else{
 		projection<-as.dist(1-cor(projection.data))
 	}
-	tempS@reductions[["pca"]]<-new("DimReduc", cell.embeddings = matrix(0,0,0))
+	str(projection)
+	tempS@reductions[["pca"]]<-new(Class = "DimReduc", cell.embeddings = matrix(0,0,0), assay.used = "RNA")
 	tempS@reductions$pca@cell.embeddings<-as.matrix(projection)
-	tempS<-Seurat::FindNeighbors(tempS)
+	tempS<-Seurat::FindNeighbors(object = tempS)
 	tempS<-Seurat::FindClusters(tempS,resolution = res)
 
 	# Convert labels to colours for each tree cut
@@ -29,7 +30,7 @@ dataSClust <- function(rca.obj,res=0.5) {
 		     names(clusterColors)<-unique(clusteringResult$cluster)
 		     dynamicColorsList<-list(Colors=clusterColors[as.character(clusteringResult$cluster)])
 		    } else{
-			dynamicColorsList<-list(WGCNA::labels2colors(tempS$seurat_clusters))	
+			dynamicColorsList<-list(WGCNA::labels2colors(tempS$seurat_clusters))
 			}
 	}
 	names(dynamicColorsList)<-c("Clusters")
