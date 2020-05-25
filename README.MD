@@ -48,6 +48,8 @@ The current release of RCA requires the following packages to be available on yo
 All missing CRAN-packages can be *automatically installed* during the RCA installation.
 Note that the *HiClimR* package is optional, it allows to speed up the computationally expensive steps. Also the
 *randomColoR* package is optional, it is useful to obtain distinguishable colors.
+Further optional packages are *Seurat*, available from CRAN, and *clusterProfiler*, *enrichplot* as well as corresponding annotation libraries, 
+such as 
 
 ### Load the package
 After installation, load the package with the command
@@ -248,14 +250,14 @@ To cluster the PBMC projection using the snn approach run
 ```{r}
 PBMCs<-RCAv2::dataSNN(PBMCs,k=100,eps=25,minPts=30)
 ```
-This function has three parameters:
+This function has three main parameters:
 * *k* as the number of considered neighbours per cell,
 * *eps* as the minimum number of shared neighbours between to cells,
 * *minPts* minimum number of points that share *eps* neighbours such that a point is considered a core point.
 
 As for the hierarchical clustering, heatmaps and umaps can be generated as well.
 
-To help the user choosing the parameters for clustering, we provide a parameter space exploration feature leading to a 3D umap illustrating the number of clusters depending on the three parameters, as shown below.
+To help the user choosing the parameters for clustering, we provide a parameter space exploration feature leading to a 3D umap illustrating the number of clusters depending on the three parameters, as shown below. 
 
 ![](Tutorial/ParameterPlotDBSCAN.PNG)
 
@@ -264,6 +266,15 @@ This figure can be generated using the function
 parameterSpaceSNN(PBMCs,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),folderpath=".",filename="Graph_based_Clustering_Parameter_Space.html") 
 ```
 where *kL*, *epsL* and *minPtsL* define the search space for *k*, *eps* and *minPts* respectively. Note that executing this function will take longer for large search spaces.
+In addition to those clustering parameters, via the *dist.fun* parameter one can choose whether a PCA reduction of the projection matrix, or the entire projection matrix should be used to construct the snn graph.
+### Using graph based clustering implemented in Seurat
+As the snn clustering approach mentioned above requires multiple parameteres to be tuned, RCAv2 also allows to cluster cells using the graph based clustering implemented in Seurat (Butler et al., Nature Biotechnology, 2018).
+To cluster the PBMC projection using Seurat clustering, run:
+```{r}
+PBMCs<-dataSClust(PBMCs,res=0.5)
+```
+where res is the resolution parameter parsed on to the Seurat clustering function. Upon graph based clustering, the RCA projection heatmap will be plotted without column dendrogramms.
+![](Tutorial/RCA_Heatmap_Seurat.PNG)
 
 ### Clustering free analysis of the projection
 Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering indepent cell-type assignment approach that is purely based on each cells z-score distribution.
@@ -322,6 +333,84 @@ umapFigures<-RCAv2::plotRCAUMAP(PBMCs,
 leads us to a clustering free cell type assignment.
 
 ![](Tutorial/Umap_ClusterFree.png)
+
+### Compute DE genes for RCA clusters
+To ease cluster interpretation further, RCAv2 allows the user to compute pairwise DE genes for all identified clusters.
+Computation can be initiated with the command:
+```{r}
+PBMCs<-RCAv2::dataDE(PBMCs,
+  logFoldChange = 1.5,
+  method = "wilcox",
+  mean.Exp = 0.5,
+  deep.Split.Values = 1,
+  min.pct = 0.25,
+  min.diff.pct = -Inf,
+  random.seed = 1,
+  min.cells.group = 3,
+  pseudocount.use = 1,
+  p.adjust.methods = "BH",
+  top.genes.per.cluster = 10
+)
+```
+Here, *logFoldChange* is the required logFoldChange to call a gene to be differentially expressed. The *method* parameter indicates which statistical test is used. Multiple test correction is perfomed using the method indicated in *p.adjust.methods*.
+The parameters *mean.Exp* and *min.pct* indicat the minimum expression value as well as the minimum percentage of cells expressing a gene. Furthermore, the pseudocount
+can be adjusted via the *pseudocount.use* parameter. The *top.genes.per.cluster* parameter indicats how many genes should be selected as top DE genes per pairwise comparison for each cluster.
+Both the entire set of DE genes as well as the top DE genes are stored in the PBMCs *rca.obj*.
+The topDE genes can be plotted in a heatmap via the *plotDEHeatmap* function:
+```{r}
+RCAv2::plotDEHeatmap(PBMCs)
+```
+### Compute enrichment for GO terms and KEGG pathways
+Using the *clusterProfiler* package, RCAv2 supports enrichment tests for GO terms and KEGG pathways using the
+functions *doEnrichGo* and *doEnrichKEGG*, respectively. Both require the parameter *annotation* to be set, which
+is needed both for ID mapping and GO-term assignment. An example for an annotation for human is the *org.Hs.eg.db* available at
+Bioconductor.
+
+To compute GO enrichment for all identified RNA-seq clusters, call the function:
+```{r}
+doEnrichGo<-function(rca.obj,
+                    annotation=NULL,
+                    ontology="BP",
+                    p.Val=0.05,
+                    q.Val=0.2,
+                    p.Adjust.Method="BH",
+                    gene.label.type="SYMBOL",
+                    filename="GoEnrichment.pdf",
+                    background.set.threshold=NULL,
+                    n.Cells.Expressed=NULL,
+                    cluster.ID=NULL,
+                    deep.split=NULL)
+```
+where ontology is either *BP, MF* or *CC*, *p.Val* and *q.Val* are thresholds used by clusterprofiler, and *p.Adjust.Method* indicates which method is used to correct for multiple testing.
+For greater user convenience, the function automatically maps geneIDs. To this end, the *gene.label.type* holds the type of the original labels. In concordance with 10X data, this is set to SYMBOL by default. 
+By default, the background set is defined separately for each cluster. Cells are selected either via the *background.set.threshold* or the *n.Cells.Expressed" parameter. Note that the former is either a numerical value or one of the following: Min, 1stQ, Mean, Median, 3thQ. Those thresholds are computed for the distribution of all mean expression values of all genes.
+The parameter *cluster.ID* can be set if the anaysis should be performed for only one particular cluster, the value of *deep.split* can be specified to select a custom split in case hierarchical clustering has been used.
+
+The doEnrichGo functions generates barplots, goplots and dotplots for each cluster separately. The filenames can be modified using the *filename* parameter. Example barplots and dotplots are shown for a PBMC NK-cell cluster. Goplots are depicted for a PBMC B-cell.
+
+![](Tutorial/RCA_GO_Example.png)
+
+
+To perform enrichment against KEGG pathways, the *doEnrichKEGG function* can be used:
+```{r}
+doEnrichKEGG<-function(rca.obj,
+                     annotation=NULL,
+                     org="hsa",
+                     key="kegg",
+                     p.Val=0.05,
+                     q.Val=0.2,
+                     p.Adjust.Method="BH",
+                     gene.label.type="SYMBOL",
+                     filename="KEGGEnrichment.pdf",
+                     background.set.threshold=NULL,
+                     n.Cells.Expressed=NULL,
+                     cluster.ID=NULL,
+                     deep.split=NULL)
+```
+The parameters are similar to the GO enrichment function except for the *org* parameter, which must represent an organism supported by KEGG. This is set to *hsa* for homo sapiens by default.
+Note that the KEGG function does not generate goPlots but only bar- and dotplots. An example for NK cells is shown below.
+
+![](Tutorial/RCA_KEGG_Example.png)
 
 
 ## Combining RCA with Seurat
