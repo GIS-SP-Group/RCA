@@ -294,6 +294,7 @@ To cluster the PBMC projection using Seurat clustering, run:
 PBMCs<-dataSClust(PBMCs,res=0.5)
 ```
 where res is the resolution parameter parsed on to the Seurat clustering function. Upon graph based clustering, the RCA projection heatmap will be plotted without column dendrogramms.
+
 ![](Tutorial/RCA_Heatmap_Seurat.png)
 
 ### Clustering free analysis of the projection
@@ -430,7 +431,7 @@ doEnrichKEGG<-function(rca.obj,
 The parameters are similar to the GO enrichment function except for the *org* parameter, which must represent an organism supported by KEGG. This is set to *hsa* for homo sapiens by default.
 Note that the KEGG function does not generate goPlots but only bar- and dotplots. An example for NK cells is shown below.
 
-![](tutorial/rca_kegg_example.png)
+![](Tutorial/rca_kegg_example.png)
 
 ##Cluster/Cell-type specific quality control
 RCAv2 offers straightforward ways to perform cluster-specific quality control. We illustrate this functionality using an inhouse dataset of 45926 cells obtained from five bone marrow samples.
@@ -450,7 +451,7 @@ RCAv2::plotRCAHeatmap(PBMCs,filename = "CML_Control_HeatmapPostQC.pdf")
 ```
 Based on the following projection heatmap
 
-![](tutorial/BM_heatmap.png)
+![](Tutorial/BM_heatmap.png)
 
 we identify the cluster IDs as:
 
@@ -466,7 +467,8 @@ plotClusterQuality(PBMCs,width = 15,height = 9,cluster.labels = cellTypeLabels)
 ```
 where *width* and *height* allow the user to customize plot size.
 As shown in the generated scatter plot different clusters require distinct QC parameters:
-![](tutorial/BM_BeforeQC.png)
+
+![](Tutorial/BM_BeforeQC.png)
 
 Therefore, we apply cluster specific NODG thresholds:
 ```{r}
@@ -479,7 +481,8 @@ and replot the QC metrics
 plotClusterQuality(PBMCs,width = 15,height = 9,cluster.labels = cellTypeLabels.pdf")
 ```
 resulting in a satisfying, cluster-specific QC.
-![](tutorial/BM_AfterQC.png)
+
+![](Tutorial/BM_AfterQC.png)
 
 ## Combining RCA with Seurat
 Data processing can also be carried out with Seurat. Here is an example how you can combine a RCA analysis with data preprocessed in Seurat.
