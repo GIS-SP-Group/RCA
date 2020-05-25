@@ -244,6 +244,26 @@ Each UMAP will be stored in a separate *pdf* where the filename indicates which 
 
 For numerical data, the dots are transparent for low values to avoid overplotting issues. In our example, we can see that *CD56* expression corresponds to the NK annotation.
 
+To obtain a less noisy cell type labelling, cell-types can also be predicted on the cluster level. To this end, RCAv2 carries out a majority vote using the cluster-composition plot mentioned above.
+To obtain cluster based cell type predictions, the user can run the function *estimateCellTypeFromProjectionPerCluster*:
+```{r}
+
+PBMCs<-RCAv2::createRCAObjectFrom10X("../Documents/10xExample/",cellrangerVersion = 2)
+PBMCs<-RCAv2::dataFilter(PBMCs,nGene.thresholds = c(300,4500), 
+                  nUMI.thresholds = c(400,30000),
+                  percent.mito.thresholds = c(0.025,0.1),
+                  min.cell.exp = 3)
+PBMCs<-RCAv2::dataLogNormalise(PBMCs)
+PBMCs<-RCAv2::dataProject(PBMCs,
+                          method = "NovershternPanel",
+                          corMeth = "pearson")
+PBMCs<-RCAv2::dataSClust(PBMCs,res = 0.1)
+PBMCs<-estimateCellTypeFromProjectionPerCluster(PBMCs)
+```
+The figure below shows an example using the PBMC dataset using the Novosthern panel.
+![](Tutorial/PerClusterAssignment.png)
+
+
 ### Graph based clustering as an alternative to hierarchical clustering
 Due to the increasing size of single cell datasets, hierarchical clustering requires machines with large main memory. To overcome this putative limitation, RCAv2 also offers graph based clustering using a shared neirest neighbour (snn) approach (Halser et al., Journal of Statistical Software, 2019).
 To cluster the PBMC projection using the snn approach run
@@ -274,7 +294,7 @@ To cluster the PBMC projection using Seurat clustering, run:
 PBMCs<-dataSClust(PBMCs,res=0.5)
 ```
 where res is the resolution parameter parsed on to the Seurat clustering function. Upon graph based clustering, the RCA projection heatmap will be plotted without column dendrogramms.
-![](Tutorial/RCA_Heatmap_Seurat.PNG)
+![](Tutorial/RCA_Heatmap_Seurat.png)
 
 ### Clustering free analysis of the projection
 Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering indepent cell-type assignment approach that is purely based on each cells z-score distribution.
@@ -410,8 +430,56 @@ doEnrichKEGG<-function(rca.obj,
 The parameters are similar to the GO enrichment function except for the *org* parameter, which must represent an organism supported by KEGG. This is set to *hsa* for homo sapiens by default.
 Note that the KEGG function does not generate goPlots but only bar- and dotplots. An example for NK cells is shown below.
 
-![](Tutorial/RCA_KEGG_Example.png)
+![](tutorial/rca_kegg_example.png)
 
+##Cluster/Cell-type specific quality control
+RCAv2 offers straightforward ways to perform cluster-specific quality control. We illustrate this functionality using an inhouse dataset of 45926 cells obtained from five bone marrow samples.
+A link to download the data will be made available here at a later stage.
+First, we load the data, project it against the global panel and cluster it:
+```{r}
+normalBoneMarow<-readRDS("../Documents/DUKE_Normal.RDS")
+createRCAObject()
+PBMCs<-RCAv2::createRCAObject(normalCML@assays$RNA@data,dataIsNormalized = T)
+
+PBMCs<-RCAv2::dataProject(PBMCs,
+                          method = "GlobalPanel",
+                          corMeth = "pearson")
+
+PBMCs<-RCAv2::dataSClust(PBMCs,res = 0.1)
+RCAv2::plotRCAHeatmap(PBMCs,filename = "CML_Control_HeatmapPostQC.pdf")
+```
+Based on the following projection heatmap
+
+![](tutorial/BM_heatmap.png)
+
+we identify the cluster IDs as:
+
+```{r}
+cellTypes<-c("Progenitor B","CMP/MEP","CMP/GMP","GMP/Dendritic cells","CD8 T cells","NK cells","CD4 T cells", "B cells", "Erythroid Progenitor","Monocytes","BT")
+clusterColors<-c("purple","black","blue","magenta","turquoise","yellow","green","pink","greenyellow","red","brown")
+names(cellTypes)<-clusterColors
+cellTypeLabels<-cellTypes[PBMCs$clustering.out$dynamicColorsList[[1]]]
+```
+and plot cluster quality scores using
+```{r}
+plotClusterQuality(PBMCs,width = 15,height = 9,cluster.labels = cellTypeLabels)
+```
+where *width* and *height* allow the user to customize plot size.
+As shown in the generated scatter plot different clusters require distinct QC parameters:
+![](tutorial/BM_BeforeQC.png)
+
+Therefore, we apply cluster specific NODG thresholds:
+```{r}
+nGene.low.thresholds = c(500,2000,1000,500,750,750,750,800,3500,500,1250),
+nGene.high.thresholds = c(5000,6000,5000,5000,1800,2000,2000,2000,6500,3000,3000))
+RCAv2::performClusterSpecificQC(PBMCs,cluster.labels = PBMCs$clustering.out$dynamicColorsList[[1]]
+```
+and replot the QC metrics
+```{r}
+plotClusterQuality(PBMCs,width = 15,height = 9,cluster.labels = cellTypeLabels.pdf")
+```
+resulting in a satisfying, cluster-specific QC.
+![](tutorial/BM_AfterQC.png)
 
 ## Combining RCA with Seurat
 Data processing can also be carried out with Seurat. Here is an example how you can combine a RCA analysis with data preprocessed in Seurat.
