@@ -431,7 +431,7 @@ doEnrichKEGG<-function(rca.obj,
 The parameters are similar to the GO enrichment function except for the *org* parameter, which must represent an organism supported by KEGG. This is set to *hsa* for homo sapiens by default.
 Note that the KEGG function does not generate goPlots but only bar- and dotplots. An example for NK cells is shown below.
 
-![](Tutorial/Rca_KEGG_Example.png)
+![](Tutorial/RCA_KEGG_Example.png)
 
 ##Cluster/Cell-type specific quality control
 RCAv2 offers straightforward ways to perform cluster-specific quality control. We illustrate this functionality using an inhouse dataset of 45926 cells obtained from five bone marrow samples.
