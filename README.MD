@@ -379,8 +379,12 @@ can be adjusted via the *pseudocount.use* parameter. The *top.genes.per.cluster*
 Both the entire set of DE genes as well as the top DE genes are stored in the PBMCs *rca.obj*.
 The topDE genes can be plotted in a heatmap via the *plotDEHeatmap* function:
 ```{r}
-RCAv2::plotDEHeatmap(PBMCs)
+RCAv2::plotDEHeatmap(PBMCs,scale=FALSE)
 ```
+The *scale* parameter allows the user to plot either the normalized UMI counts or scaled count (z-transformed). An example is shown below.
+
+![](Tutorial/DE_Heatmaps.png)
+
 ### Compute enrichment for GO terms and KEGG pathways
 Using the *clusterProfiler* package, RCAv2 supports enrichment tests for GO terms and KEGG pathways using the
 functions *doEnrichGo* and *doEnrichKEGG*, respectively. Both require the parameter *annotation* to be set, which
