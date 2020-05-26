@@ -1,6 +1,7 @@
 #' Plot heatmap of DE genes
 #'
 #' @param rca.obj data matrix (genes x cells)
+#' @param scale TRUE if genes should be z-transformed before plotting. Default is FALSE.
 #' @param width width of plot in inches. Default is 20.
 #' @param height height of plot in inches. Default is 20.
 #' @param folderpath path to save heatmap to
@@ -10,7 +11,7 @@
 #' @export
 #'
 
-plotDEHeatmap <- function(rca.obj, width = 20, height = 20, folderpath = ".", filename = "RCA_DE_Heatmap.pdf", extraCellProperty = NULL) {
+plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folderpath = ".", filename = "RCA_DE_Heatmap.pdf", extraCellProperty = NULL) {
 
     require(ComplexHeatmap)
 
@@ -20,14 +21,19 @@ plotDEHeatmap <- function(rca.obj, width = 20, height = 20, folderpath = ".", fi
     cellTree = rca.obj$clustering.out$cellTree
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
 
+    # if scaling is requested by user
+    if(scale) {
+        heatmapIn <- t(scale(x = t(heatmapIn), center = TRUE, scale = TRUE))
+    }
+
     # Set color scheme of heatmap
     colorScheme <-
         circlize::colorRamp2(
-            seq(min(abs(
+            seq(min(
                 heatmapIn
-            )), max(abs(
+            ), max(
                 heatmapIn
-            )), length.out = 5),
+            ), length.out = 5),
             c("#7777FF",
               "white",
               "red",

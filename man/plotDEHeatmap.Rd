@@ -6,6 +6,7 @@
 \usage{
 plotDEHeatmap(
   rca.obj,
+  scale = FALSE,
   width = 20,
   height = 20,
   folderpath = ".",
@@ -15,6 +16,8 @@ plotDEHeatmap(
 }
 \arguments{
 \item{rca.obj}{data matrix (genes x cells)}
+
+\item{scale}{TRUE if genes should be z-transformed before plotting. Default is FALSE.}
 
 \item{width}{width of plot in inches. Default is 20.}
 
