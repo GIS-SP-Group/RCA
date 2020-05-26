@@ -472,9 +472,9 @@ As shown in the generated scatter plot different clusters require distinct QC pa
 
 Therefore, we apply cluster specific NODG thresholds:
 ```{r}
-nGene.low.thresholds = c(500,2000,1000,500,750,750,750,800,3500,500,1250),
-nGene.high.thresholds = c(5000,6000,5000,5000,1800,2000,2000,2000,6500,3000,3000))
-RCAv2::performClusterSpecificQC(PBMCs,cluster.labels = PBMCs$clustering.out$dynamicColorsList[[1]]
+RCAv2::performClusterSpecificQC(PBMCs,cluster.labels = PBMCs$clustering.out$dynamicColorsList[[1]],
+	nGene.low.thresholds = c(500,2000,1000,500,750,750,750,800,3500,500,1250),
+	nGene.high.thresholds = c(5000,6000,5000,5000,1800,2000,2000,2000,6500,3000,3000))
 ```
 and replot the QC metrics
 ```{r}
