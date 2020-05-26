@@ -27,6 +27,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
     }
 
     # Set color scheme of heatmap
+    if (scale){
     colorScheme <-
         circlize::colorRamp2(
             seq(min(
@@ -38,8 +39,18 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
               "white",
               "red",
               "#7F0000",
-              "#2F0000")
-        )
+              "#2F0000"))
+    }else{
+    colorScheme <-
+        circlize::colorRamp2(
+            seq(min(
+                heatmapIn
+            ), max(
+                heatmapIn
+            ), length.out = 2),
+            c("white",
+              "red"))
+    }
     if ((class(cellTree) == "hclust") && (length(cellTree$order) == ncol(heatmapIn))){
         # If no cluster colors or cell properties are to be plotted
         if(is.null(clusterColorList)) {
