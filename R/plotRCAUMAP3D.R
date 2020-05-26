@@ -37,7 +37,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 		    marker = list(size = 5, width=2))
 
 	# Save UMAP
-	htmlwidgets::saveWidget(as_widget(umap3dPlot),  paste0(folderpath, "/", filename))
+	htmlwidgets::saveWidget(plotly::as_widget(umap3dPlot),  paste0(folderpath, "/", filename))
 
 
     } else {
@@ -68,7 +68,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 
 
                 # Save plot
-    	        htmlwidgets::saveWidget(as_widget(umap3dPlot),  paste0(folderpath, "/ClusterColors_",clusterColorName,"_",filename))
+    	        htmlwidgets::saveWidget(plotly::as_widget(umap3dPlot),  paste0(folderpath, "/ClusterColors_",clusterColorName,"_",filename))
             }
 
         }
@@ -102,7 +102,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 
 
             # Save plot
-            htmlwidgets::saveWidget(as_widget(umap3dPlot),  paste0(folderpath, "/RelativeColoring_CellTypes_",filename))
+            htmlwidgets::saveWidget(plotly::as_widget(umap3dPlot),  paste0(folderpath, "/RelativeColoring_CellTypes_",filename))
 
 
         }
@@ -154,7 +154,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 		}
 
                 # Save plot
-                htmlwidgets::saveWidget(as_widget(umap3dPlot),  paste0(folderpath, "/CellProperty_",CellPropertyName,"_",filename))
+                htmlwidgets::saveWidget(plotly::as_widget(umap3dPlot),  paste0(folderpath, "/CellProperty_",CellPropertyName,"_",filename))
             }
         }
 
