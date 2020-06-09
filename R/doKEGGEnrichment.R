@@ -110,7 +110,6 @@ doEnrichKEGG<-function(rca.obj,
 						 pAdjustMethod = p.Adjust.Method, 
 						 pvalueCutoff  = p.Val, 
 						 qvalueCutoff  = q.Val, 
-						 readable = TRUE, 
 						 universe = backgroundENTREZ$ENTREZID)
 		
 		if (!is.null(ggo)){
