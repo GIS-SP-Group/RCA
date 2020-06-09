@@ -1,42 +1,46 @@
 #' Create RCA Object from 10X data
 #'
 #' @param dataDir Directory containing 10X data
-#' @param cellrangerVersion Version of cellranger used to generate data. Default is 3.0.
 #' @param min.barcode.umi Minimum UMIs needed for a barcode to be considered. Default is 100.
 #' @return RCA object.
 #' @export
 #'
-createRCAObjectFrom10X <- function(dataDir, cellrangerVersion = 3.0, min.barcode.umi = 100) {
+createRCAObjectFrom10X <- function(dataDir, min.barcode.umi = 100) {
 
     # Check if data directory exists, otherwise stop and throw error
     if (!dir.exists(paths = dataDir)) {
         stop("10X Directory provided does not exist")
     }
 
-    # Load file paths
-    barcodeFilePath <- file.path(dataDir, "barcodes.tsv.gz")
-
-    # For earlier versions of cellranger, the filenames would be different
-    if(cellrangerVersion < 3.0) {
+    # Set barcodes file path
+    if(file.exists(file.path(dataDir, "barcodes.tsv"))) {
         barcodeFilePath <- file.path(dataDir, "barcodes.tsv")
-        featureFilePath <- file.path(dataDir, "genes.tsv")
-        matrixFilePath <- file.path(dataDir, "matrix.mtx")
-
-    } else {
+    } else if (file.exists(file.path(dataDir, "barcodes.tsv.gz"))) {
         barcodeFilePath <- file.path(dataDir, "barcodes.tsv.gz")
-        featureFilePath <- file.path(dataDir, "features.tsv.gz")
-        matrixFilePath <- file.path(dataDir, "matrix.mtx.gz")
+    } else {
+        stop("Barcodes file not found.")
     }
 
-    # Stop if any of the files don't exist
-    if(!file.exists(barcodeFilePath)) {
-        stop("Barcode file missing")
+    # Set genes/features file path
+    if(file.exists(file.path(dataDir, "genes.tsv"))) {
+        featureFilePath <- file.path(dataDir, "genes.tsv")
+    } else if (file.exists(file.path(dataDir, "genes.tsv.gz"))) {
+        featureFilePath <- file.path(dataDir, "genes.tsv.gz")
+    } else if (file.exists(file.path(dataDir, "features.tsv"))) {
+        featureFilePath <- file.path(dataDir, "features.tsv")
+    } else if (file.exists(file.path(dataDir, "features.tsv.gz"))) {
+        featureFilePath <- file.path(dataDir, "features.tsv.gz")
+    } else {
+        stop("Genes/Features file not found.")
     }
-    if(!file.exists(featureFilePath)) {
-        stop("Gene/Feature file missing")
-    }
-    if(!file.exists(matrixFilePath)) {
-        stop("Matrix file missing")
+
+    # Set matrix file path
+    if(file.exists(file.path(dataDir, "matrix.mtx"))) {
+        matrixFilePath <- file.path(dataDir, "matrix.mtx")
+    } else if (file.exists(file.path(dataDir, "matrix.mtx.gz"))) {
+        matrixFilePath <- file.path(dataDir, "matrix.mtx.gz")
+    } else {
+        stop("Matrix file not found.")
     }
 
     # Load 10X barcodes and feature names
