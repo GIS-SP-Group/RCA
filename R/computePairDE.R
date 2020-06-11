@@ -33,7 +33,7 @@
 #' @param pseudocount.use Pseudocount to add to averaged expression values when calculating logFC. 1 by default.
 #' @param p.adjust.methods correction method for calculating qvalue. default is BH (or FDR)
 #' @param top.genes.per.cluster Number of top DE genes to be considered per cluster
-
+#' @param pairwise Flag indicating whether DE genes should be compared pairwise or 1vsALL (Default).
 
 #' @return RCA object.
 #' @export
@@ -79,9 +79,10 @@ dataDE <- function(rca.obj,
     ###########################
     #Compute pairwise DE genes#
     ###########################
-    for (clusteri in 1:(total.clus - 1)) {
-        for (clusterj in (clusteri + 1):(total.clus)) {
-            print(c(clusteri, clusterj))
+    if (pairwise){
+      for (clusteri in 1:(total.clus - 1)) {
+       	 for (clusterj in (clusteri + 1):(total.clus)) {
+       	     print(c(clusteri, clusterj))
             cells.1 <- colnames(rca.obj$data)[which(clusters == clusteri)]
             cells.2 <-
                 colnames(rca.obj$data)[which(clusters == clusterj)]
@@ -101,8 +102,7 @@ dataDE <- function(rca.obj,
                 min.cells.group = min.cells.group,
                 pseudocount.use = pseudocount.use,
                 MeanExprsThrs = MeanExprsThrs,
-                p.adjust.methods = "BH"
-            )
+                p.adjust.methods = p.adjust.methods)   
             if (!(is.null(marker.genes))) {
                 if (colnames(marker.genes)[1] != 'myAUC') {
                     marker.genes = marker.genes[marker.genes$p_val_adj < 0.05, ]
@@ -115,10 +115,46 @@ dataDE <- function(rca.obj,
                 }
             }
         }
+      }
+    }else{
+      for (clusteri in 1:(total.clus)) {
+       	    print(clusteri)
+            cells.1 <- colnames(rca.obj$data)[which(clusters == clusteri)]
+            cells.2 <- colnames(rca.obj$data)[which(clusters != clusteri)]
+            marker.genes = ComputePairWiseDE(
+                object = rca.obj$data,
+                cells.1 = cells.1,
+                cells.2 = cells.2,
+                features = NULL,
+                logfc.threshold = logFoldChange,
+                test.use = method,
+                min.pct = min.pct,
+                min.diff.pct = min.diff.pct,
+                verbose = TRUE,
+                only.pos = FALSE,
+                max.cells.per.ident = Inf,
+                random.seed = random.seed,
+                min.cells.group = min.cells.group,
+                pseudocount.use = pseudocount.use,
+                MeanExprsThrs = MeanExprsThrs,
+                p.adjust.methods = p.adjust.methods 
+    		)
+            if (!(is.null(marker.genes))) {
+                if (colnames(marker.genes)[1] != 'myAUC') {
+                    marker.genes = marker.genes[marker.genes$p_val_adj < 0.05, ]
+                }
+                if(nrow(marker.genes) > 0) {
+                    marker.genes$group1 = clusteri
+                    marker.genes$gene = rownames(marker.genes)
+                    df = rbind(df, marker.genes)
+                }
+            }
+	}
     }
     ######################################
     #Determine top x DE genes per Cluster#
     ######################################
+    if(pairwise){
     mC1 <- df %>% group_by(group1, group2) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC)
     markers2 <- df
     markers2$avg_logFC <- (-1) * (markers2$avg_logFC)
@@ -127,6 +163,9 @@ dataDE <- function(rca.obj,
             cbind(Cluster = mC1$group1, Gene = mC1$gene),
             cbind(Cluster = mC2$group2, Gene = mC2$gene)
         ))
+    }else{
+    topMarkers <- data.frame(Cluster = df$group1, Gene = df$gene)
+    }
     topMarkers <- topMarkers %>% group_by(Cluster) %>% distinct(.keep_all = T)
     topMarkers <- topMarkers[order(topMarkers$Cluster, decreasing = F), ]
 
