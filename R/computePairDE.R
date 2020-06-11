@@ -33,7 +33,7 @@
 #' @param pseudocount.use Pseudocount to add to averaged expression values when calculating logFC. 1 by default.
 #' @param p.adjust.methods correction method for calculating qvalue. default is BH (or FDR)
 #' @param top.genes.per.cluster Number of top DE genes to be considered per cluster
-#' @param pairwise Flag indicating whether DE genes should be compared pairwise or 1vsALL (Default).
+#' @param pairwise Flag indicating whether DE genes should be compared derived in pairwise manner or 1 cluster vs all others (Default).
 
 #' @return RCA object.
 #' @export
@@ -49,7 +49,8 @@ dataDE <- function(rca.obj,
                    min.cells.group = 3,
                    pseudocount.use = 1,
                    p.adjust.methods =  "BH",
-                   top.genes.per.cluster = 10) {
+                   top.genes.per.cluster = 10,
+		   pairwise=FALSE) {
     df <- c()
     temp.exp = expm1(x = rca.obj$data)
     temp.exp.row = Matrix::rowMeans(temp.exp)
