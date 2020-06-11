@@ -9,7 +9,8 @@
 #' @param p.Adjust.Method p-value adjustment method to be used, default BH
 #' @param gene.label.type Type of gene.labels used, default SYMBOL
 #' @param filename postfix of the plots generated, GoEnrichment.pdf
-#' @param background.set.threshold, minimum expression threshold used for mean gene-expression. Either a numerical value or one of the following thresholds computed on the mean gene-expression values across all genes: Min, 1stQ, Mean, Median, 3rdQ. Default: 1stQ
+#' @param background.set, ALL indicates that all genes are considered, CLUSTER indicates that only genes with the cluster of interest are considered (default: ALL)
+#' @param background.set.threshold, minimum expression threshold used for mean gene-expression. Either a numerical value or one of the following thresholds computed on the mean gene-expression values across all genes within a considered cluster: Min, 1stQ, Mean, Median, 3rdQ. Default: NULL
 #' @param n.Cells.Expressed Alternative threshold to filter genes. Keep only genes that are expressed in at least n.Cells.Expressed cells
 #' @param cluster.ID ID of a cluster for which the GO enrichment should be computed. If this is not provided, enrichment will be computed for all clusters. Default: NULL
 #' @param deep.split Deep.split to be used if hierachical clustering was used to cluster the projection
@@ -25,7 +26,8 @@ doEnrichKEGG<-function(rca.obj,
 		     p.Adjust.Method="BH",
 		     gene.label.type="SYMBOL",
 		     filename="KEGG_Enrichment.pdf",
-		     background.set.threshold="1stQ",
+		     background.set="ALL",
+		     background.set.threshold=NULL,
 		     n.Cells.Expressed=NULL,
 		     cluster.ID=NULL,
 		     deep.split=NULL){
@@ -71,12 +73,18 @@ doEnrichKEGG<-function(rca.obj,
 		clusterGenes<-as.character(rca.obj$DE.genes$Top.DE.genes$Gene[which(rca.obj$DE.genes$Top.DE.genes$Cluster==cluster)])
 		clusterGenes<-str_to_upper(clusterGenes)
 		###Generate background set using a threshold based on the mean expression of genes across all cells.
+		backgroundGeneNames<-row.names(rca.obj$data)
 		if (!(is.null(background.set.threshold))){
-			if(is.null(cluster.ID)){
-				clusterMeanExp<-apply(rca.obj$data[,which(rca.obj$clustering.out$dynamicColorsList[[1]]==names(allClusters)[cluster])],1,mean)
+			if (background.set=="CLUSTER"){
+				if(is.null(cluster.ID)){
+					clusterMeanExp<-apply(rca.obj$data[,which(rca.obj$clustering.out$dynamicColorsList[[1]]==names(allClusters)[cluster])],1,mean)
+				}else{
+					clusterMeanExp<-apply(rca.obj$data[,which(rca.obj$clustering.out$dynamicColorsList[[1]]==names(allClusters)[1])],1,mean)
+				}
 			}else{
-				clusterMeanExp<-apply(rca.obj$data[,which(rca.obj$clustering.out$dynamicColorsList[[1]]==names(allClusters)[1])],1,mean)
+				clusterMeanExp<-apply(rca.obj$data,1,mean)
 			}
+
 			if (is.numeric(background.set.threshold)){
 				backgroundGeneNames<-row.names(rca.obj$data)[which(clusterMeanExp>background.set.threshold)]
 			}else{
