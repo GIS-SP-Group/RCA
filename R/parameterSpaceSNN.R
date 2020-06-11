@@ -1,4 +1,4 @@
-#' Generate cell clusters using hierarchical clustering and dynamic tree cutting.
+#' Generates an overview on the dependence of SNN parameters to the number of clusters
 #'
 #' @param rca.obj RCA object.
 #' @param kL vector of k values to be used. Default is 10-50.
