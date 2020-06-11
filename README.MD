@@ -401,6 +401,7 @@ doEnrichGo<-function(rca.obj,
                     p.Adjust.Method="BH",
                     gene.label.type="SYMBOL",
                     filename="GoEnrichment.pdf",
+		    background.set="ALL",
                     background.set.threshold=NULL,
                     n.Cells.Expressed=NULL,
                     cluster.ID=NULL,
@@ -408,7 +409,7 @@ doEnrichGo<-function(rca.obj,
 ```
 where ontology is either *BP, MF* or *CC*, *p.Val* and *q.Val* are thresholds used by clusterprofiler, and *p.Adjust.Method* indicates which method is used to correct for multiple testing.
 For greater user convenience, the function automatically maps geneIDs. To this end, the *gene.label.type* holds the type of the original labels. In concordance with 10X data, this is set to SYMBOL by default. 
-By default, the background set is defined separately for each cluster. Cells are selected either via the *background.set.threshold* or the *n.Cells.Expressed" parameter. Note that the former is either a numerical value or one of the following: Min, 1stQ, Mean, Median, 3thQ. Those thresholds are computed for the distribution of all mean expression values of all genes.
+The background set is either based on all clusters or only on the investigated one. Cells are selected either via the *background.set.threshold* or the *n.Cells.Expressed" parameter. Note that the former is either a numerical value or one of the following: Min, 1stQ, Mean, Median, 3thQ. Those thresholds are computed for the distribution of all mean expression values of all genes.
 The parameter *cluster.ID* can be set if the anaysis should be performed for only one particular cluster, the value of *deep.split* can be specified to select a custom split in case hierarchical clustering has been used.
 
 The doEnrichGo functions generates barplots, goplots and dotplots for each cluster separately. The filenames can be modified using the *filename* parameter. Example barplots and dotplots are shown for a PBMC NK-cell cluster. Goplots are depicted for a PBMC B-cell.
@@ -427,6 +428,7 @@ doEnrichKEGG<-function(rca.obj,
                      p.Adjust.Method="BH",
                      gene.label.type="SYMBOL",
                      filename="KEGGEnrichment.pdf",
+		     background.set="ALL",
                      background.set.threshold=NULL,
                      n.Cells.Expressed=NULL,
                      cluster.ID=NULL,
