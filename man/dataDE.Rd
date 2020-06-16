@@ -16,7 +16,8 @@ dataDE(
   min.cells.group = 3,
   pseudocount.use = 1,
   p.adjust.methods = "BH",
-  top.genes.per.cluster = 10
+  top.genes.per.cluster = 10,
+  pairwise = FALSE
 )
 }
 \arguments{
@@ -64,6 +65,8 @@ fraction of detection between the two groups. Set to -Inf by default}
 \item{p.adjust.methods}{correction method for calculating qvalue. default is BH (or FDR)}
 
 \item{top.genes.per.cluster}{Number of top DE genes to be considered per cluster}
+
+\item{pairwise}{Flag indicating whether DE genes should be compared derived in pairwise manner or 1 cluster vs all others (Default).}
 }
 \value{
 RCA object.

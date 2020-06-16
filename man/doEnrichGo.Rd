@@ -13,7 +13,8 @@ doEnrichGo(
   p.Adjust.Method = "BH",
   gene.label.type = "SYMBOL",
   filename = "GoEnrichment.pdf",
-  background.set.threshold = "1stQ",
+  background.set = "ALL",
+  background.set.threshold = NULL,
   n.Cells.Expressed = NULL,
   cluster.ID = NULL,
   deep.split = NULL
@@ -36,7 +37,9 @@ doEnrichGo(
 
 \item{filename}{postfix of the plots generated, GoEnrichment.pdf}
 
-\item{background.set.threshold, }{minimum expression threshold used for mean gene-expression. Either a numerical value or one of the following thresholds computed on the mean gene-expression values across all genes: Min, 1stQ, Mean, Median, 3rdQ. Default: 1stQ}
+\item{background.set, }{ALL indicates that all genes are considered, CLUSTER indicates that only genes with the cluster of interest are considered (default: ALL).}
+
+\item{background.set.threshold, }{minimum expression threshold used for mean gene-expression. Either a numerical value or one of the following thresholds computed on the mean gene-expression values across all genes within a considered cluster: Min, 1stQ, Mean, Median, 3rdQ. Default: NULL}
 
 \item{n.Cells.Expressed}{Alternative threshold to filter genes. Keep only genes that are expressed in at least n.Cells.Expressed cells}
 
