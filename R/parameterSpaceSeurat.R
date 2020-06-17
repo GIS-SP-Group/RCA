@@ -23,8 +23,8 @@ parameterSpaceSeurat <- function(rca.obj,stepsize=0.1,folderpath="./",filename="
 		ggplot2::ylab("#Clusters")+
 		ggplot2::xlab("Seurat resolution")
 
-	pdf(paste0(folderpath,filename),width=12,height=12)
+	pdf(paste0(folderpath,"/",filename),width=12,height=12)
 	parameterFigure
 	dev.off()
-	return (nClusters)
+	return (parameterFigure)
 }
