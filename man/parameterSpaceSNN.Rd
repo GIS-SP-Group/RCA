@@ -2,7 +2,7 @@
 % Please edit documentation in R/parameterSpaceSNN.R
 \name{parameterSpaceSNN}
 \alias{parameterSpaceSNN}
-\title{Generate cell clusters using hierarchical clustering and dynamic tree cutting.}
+\title{Generates an overview on the dependence of SNN parameters to the number of clusters}
 \usage{
 parameterSpaceSNN(
   rca.obj,
@@ -30,5 +30,5 @@ parameterSpaceSNN(
 a data frame holding parameter values and resulting cluster numbers.
 }
 \description{
-Generate cell clusters using hierarchical clustering and dynamic tree cutting.
+Generates an overview on the dependence of SNN parameters to the number of clusters
 }
