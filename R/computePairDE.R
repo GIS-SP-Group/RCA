@@ -164,12 +164,13 @@ dataDE <- function(rca.obj,
             cbind(Cluster = mC1$group1, Gene = mC1$gene),
             cbind(Cluster = mC2$group2, Gene = mC2$gene)
         ))
-    }else{
-    topMarkers <- data.frame(Cluster = df$group1, Gene = df$gene)
-    }
-    topMarkers <- topMarkers %>% group_by(Cluster) %>% distinct(.keep_all = T)
+    topMarkers <- topMarkers %>% group_by(Cluster) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC) %>% distinct(.keep_all = T)
     topMarkers <- topMarkers[order(topMarkers$Cluster, decreasing = F), ]
-
+    }else{
+    	topMarkers <- data.frame(Cluster = df$group1, Gene = df$gene, avg_logFC = df$avg_logFC)
+    	topMarkers <- topMarkers %>% group_by(Cluster) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC) %>% distinct(.keep_all = T)
+    	topMarkers <- topMarkers[order(topMarkers$Cluster, decreasing = F), ]
+    }
     rca.obj$DE.genes <- list(All.DE.genes = df, Top.DE.genes = topMarkers)
     return(rca.obj)
 }
