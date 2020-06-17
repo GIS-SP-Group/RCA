@@ -16,13 +16,15 @@ parameterSpaceSeurat <- function(rca.obj,stepsize=0.1,folderpath="./",filename="
 		nClusters<-rbind(nClusters,cbind(Resolution=RES,Clusters=length(unique(RCAv2::dataSClust(rca.obj,res = RES)$clustering.out$dynamicColorsList$Clusters))))
 	}
 	nClusters<-data.frame(nClusters)
-	pdf(paste0(folderpath,filename),width=12,height=12)
-	ggplot2::ggplot(nClusters,ggplot2::aes(x=Resolution,y=Clusters))+
+	parameterFigure<-ggplot2::ggplot(nClusters,ggplot2::aes(x=Resolution,y=Clusters))+
 		ggplot2::geom_point()+
 		ggplot2::geom_line()+
 		ggplot2::theme_bw(15)+
 		ggplot2::ylab("#Clusters")+
 		ggplot2::xlab("Seurat resolution")
+
+	pdf(paste0(folderpath,filename),width=12,height=12)
+	parameterFigure
 	dev.off()
 	return (nClusters)
 }
