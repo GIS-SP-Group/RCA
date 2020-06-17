@@ -7,7 +7,7 @@
 #' @return a data frame holding parameter values and resulting cluster numbers.
 #' @export
 #'
-parameterSpaceSeurat <- function(rca.obj,stepsize=0.1,folderpath="./",filename="Seurat_Parameter_Space.pdf") {
+parameterSpaceSeurat <- function(rca.obj,stepsize=0.1,folderpath="./",filename="Seurat_Parameter_Space.png") {
 
 	# Extract projection data
 	nClusters<-c()
@@ -23,8 +23,8 @@ parameterSpaceSeurat <- function(rca.obj,stepsize=0.1,folderpath="./",filename="
 		ggplot2::ylab("#Clusters")+
 		ggplot2::xlab("Seurat resolution")
 
-	pdf(paste0(folderpath,"/",filename),width=12,height=12)
+	png(paste0(folderpath,"/",filename),width=800,height=800)
 	parameterFigure
 	dev.off()
-	return (parameterFigure)
+	return (nClusters)
 }
