@@ -7,16 +7,22 @@
 #' @return a data frame holding parameter values and resulting cluster numbers.
 #' @export
 #'
-parameterSpaceSeurat <- function(rca.obj,stepsize=0.1,folderpath=".",filename="Seurat_Parameter_Space.pdf") {
+parameterSpaceSeurat <- function(rca.obj,stepsize=0.1,folderpath="./",filename="Seurat_Parameter_Space.pdf") {
 
 	# Extract projection data
 	nClusters<-c()
 	stepsize=0.1
 	for (RES in seq(0,1,stepsize)){
 		nClusters<-rbind(nClusters,cbind(Resolution=RES,Clusters=length(unique(RCAv2::dataSClust(rca.obj,res = RES)$clustering.out$dynamicColorsList$Clusters))))
-		}
+	}
+	nClusters<-data.frame(nClusters)
 	pdf(paste0(folderpath,filename),width=12,height=12)
-	ggplot2::ggplot(data.frame(nClusters),ggplot2::aes(x=Resolution,y=Clusters))+ggplot2::geom_point()+ggplot2::geom_line()+ggplot2::theme_bw(15)+ggplot2::ylab("#Clusters")+ggplot2::xlab("Seurat resolution")
+	ggplot2::ggplot(nClusters,ggplot2::aes(x=Resolution,y=Clusters))+
+		ggplot2::geom_point()+
+		ggplot2::geom_line()+
+		ggplot2::theme_bw(15)+
+		ggplot2::ylab("#Clusters")+
+		ggplot2::xlab("Seurat resolution")
 	dev.off()
-	return (data.frame(nClusters))
+	return (nClusters)
 }
