@@ -26,11 +26,11 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
     # Set color scheme of heatmap
     colorScheme <-
         circlize::colorRamp2(
-            seq(min(abs(
+            seq(min(
                 heatmapIn
-            )), max(abs(
+            ), max(
                 heatmapIn
-            )), length.out = 5),
+            ), length.out = 5),
             c("#7777FF",
               "white",
               "red",
