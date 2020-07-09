@@ -89,8 +89,7 @@ dataDE <- function(rca.obj,
       df<-foreach (clusteri= 1:(total.clus - 1),.combine=rbind)%dopar% {
        	 for (clusterj in (clusteri + 1):(total.clus)) {
             cells.1 <- colnames(rca.obj$data)[which(clusters == clusteri)]
-            cells.2 <-
-                colnames(rca.obj$data)[which(clusters == clusterj)]
+            cells.2 <- colnames(rca.obj$data)[which(clusters == clusterj)]
             marker.genes = ComputePairWiseDE(
                 object = rca.obj$data,
                 cells.1 = cells.1,
@@ -159,6 +158,7 @@ dataDE <- function(rca.obj,
     }
 
     stopCluster(cl)
+    print(head(df))
     ######################################
     #Determine top x DE genes per Cluster#
     ######################################
