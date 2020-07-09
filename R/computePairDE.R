@@ -86,9 +86,8 @@ dataDE <- function(rca.obj,
     #Compute pairwise DE genes#
     ###########################
     if (pairwise){
-      for (clusteri in 1:(total.clus - 1)) {
+      df<-foreach (clusteri= 1:(total.clus - 1),.combine=rbind)%dopar% {
        	 for (clusterj in (clusteri + 1):(total.clus)) {
-       	     print(c(clusteri, clusterj))
             cells.1 <- colnames(rca.obj$data)[which(clusters == clusteri)]
             cells.2 <-
                 colnames(rca.obj$data)[which(clusters == clusterj)]
@@ -117,14 +116,14 @@ dataDE <- function(rca.obj,
                     marker.genes$group1 = clusteri
                     marker.genes$group2 = clusterj
                     marker.genes$gene = rownames(marker.genes)
-                    df = rbind(df, marker.genes)
+                    #df = rbind(df, marker.genes)
                 }
+		marker.genes
             }
         }
       }
     }else{
       df<-foreach (clusteri=1:(total.clus),.combine=rbind)%dopar%{
-       	    print(clusteri)
             cells.1 <- colnames(rca.obj$data)[which(clusters == clusteri)]
             cells.2 <- colnames(rca.obj$data)[which(clusters != clusteri)]
             marker.genes = ComputePairWiseDE(
