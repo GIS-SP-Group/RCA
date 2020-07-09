@@ -87,6 +87,7 @@ dataDE <- function(rca.obj,
     ###########################
     if (pairwise){
       df<-foreach (clusteri= 1:(total.clus - 1),.combine=rbind)%dopar% {
+	 tmp<-c()
        	 for (clusterj in (clusteri + 1):(total.clus)) {
             cells.1 <- colnames(rca.obj$data)[which(clusters == clusteri)]
             cells.2 <- colnames(rca.obj$data)[which(clusters == clusterj)]
@@ -110,16 +111,17 @@ dataDE <- function(rca.obj,
             if (!(is.null(marker.genes))) {
                 if (colnames(marker.genes)[1] != 'myAUC') {
                     marker.genes = marker.genes[marker.genes$p_val_adj < 0.05, ]
+	    	    tmp=rbind(tmp, marker.genes)
                 }
                 if(nrow(marker.genes) > 0) {
                     marker.genes$group1 = clusteri
                     marker.genes$group2 = clusterj
                     marker.genes$gene = rownames(marker.genes)
-                    #df = rbind(df, marker.genes)
+                    tmp<-rbind(tmp, marker.genes)
                 }
-		marker.genes
             }
         }
+	tmp
       }
     }else{
       df<-foreach (clusteri=1:(total.clus),.combine=rbind)%dopar%{
