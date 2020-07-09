@@ -7,8 +7,8 @@
 parameterSpaceSeurat(
   rca.obj,
   stepsize = 0.1,
-  folderpath = ".",
-  filename = "Seurat_Parameter_Space.pdf"
+  folderpath = "./",
+  filename = "Seurat_Parameter_Space.png"
 )
 }
 \arguments{

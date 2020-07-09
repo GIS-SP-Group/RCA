@@ -43,7 +43,7 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
             if(is.numeric(nGene.thresholds) && (length(nGene.thresholds) == 2)) {
 
                 nGene.filt.cells <- filt.cells[which((nGeneVec >= nGene.thresholds[1]) & (nGeneVec <= nGene.thresholds[2]))]
-            } 
+            }
             else {
                 warning("nGene.thresholds was not of the appropriate format. Please enter a numeric vector with lower and upper thresholds.")
                 nGene.filt.cells <- filt.cells
@@ -65,8 +65,8 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
 
             if(is.numeric(nUMI.thresholds) && (length(nUMI.thresholds) == 2)) {
 
-                nUMI.filt.cells <- filt.cells[which((nUMIVec >= nUMI.thresholds[1]) & (nUMIVec <= nUMI.thresholds[2]))]    
-            } 
+                nUMI.filt.cells <- filt.cells[which((nUMIVec >= nUMI.thresholds[1]) & (nUMIVec <= nUMI.thresholds[2]))]
+            }
 	    else {
                 warning("nUMI.thresholds was not of the appropriate format. Please enter a numeric vector with lower and upper thresholds.")
                 nUMI.filt.cells <- filt.cells
@@ -113,6 +113,10 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
     cellIndexToKeep <- which(cluster.df$Cell %in% cellsToKeep)
     rca.obj$raw.data <- rca.obj$raw.data[, cellIndexToKeep]
     rca.obj$data <- rca.obj$data[, cellIndexToKeep]
+
+    if(!is.null(rca.obj$projection.data)) {
+        rca.obj$projection.data <- rca.obj$projection.data[, cellIndexToKeep]
+    }
 
     # Subset cluster labels
     for(i in 1:length(rca.obj$clustering.out$dynamicColorsList)) {
