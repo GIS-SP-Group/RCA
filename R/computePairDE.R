@@ -34,6 +34,7 @@
 #' @param p.adjust.methods correction method for calculating qvalue. default is BH (or FDR)
 #' @param top.genes.per.cluster Number of top DE genes to be considered per cluster
 #' @param pairwise Flag indicating whether DE genes should be compared derived in pairwise manner or 1 cluster vs all others (Default).
+#' @param nCores Number of cores to used for parallel computation (default 1).
 
 #' @return RCA object.
 #' @export
@@ -50,7 +51,11 @@ dataDE <- function(rca.obj,
                    pseudocount.use = 1,
                    p.adjust.methods =  "BH",
                    top.genes.per.cluster = 10,
-		   pairwise=FALSE) {
+		   pairwise=FALSE,nCores=1) {
+    require(foreach)
+    require(doParallel)
+    cl <- makeCluster(nCores)
+    registerDoParallel(cl)
     df <- c()
     temp.exp = expm1(x = rca.obj$data)
     temp.exp.row = Matrix::rowMeans(temp.exp)
@@ -118,7 +123,7 @@ dataDE <- function(rca.obj,
         }
       }
     }else{
-      for (clusteri in 1:(total.clus)) {
+      df<-foreach (clusteri=1:(total.clus),.combine=rbind)%dopar%{
        	    print(clusteri)
             cells.1 <- colnames(rca.obj$data)[which(clusters == clusteri)]
             cells.2 <- colnames(rca.obj$data)[which(clusters != clusteri)]
@@ -147,11 +152,14 @@ dataDE <- function(rca.obj,
                 if(nrow(marker.genes) > 0) {
                     marker.genes$group1 = clusteri
                     marker.genes$gene = rownames(marker.genes)
-                    df = rbind(df, marker.genes)
+#                    df = rbind(df, marker.genes)
                 }
+		marker.genes
             }
 	}
     }
+
+    stopCluster(cl)
     ######################################
     #Determine top x DE genes per Cluster#
     ######################################
