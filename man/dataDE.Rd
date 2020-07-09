@@ -17,7 +17,8 @@ dataDE(
   pseudocount.use = 1,
   p.adjust.methods = "BH",
   top.genes.per.cluster = 10,
-  pairwise = FALSE
+  pairwise = FALSE,
+  nCores = 1
 )
 }
 \arguments{
@@ -67,6 +68,8 @@ fraction of detection between the two groups. Set to -Inf by default}
 \item{top.genes.per.cluster}{Number of top DE genes to be considered per cluster}
 
 \item{pairwise}{Flag indicating whether DE genes should be compared derived in pairwise manner or 1 cluster vs all others (Default).}
+
+\item{nCores}{Number of cores to used for parallel computation (default 1).}
 }
 \value{
 RCA object.
