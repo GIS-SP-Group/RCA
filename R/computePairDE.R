@@ -111,7 +111,6 @@ dataDE <- function(rca.obj,
             if (!(is.null(marker.genes))) {
                 if (colnames(marker.genes)[1] != 'myAUC') {
                     marker.genes = marker.genes[marker.genes$p_val_adj < 0.05, ]
-	    	    tmp=rbind(tmp, marker.genes)
                 }
                 if(nrow(marker.genes) > 0) {
                     marker.genes$group1 = clusteri
