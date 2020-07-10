@@ -161,7 +161,7 @@ dataDE <- function(rca.obj,
     #Determine top x DE genes per Cluster#
     ######################################
     if(pairwise){
-    mC1 <- df %>% group_by(group1, group2) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC)
+    mC1 <- df %>% dplyr::group_by(group1, group2) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC)
     markers2 <- df
     markers2$avg_logFC <- (-1) * (markers2$avg_logFC)
     mC2 <- markers2 %>% group_by(group2, group1) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC)
@@ -169,13 +169,13 @@ dataDE <- function(rca.obj,
             cbind(Cluster = mC1$group1, Gene = mC1$gene),
             cbind(Cluster = mC2$group2, Gene = mC2$gene)
         ))
-    topMarkers <- topMarkers %>% group_by(Cluster) %>% distinct(.keep_all = T)
+    topMarkers <- topMarkers %>% dplyr::group_by(Cluster) %>% distinct(.keep_all = T)
     topMarkers <- topMarkers[order(topMarkers$Cluster, decreasing = F), ]
     df$group1<-names(remap)[df$group1]
     df$group2<-names(remap)[df$group2]
     }else{
     	topMarkers <- data.frame(Cluster = df$group1, Gene = df$gene, avg_logFC = df$avg_logFC)
-    	topMarkers <- topMarkers %>% group_by(Cluster) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC) %>% distinct(.keep_all = T)
+    	topMarkers <- topMarkers %>% dplyr::group_by(Cluster) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC) %>% distinct(.keep_all = T)
     	topMarkers <- topMarkers[order(topMarkers$Cluster, decreasing = F), ]
 	df$group1<-names(remap)[df$group1]
     }
