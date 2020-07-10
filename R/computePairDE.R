@@ -73,9 +73,9 @@ dataDE <- function(rca.obj,
             unique(rca.obj$clustering.out$dynamicColorsList[[deepsplit]])
         clusters <- as.numeric(as.character(remap[clusters]))
     } else{
-        #############################
-        #Graph based clustering used#
-        #############################
+    #############################
+    #Graph based clustering used#
+    #############################
         clusters <- rca.obj$clustering.out$dynamicColorsList[[1]]
         total.clus <- length(unique(clusters))
         remap <- c(1:total.clus)
@@ -179,6 +179,8 @@ dataDE <- function(rca.obj,
     	topMarkers <- topMarkers %>% group_by(Cluster) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC) %>% distinct(.keep_all = T)
     	topMarkers <- topMarkers[order(topMarkers$Cluster, decreasing = F), ]
     }
+    df$group1<-names(remap)[df$group1]
+    df$group2<-names(remap)[df$group2]
     rca.obj$DE.genes <- list(All.DE.genes = df, Top.DE.genes = topMarkers)
     return(rca.obj)
 }
