@@ -158,9 +158,6 @@ dataDE <- function(rca.obj,
 	}
     }
 
-    stopCluster(cl)
-    print(head(df))
-    ######################################
     #Determine top x DE genes per Cluster#
     ######################################
     if(pairwise){
@@ -174,13 +171,14 @@ dataDE <- function(rca.obj,
         ))
     topMarkers <- topMarkers %>% group_by(Cluster) %>% distinct(.keep_all = T)
     topMarkers <- topMarkers[order(topMarkers$Cluster, decreasing = F), ]
+    df$group1<-names(remap)[df$group1]
+    df$group2<-names(remap)[df$group2]
     }else{
     	topMarkers <- data.frame(Cluster = df$group1, Gene = df$gene, avg_logFC = df$avg_logFC)
     	topMarkers <- topMarkers %>% group_by(Cluster) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC) %>% distinct(.keep_all = T)
     	topMarkers <- topMarkers[order(topMarkers$Cluster, decreasing = F), ]
+	df$group1<-names(remap)[df$group1]
     }
-    df$group1<-names(remap)[df$group1]
-    df$group2<-names(remap)[df$group2]
     rca.obj$DE.genes <- list(All.DE.genes = df, Top.DE.genes = topMarkers)
     return(rca.obj)
 }
