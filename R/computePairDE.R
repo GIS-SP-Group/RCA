@@ -57,11 +57,15 @@ dataDE <- function(rca.obj,
     cl <- makeCluster(nCores)
     registerDoParallel(cl)
     df <- c()
-    temp.exp = expm1(x = rca.obj$data)
+    if (is.null(mean.Exp)){
+    temp.exp = exp(x = rca.obj$data)
     temp.exp.row = Matrix::rowMeans(temp.exp)
     temp.exp.row = sort(temp.exp.row, decreasing = T)
     temp.exp.row = temp.exp.row[6:length(temp.exp.row)]
-    MeanExprsThrs = mean(temp.exp.row)
+    MeanExprsThrs = mean(temp.exp.row)}
+    else{
+	    MeanExprsThrs=mean.Exp
+    }
     ############################
     #hclust used for clustering#
     ############################
