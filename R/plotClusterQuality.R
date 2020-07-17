@@ -34,7 +34,7 @@ plotClusterQuality <- function(rca.obj, cluster.labels, width = 20, height = 20,
         mito.genes = grep(pattern = "^MT-", x = rownames(data), value = T)
 
         # Compute percent.mito vector
-        pMitoVec <- Matrix::colSums(data[mito.genes, , drop = FALSE])/Matrix::colSums(data)
+        pMitoVec <- Matrix::colSums(data[mito.genes, , drop = FALSE])/Matrix::colSums(data)*100
 
         # Append QC vectors to data frame
         cluster.quality.df <- data.frame(Cluster = rep(cluster, ncol(data)), nGene = nGeneVec, nUMI = nUMIVec, pMito = pMitoVec)

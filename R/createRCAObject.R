@@ -1,15 +1,15 @@
 #' Create RCA object
 #'
 #' @param rawData A matrix of expression values
-#' @param dataIsNormalized A flag indicating whether the provided data is already normalized
+#' @param normData A matrix of normalized expression values
 #' @return RCA object.
 #' @export
 #'
-createRCAObject <- function(rawData,dataIsNormalized=FALSE) {
+createRCAObject <- function(rawData, normData=NULL) {
 
     # Create RCA object using RCAConstruct and the raw data provided
-    if (dataIsNormalized){
-    rca.obj <- RCAConstruct$new(raw.data = rawData, data=rawData)
+    if !(is.null(normData)){
+    rca.obj <- RCAConstruct$new(raw.data = rawData, data=normData)
     }else
     {
     rca.obj <- RCAConstruct$new(raw.data = rawData)
