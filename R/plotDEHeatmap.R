@@ -7,11 +7,12 @@
 #' @param folderpath path to save heatmap to
 #' @param filename file name of saved heatmap
 #' @param extraCellProperty vector indicating cell property to be plotted in heatmap
+#' @param SeuratColorScheme Use the color scheme known from Seurat (Default). Otherwise use a blue to red color scheme.
 #'
 #' @export
 #'
 
-plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folderpath = ".", filename = "RCA_DE_Heatmap.pdf", extraCellProperty = NULL) {
+plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folderpath = ".", filename = "RCA_DE_Heatmap.pdf", extraCellProperty = NULL,SeuratColorScheme = TRUE) {
 
     require(ComplexHeatmap)
 
@@ -28,6 +29,9 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
 
     # Set color scheme of heatmap
     if (scale){
+	    if(SeuratColorScheme){
+    colorScheme <-  colorRampPalette(c("purple", "black", "yellow"))(256)
+	    }else{
     colorScheme <-
         circlize::colorRamp2(
             seq(min(
@@ -40,7 +44,11 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
               "red",
               "#7F0000",
               "#2F0000"))
+	    }
     }else{
+	    if (SeuratColorScheme){
+     colorScheme <-  colorRampPalette(c("black", "yellow"))(256)
+	    }else{
     colorScheme <-
         circlize::colorRamp2(
             seq(min(
@@ -50,7 +58,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
             ), length.out = 2),
             c("white",
               "red"))
-    }
+    }}
     if ((class(cellTree) == "hclust") && (length(cellTree$order) == ncol(heatmapIn))){
         # If no cluster colors or cell properties are to be plotted
         if(is.null(clusterColorList)) {

@@ -7,11 +7,12 @@
 #' @param folderpath path to save heatmap to
 #' @param filename file name of saved heatmap
 #' @param extraCellProperty vector indicating cell property to be plotted in heatmap
+#' @param SeuratColorScheme Use the color scheme known from Seurat (default). Otherwise, use a blue to red color scheme
 #'
 #' @export
 #'
 
-plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, folderpath = ".", filename = "RCA_Heatmap.pdf", extraCellProperty = NULL) {
+plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, folderpath = ".", filename = "RCA_Heatmap.pdf", extraCellProperty = NULL,SeuratColorScheme = TRUE) {
     require(ComplexHeatmap)
     # Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
@@ -24,6 +25,9 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
     heatmapIn <- heatmapIn[varVec >= var.thrs, ]
 
     # Set color scheme of heatmap
+    if (SeuratColorScheme){
+    colorScheme <-  colorRampPalette(c("purple", "black", "yellow"))(256)
+    }else{
     colorScheme <-
         circlize::colorRamp2(
             seq(min(
@@ -37,6 +41,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
               "#7F0000",
               "#2F0000")
         )
+    }
     if (class(cellTree) == "hclust"){
     # If no cluster colors or cell properties are to be plotted
     if(is.null(clusterColorList)) {
