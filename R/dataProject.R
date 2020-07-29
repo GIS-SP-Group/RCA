@@ -1,18 +1,14 @@
 #' Compute Reference Component features for clustering analysis
 #'
-#' @param rca.obj RCA object.
+#' @param sc_data data object from a RCA object.
 #' @param method Either "GlobalPanel"(default), "ColonEpiPanel", "MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel" or "Custom"
 #' @param customPath directory path (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".
 #' @param corMeth Any of the correlation measures supported by R, defaults to pearson
 #' @param power power to raise up to for the RCA features before clustering, default is 4
 #' @param scale True if the data should be scaled, False otherwise
-#' @return RCA object.
-#' @export
+#' @return a projection matrix.
 #'
-dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
-
-    # Extract data
-    sc_data <- rca.obj$data
+dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
 
     # If panel for correlation is GlobalPanel
     if (method == "GlobalPanel") {
@@ -163,12 +159,60 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
 
     # Store projection result as Matrix
     projection = as.matrix(projection)
-    projection = as(projection, "dgCMatrix")
+    return(as(as.matrix(projection), "dgCMatrix"))  
+}
 
-    # Assign projection result to RCA object
-    rca.obj$projection.data <- projection
+
+#' Compute Reference Component features for clustering analysis
+#'
+#' @param rca.obj RCA object.
+#' @param method Either "GlobalPanel"(default), "ColonEpiPanel", "MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel" or "Custom"
+#' @param customPath directory path (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".
+#' @param corMeth Any of the correlation measures supported by R, defaults to pearson
+#' @param power power to raise up to for the RCA features before clustering, default is 4
+#' @param scale True if the data should be scaled, False otherwise
+#' @return RCA object.
+#' @export
+#'
+dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
+
+    # Run the worker function
+    rca.obj$projection.data <- datProjectWorker(rca.obj$data,method,customPath,corMeth,power,scale)
 
     ### Return RCA object
-
     return(rca.obj)
+}
+
+
+#' Compute Reference Component features for clustering analysis
+#'
+#' @param rca.obj RCA object.
+#' @param method List of panel identifiers containing "GlobalPanel"(default), "ColonEpiPanel", "MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel"
+#' @param customPath list of paths (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".
+#' @param corMeth Any of the correlation measures supported by R, defaults to pearson
+#' @param power power to raise up to for the RCA features before clustering, default is 4
+#' @return RCA object.
+#' @export
+#'
+dataProjectMultiPanel <- function(rca.obj, method = list("GlobalPanel"), customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
+
+    # Extract data
+    tmp<-c()
+    if (!(is.null(method))){
+    for (element in method){
+      tmp<-rbind(tmp,dataProjectWorker(rca.obj$data,method,customPath,corMeth,power,T))
+      }
+    }
+
+    if (!(is.null(customPath))){
+    for (element in customPath){
+	tmp<-rbind(tmp,dataProjectWork(rca.obj$data,"Custom",element,corMeth,power,T))
+	   }
+    }
+    # Assign projection result to RCA object
+    rca.obj$projection.data <- tmp
+
+    ### Return RCA object
+    return(rca.obj)
+
 }
