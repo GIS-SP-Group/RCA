@@ -177,7 +177,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
 
     # Run the worker function
-    rca.obj$projection.data <- datProjectWorker(rca.obj$data,method,customPath,corMeth,power,scale)
+    rca.obj$projection.data <- dataProjectWorker(rca.obj$data,method,customPath,corMeth,power,scale)
 
     ### Return RCA object
     return(rca.obj)
