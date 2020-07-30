@@ -11,7 +11,8 @@ plotRCAHeatmap(
   height = 20,
   folderpath = ".",
   filename = "RCA_Heatmap.pdf",
-  extraCellProperty = NULL
+  extraCellProperty = NULL,
+  SeuratColorScheme = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ plotRCAHeatmap(
 \item{filename}{file name of saved heatmap}
 
 \item{extraCellProperty}{vector indicating cell property to be plotted in heatmap}
+
+\item{SeuratColorScheme}{Use the color scheme known from Seurat (default). Otherwise, use a blue to red color scheme}
 }
 \description{
 Plot heatmap of projection to the RCA panel
