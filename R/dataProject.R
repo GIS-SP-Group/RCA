@@ -11,7 +11,58 @@
 dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
 
     # If panel for correlation is GlobalPanel
-    if (method == "GlobalPanel") {
+
+    if (method == "GlobalPanel_CellTypes") {
+        # Initialise variable to store projection data from the two fragments of the Global Panel
+        projection_list = list()
+
+        # For each fragment of the Global Panel
+
+            # Initialise panel
+            panel = ReferencePanel[[1]][[1]]
+
+            # Select genes that are shared by the input data and the panel
+            shared_genes <- intersect(rownames(sc_data), rownames(panel))
+
+            # Reduce the panel and input data to the shared genes
+            subset_panel = panel[shared_genes, ]
+            subset_data = sc_data[shared_genes, , drop = FALSE]
+
+            # For values in the panel below the minimum threshold, set those values to threshold
+            subset_panel[subset_panel <= (ReferencePanel$at)[i]] = (ReferencePanel$at)[i]
+
+            # Compute projection of input data with the panel fragment
+            if(corMeth == "pearson") {
+                subset_panel = as.matrix(subset_panel)
+                projection_fragment <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
+            } else {
+                projection_fragment <- cor(subset_panel, subset_data, method = corMeth)
+            }
+
+
+            # Reattach dimnames
+            colnames(projection_fragment) <- colnames(subset_data)
+            rownames(projection_fragment) <- colnames(subset_panel)
+
+            # Raise the projection fragment to power
+            projection_fragment = abs(projection_fragment) ^ (power) * sign(projection_fragment)
+
+            # If scaling is required
+            if (scale) {
+
+                # Scale
+                projection_fragment = scale(projection_fragment, center = TRUE, scale = TRUE)
+            }
+
+            # Store projection data of fragment of Global Panel
+
+        # Combine the projection result of multiple Global Panel fragments
+        projection = projection_fragment
+
+    }
+    # If panel for correlation is ColonEpitheliumPanel
+ 
+    else if (method == "GlobalPanel") {
 
         # Initialise variable to store projection data from the two fragments of the Global Panel
         projection_list = list()
@@ -184,7 +235,7 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
 }
 
 
-#' Compute Reference Component features for clustering analysis
+#' Compute Reference Component features for clustering analysis against a list of panels
 #'
 #' @param rca.obj RCA object.
 #' @param method List of panel identifiers containing "GlobalPanel"(default), "ColonEpiPanel", "MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel"
