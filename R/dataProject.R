@@ -200,7 +200,7 @@ dataProjectMultiPanel <- function(rca.obj, method = list("GlobalPanel"), customP
     tmp<-c()
     if (!(is.null(method))){
     for (element in method){
-      tmp<-rbind(tmp,dataProjectWorker(rca.obj$data,method,customPath,corMeth,power,T))
+      tmp<-rbind(tmp,dataProjectWorker(rca.obj$data,element,customPath,corMeth,power,T))
       }
     }
 
