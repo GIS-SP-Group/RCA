@@ -22,7 +22,6 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
     # Subset projection data to remove unnecessary cell types
     varVec <- apply(heatmapIn, 1, var)
 
-    heatmapIn <- heatmapIn[varVec >= var.thrs, ]
 
     # Set color scheme of heatmap
     if (SeuratColorScheme){
@@ -42,6 +41,9 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
               "#2F0000")
         )
     }
+
+    heatmapIn <- heatmapIn[varVec >= var.thrs, ]
+
     if (class(cellTree) == "hclust"){
     # If no cluster colors or cell properties are to be plotted
     if(is.null(clusterColorList)) {
