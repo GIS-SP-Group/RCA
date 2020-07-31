@@ -166,7 +166,6 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
         )
     }
     } else{
-    heatmapIn<-heatmapIn[]
     #graph based clustering
     if(is.null(clusterColorList)) {
         # Initialize heatmap object
