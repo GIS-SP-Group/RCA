@@ -4,12 +4,12 @@
 \alias{createRCAObject}
 \title{Create RCA object}
 \usage{
-createRCAObject(rawData, dataIsNormalized = FALSE)
+createRCAObject(rawData, normData = NULL)
 }
 \arguments{
 \item{rawData}{A matrix of expression values}
 
-\item{dataIsNormalized}{A flag indicating whether the provided data is already normalized}
+\item{normData}{A matrix of normalized expression values}
 }
 \value{
 RCA object.

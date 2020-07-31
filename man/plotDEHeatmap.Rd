@@ -11,7 +11,8 @@ plotDEHeatmap(
   height = 20,
   folderpath = ".",
   filename = "RCA_DE_Heatmap.pdf",
-  extraCellProperty = NULL
+  extraCellProperty = NULL,
+  SeuratColorScheme = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ plotDEHeatmap(
 \item{filename}{file name of saved heatmap}
 
 \item{extraCellProperty}{vector indicating cell property to be plotted in heatmap}
+
+\item{SeuratColorScheme}{Use the color scheme known from Seurat (Default). Otherwise use a blue to red color scheme.}
 }
 \description{
 Plot heatmap of DE genes
