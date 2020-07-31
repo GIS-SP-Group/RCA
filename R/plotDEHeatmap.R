@@ -30,20 +30,18 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
     # Set color scheme of heatmap
     if (scale){
 	    if(SeuratColorScheme){
-    colorScheme <-  colorRampPalette(c("purple", "black", "yellow"))(256)
+    colorScheme <-  circlize::colorRampPalette(c(),c("purple", "black", "yellow"))
 	    }else{
     colorScheme <-
         circlize::colorRamp2(
-            seq(min(
+            c(min(
                 heatmapIn
-            ), max(
+            ),0, max(
                 heatmapIn
-            ), length.out = 5),
+            )),
             c("#7777FF",
               "white",
-              "red",
-              "#7F0000",
-              "#2F0000"))
+              "red"))
 	    }
     }else{
 	    if (SeuratColorScheme){
@@ -51,11 +49,11 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
 	    }else{
     colorScheme <-
         circlize::colorRamp2(
-            seq(min(
+            c(min(
                 heatmapIn
             ), max(
                 heatmapIn
-            ), length.out = 2),
+            )),
             c("white",
               "red"))
     }}
