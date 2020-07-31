@@ -29,7 +29,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
             subset_data = sc_data[shared_genes, , drop = FALSE]
 
             # For values in the panel below the minimum threshold, set those values to threshold
-            subset_panel[subset_panel <= (ReferencePanel$at)[i]] = (ReferencePanel$at)[i]
+            subset_panel[subset_panel <= (ReferencePanel$at)[1]] = (ReferencePanel$at)[1]
 
             # Compute projection of input data with the panel fragment
             if(corMeth == "pearson") {
