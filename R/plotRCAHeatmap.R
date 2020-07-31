@@ -25,20 +25,17 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
 
     # Set color scheme of heatmap
     if (SeuratColorScheme){
-    colorScheme <-  colorRampPalette(c("purple", "black", "yellow"))(256)
+    colorScheme <-  colorRamp2(c(min(heatmapIn), 0, max(heatmapIn)),c("purple", "black", "yellow"))
     }else{
     colorScheme <-
         circlize::colorRamp2(
-            seq(min(
+            c(min(
                 heatmapIn
-            ), max(
+            ), 0, max(
                 heatmapIn
-            ), length.out = 5),
-            c("#7777FF",
+            )),c("#7777FF",
               "white",
-              "red",
-              "#7F0000",
-              "#2F0000")
+              "red")
         )
     }
 
