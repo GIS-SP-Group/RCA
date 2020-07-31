@@ -245,7 +245,7 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
 #' @return RCA object.
 #' @export
 #'
-dataProjectMultiPanel <- function(rca.obj, method = list("GlobalPanel"), customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
+dataProjectMultiPanel <- function(rca.obj, method = list("NovershternPanel","MonacoPanel","GlobalPanel_CellTypes"), customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
 
     # Extract data
     tmp<-c()
