@@ -2,11 +2,11 @@
 % Please edit documentation in R/dataProject.R
 \name{dataProjectMultiPanel}
 \alias{dataProjectMultiPanel}
-\title{Compute Reference Component features for clustering analysis}
+\title{Compute Reference Component features for clustering analysis against a list of panels}
 \usage{
 dataProjectMultiPanel(
   rca.obj,
-  method = list("GlobalPanel"),
+  method = list("NovershternPanel", "MonacoPanel", "GlobalPanel_CellTypes"),
   customPath = NULL,
   corMeth = "pearson",
   power = 4,
@@ -28,5 +28,5 @@ dataProjectMultiPanel(
 RCA object.
 }
 \description{
-Compute Reference Component features for clustering analysis
+Compute Reference Component features for clustering analysis against a list of panels
 }
