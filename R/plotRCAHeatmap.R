@@ -7,12 +7,12 @@
 #' @param folderpath path to save heatmap to
 #' @param filename file name of saved heatmap
 #' @param extraCellProperty vector indicating cell property to be plotted in heatmap
-#' @param SeuratColorScheme Use the color scheme known from Seurat (default). Otherwise, use a blue to red color scheme
+#' @param SeuratColorScheme Use the color scheme known from Seurat (default is FALSE). Otherwise, use a blue to red color scheme
 #'
 #' @export
 #'
 
-plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, folderpath = ".", filename = "RCA_Heatmap.pdf", extraCellProperty = NULL,SeuratColorScheme = TRUE) {
+plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, folderpath = ".", filename = "RCA_Heatmap.pdf", extraCellProperty = NULL, SeuratColorScheme = FALSE) {
     require(ComplexHeatmap)
     # Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
