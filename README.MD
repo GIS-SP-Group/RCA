@@ -145,10 +145,14 @@ In addition to the *GlobalPanel*, RCA now provides *6* additional reference pane
 
 * *ColonEpiPanel*: 9 colon epithelial samples from Li et al. (Nature genetics, 2017).
 * *MonacoPanel*: 29 PBMC cell types from Monaco, G., et al. (Cell reports, 2019).
+* *MonacoBCellPanel*: 5 B cell sub-types from Monaco, G., et al. (Cell reports, 2019).
+* *MonacoMonoPanel*: 5 Monocyte sub-types from Monaco, G., et al. (Cell reports, 2019).
+* *MonacoTCellPanel*: 15 T cell sub-types from Monaco, G., et al. (Cell reports, 2019).
 * *ENCODEMousePanel*: 15 mouse cell types from ENCODE.
 * *ENCODEHumanPanel*: 93 human cell types from ENCODE.
 * *ZhangMouseBrainPanel*: 7 mouse brain cell types from Tasic et al. (Nature neuroscience, 2016).
 * *NovershternPanel*: 15 PBMC cell types from Novershtern et al. (Cell, 2011).
+* *NovershternTCellPanel*: 6 T cell sub-types from Novershtern et al. (Cell, 2011).
 
 
 RCAv2 directly allows the user to utilize any custom panel. A user generated panel **has to** have a distinct structure:
