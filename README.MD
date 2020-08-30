@@ -140,7 +140,7 @@ PBMCs
 	Filtered data: 4973 cells and 17120 features.
 	Projection data: 4973 cells to 179 cell-types
 
-In addition to the *GlobalPanel*, RCA now provides *6* additional reference panels:
+In addition to the *GlobalPanel*, RCA now provides *10* additional reference panels:
 
 
 * *ColonEpiPanel*: 9 colon epithelial samples from Li et al. (Nature genetics, 2017).
