@@ -6,10 +6,10 @@
 #' @param corMeth Any of the correlation measures supported by R, defaults to pearson
 #' @param power power to raise up to for the RCA features before clustering, default is 4
 #' @param scale True if the data should be scaled, False otherwise
-#' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step
+#' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step, default is 1%.
 #' @return a projection matrix.
 #'
-dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 0) {
+dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 1) {
 
     # If panel for correlation is GlobalPanel
 
@@ -255,11 +255,11 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 #' @param corMeth Any of the correlation measures supported by R, defaults to pearson
 #' @param power power to raise up to for the RCA features before clustering, default is 4
 #' @param scale True if the data should be scaled, False otherwise
-#' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step
+#' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step, default is 1%.
 #' @return RCA object.
 #' @export
 #'
-dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 0) {
+dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 1) {
 
     # Run the worker function
     rca.obj$projection.data <- dataProjectWorker(rca.obj$data,method,customPath,corMeth,power,scale, min.cell.number.expressing) 
@@ -276,11 +276,11 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
 #' @param customPath list of paths (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".
 #' @param corMeth Any of the correlation measures supported by R, defaults to pearson
 #' @param power power to raise up to for the RCA features before clustering, default is 4
-#' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step
+#' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step, default is 1%.
 #' @return RCA object.
 #' @export
 #'
-dataProjectMultiPanel <- function(rca.obj, method = list("NovershternPanel","MonacoPanel","GlobalPanel_CellTypes"), customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 0) {
+dataProjectMultiPanel <- function(rca.obj, method = list("NovershternPanel","MonacoPanel","GlobalPanel_CellTypes"), customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 1) {
 
     # Extract data
     tmp<-c()
