@@ -86,7 +86,7 @@ performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.threshol
             mito.genes = grep(pattern = "^MT-", x = rownames(data), value = T)
 
             # Compute percent.mito vector
-            pMitoVec <- Matrix::colSums(data[mito.genes, ])/Matrix::colSums(data)
+            pMitoVec <- 100*Matrix::colSums(data[mito.genes, ])/Matrix::colSums(data)
 
 
             if(is.numeric(pMito.thresholds) && (length(pMito.thresholds) == 2)) {
