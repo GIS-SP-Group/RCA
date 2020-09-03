@@ -24,10 +24,13 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
             # Select genes with expression in a minimum number of cells
             geneExpVec <- Matrix::rowSums(sc_data>0)/dim(sc_data)[2]*100
-            filt.genes <- which(geneExpVec < min.cell.number.expressing)
-
-            # Select genes that are shared by the input data and the panel
-            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+	    if (min.cell.number.expressing==0){
+	            shared_genes <- intersect(rownames(sc_data),rownames(panel))
+	    }else{
+		    filt.genes <- which(geneExpVec < min.cell.number.expressing)
+	            # Select genes that are shared by the input data and the panel
+	            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+	    }
 
             # Reduce the panel and input data to the shared genes
             subset_panel = panel[shared_genes, ]
@@ -80,10 +83,16 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
 	    # Select genes with expression in a minimum number of cells
             geneExpVec <- Matrix::rowSums(sc_data>0)/dim(sc_data)[2]*100
-            filt.genes <- which(geneExpVec < min.cell.number.expressing)
 
             # Select genes that are shared by the input data and the panel
-            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+	    if (min.cell.number.expressing==0){
+	            shared_genes <- intersect(rownames(sc_data),rownames(panel))
+	    }else{
+		    filt.genes <- which(geneExpVec < min.cell.number.expressing)
+	            # Select genes that are shared by the input data and the panel
+	            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+	    }
+
 
             # Reduce the panel and input data to the shared genes
             subset_panel = panel[shared_genes, ]
@@ -149,17 +158,17 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
         
         # Initialise variable to store projection data from the two fragments of the Global Panel
         projection_list = list()
-       
-
+    
         # Select genes with expression in a minimum number of cells
         geneExpVec <- Matrix::rowSums(sc_data>0)/dim(sc_data)[2]*100
+        if (min.cell.number.expressing==0){
+           shared_genes <- intersect(rownames(sc_data),rownames(panel))
+        }else{
         filt.genes <- which(geneExpVec < min.cell.number.expressing)
-     
-     	# Select genes that are shared by the input data and the panel
+        # Select genes that are shared by the input data and the panel
         shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+        }
 
-
-        
         # Reduce the panel and input data to the shared genes
         subset_panel = panel[shared_genes, ]
         subset_data = sc_data[shared_genes, , drop = FALSE]
@@ -193,14 +202,18 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
         # Load panel from path provided
         panel <- readRDS(customPath)
- 
+
+
         # Select genes with expression in a minimum number of cells
         geneExpVec <- Matrix::rowSums(sc_data>0)/dim(sc_data)[2]*100
-        filt.genes <- which(geneExpVec < min.cell.number.expressing)
+        if (min.cell.number.expressing==0){
+            shared_genes <- intersect(rownames(sc_data),rownames(panel))
+       }else{
+	    filt.genes <- which(geneExpVec < min.cell.number.expressing)
+            # Select genes that are shared by the input data and the panel
+            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+       }
 
-	# Select genes that are shared by the input data and the panel
-         shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
-        
 	# Reduce the panel and input data to the shared genes
         subset_panel = panel[shared_genes, ]
         subset_data = sc_data[shared_genes, , drop = FALSE]
