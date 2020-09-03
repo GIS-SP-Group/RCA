@@ -586,11 +586,11 @@ We obtain the following UMAP:
 ![](Tutorial/UMAP_Seurat.png)
 
 ### Generate a RCA object and perform RCA analysis
-We use the RCA function *createRCAObject* to generate a RCA object from the normalized data stored in our Seurat object.
+We use the RCA function *createRCAObject* to generate a RCA object from the raw and optionally also the normalized data stored in our Seurat object.
 
 ```{r}
 library(RCAv2)
-RCA_from_Seurat<-RCAv2::createRCAObject(pbmc_Seurat@assays$RNA@data,dataIsNormalized=T)
+RCA_from_Seurat<-RCAv2::createRCAObject(pbmc_Seurat@assays$RNA@counts, pbmc_Seurat@assays$RNA@data)
 ```
 Next, we can compute the projection, cluster the data, and estimate the most likely cell type for each cell as above:
 ```{r}
@@ -676,6 +676,13 @@ For greater convenience the results of RCA can be saved within the Seurat object
 pbmc_Seurat[["RCA.clusters"]]<-RCA_from_Seurat$clustering.out$dynamicColorsList
 pbmc_Seurat[["cellTypeLabel"]]<-RCA_from_Seurat$cell.Type.Estimate
 pbmc_Seurat[["Projection"]]<-CreateAssayObject(data=RCA_from_Seurat$projection.data)
+```
+
+### Add a UMAP based on the projection to the Seurat object
+Also, a UMAP reduction based on the projection space can be added to the Seurat object:
+```{r}
+RCA_from_Seurat<-computeUMAP(RCA_from_Seurat)
+pbmc_Seurat[["RCA_umap"]]<-CreateDimReducObject(embeddings=as.matrix(RCA_from_Seurat$umap.coordinates),key="RCA_umap_",assay=DefaultAssay(pbmc_Seurat))
 ```
 
 ## FAQ
