@@ -24,7 +24,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
             # Select genes with expression in a minimum number of cells
             geneExpVec <- Matrix::rowSums(sc_data$data>0)/dim(sc_data$data)[2]*100
-            filt.genes <- which(geneExpVec < min.cell.exp)
+            filt.genes <- which(geneExpVec < min.cell.number.expressing)
 
             # Select genes that are shared by the input data and the panel
             shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
@@ -80,7 +80,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
 	    # Select genes with expression in a minimum number of cells
             geneExpVec <- Matrix::rowSums(sc_data$data>0)/dim(sc_data$data)[2]*100
-            filt.genes <- which(geneExpVec < min.cell.exp)
+            filt.genes <- which(geneExpVec < min.cell.number.expressing)
 
             # Select genes that are shared by the input data and the panel
             shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
@@ -153,7 +153,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
         # Select genes with expression in a minimum number of cells
         geneExpVec <- Matrix::rowSums(sc_data$data>0)/dim(sc_data$data)[2]*100
-        filt.genes <- which(geneExpVec < min.cell.exp)
+        filt.genes <- which(geneExpVec < min.cell.number.expressing)
      
      	# Select genes that are shared by the input data and the panel
         shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
@@ -196,7 +196,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
  
         # Select genes with expression in a minimum number of cells
         geneExpVec <- Matrix::rowSums(sc_data$data>0)/dim(sc_data$data)[2]*100
-        filt.genes <- which(geneExpVec < min.cell.exp)
+        filt.genes <- which(geneExpVec < min.cell.number.expressing)
 
 	# Select genes that are shared by the input data and the panel
          shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
