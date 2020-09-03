@@ -6,9 +6,10 @@
 #' @param corMeth Any of the correlation measures supported by R, defaults to pearson
 #' @param power power to raise up to for the RCA features before clustering, default is 4
 #' @param scale True if the data should be scaled, False otherwise
+#' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step
 #' @return a projection matrix.
 #'
-dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
+dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 0) {
 
     # If panel for correlation is GlobalPanel
 
@@ -21,8 +22,12 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
             # Initialise panel
             panel = ReferencePanel[[1]][[1]]
 
+            # Select genes with expression in a minimum number of cells
+            geneExpVec <- Matrix::rowSums(sc_data$data>0)/dim(sc_data$data)[2]*100
+            filt.genes <- which(geneExpVec < min.cell.exp)
+
             # Select genes that are shared by the input data and the panel
-            shared_genes <- intersect(rownames(sc_data), rownames(panel))
+            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
 
             # Reduce the panel and input data to the shared genes
             subset_panel = panel[shared_genes, ]
@@ -73,8 +78,12 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
             # Initialise panel
             panel = ReferencePanel[[1]][[i]]
 
+	    # Select genes with expression in a minimum number of cells
+            geneExpVec <- Matrix::rowSums(sc_data$data>0)/dim(sc_data$data)[2]*100
+            filt.genes <- which(geneExpVec < min.cell.exp)
+
             # Select genes that are shared by the input data and the panel
-            shared_genes <- intersect(rownames(sc_data), rownames(panel))
+            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
 
             # Reduce the panel and input data to the shared genes
             subset_panel = panel[shared_genes, ]
@@ -140,9 +149,16 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
         
         # Initialise variable to store projection data from the two fragments of the Global Panel
         projection_list = list()
-        
-        # Select genes that are shared by the input data and the panel
-        shared_genes <- intersect(rownames(sc_data), rownames(panel))
+       
+
+        # Select genes with expression in a minimum number of cells
+        geneExpVec <- Matrix::rowSums(sc_data$data>0)/dim(sc_data$data)[2]*100
+        filt.genes <- which(geneExpVec < min.cell.exp)
+     
+     	# Select genes that are shared by the input data and the panel
+        shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+
+
         
         # Reduce the panel and input data to the shared genes
         subset_panel = panel[shared_genes, ]
@@ -177,11 +193,15 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
         # Load panel from path provided
         panel <- readRDS(customPath)
+ 
+        # Select genes with expression in a minimum number of cells
+        geneExpVec <- Matrix::rowSums(sc_data$data>0)/dim(sc_data$data)[2]*100
+        filt.genes <- which(geneExpVec < min.cell.exp)
 
-        # Select genes that are shared by the input data and the panel
-        shared_genes <- intersect(rownames(sc_data), rownames(panel))
-
-        # Reduce the panel and input data to the shared genes
+	# Select genes that are shared by the input data and the panel
+         shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+        
+	# Reduce the panel and input data to the shared genes
         subset_panel = panel[shared_genes, ]
         subset_data = sc_data[shared_genes, , drop = FALSE]
 
@@ -222,13 +242,14 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 #' @param corMeth Any of the correlation measures supported by R, defaults to pearson
 #' @param power power to raise up to for the RCA features before clustering, default is 4
 #' @param scale True if the data should be scaled, False otherwise
+#' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step
 #' @return RCA object.
 #' @export
 #'
-dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
+dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 0) {
 
     # Run the worker function
-    rca.obj$projection.data <- dataProjectWorker(rca.obj$data,method,customPath,corMeth,power,scale)
+    rca.obj$projection.data <- dataProjectWorker(rca.obj$data,method,customPath,corMeth,power,scale, min.cell.number.expressing) 
 
     ### Return RCA object
     return(rca.obj)
@@ -242,22 +263,23 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
 #' @param customPath list of paths (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".
 #' @param corMeth Any of the correlation measures supported by R, defaults to pearson
 #' @param power power to raise up to for the RCA features before clustering, default is 4
+#' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step
 #' @return RCA object.
 #' @export
 #'
-dataProjectMultiPanel <- function(rca.obj, method = list("NovershternPanel","MonacoPanel","GlobalPanel_CellTypes"), customPath = NULL, corMeth = "pearson", power = 4, scale = T) {
+dataProjectMultiPanel <- function(rca.obj, method = list("NovershternPanel","MonacoPanel","GlobalPanel_CellTypes"), customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 0) {
 
     # Extract data
     tmp<-c()
     if (!(is.null(method))){
     for (element in method){
-      tmp<-rbind(tmp,dataProjectWorker(rca.obj$data,element,customPath,corMeth,power,T))
+      tmp<-rbind(tmp,dataProjectWorker(rca.obj$data,element,customPath,corMeth,power,T, min.cell.number.expressing ))
       }
     }
 
     if (!(is.null(customPath))){
     for (element in customPath){
-	tmp<-rbind(tmp,dataProjectWork(rca.obj$data,"Custom",element,corMeth,power,T))
+	tmp<-rbind(tmp,dataProjectWork(rca.obj$data,"Custom",element,corMeth,power,T, min.cell.number.expressing ))
 	   }
     }
     # Assign projection result to RCA object
