@@ -54,6 +54,7 @@ dataDE <- function(rca.obj,
 		   pairwise=FALSE,nCores=1) {
     require(foreach)
     require(doParallel)
+    require(dplyr)
     cl <- makeCluster(nCores)
     registerDoParallel(cl)
     df <- c()
@@ -269,6 +270,7 @@ ComputePairWiseDE <-  function(object,
     require(pbapply)
     require(tidyverse)
     require(ROCR)
+    require(dplyr)
     ## for Wilcox test
     WilcoxDETest <-
         function(data.use, cells.1, cells.2, verbose = TRUE) {
