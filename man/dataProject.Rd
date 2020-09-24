@@ -27,7 +27,7 @@ dataProject(
 
 \item{scale}{True if the data should be scaled, False otherwise}
 
-\item{min.cell.number.expressing}{Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step, default is 1%.}
+\item{min.cell.number.expressing}{Minimum number of cells (0-100) expressing a gene such that it is considered in the projection step, default is 1.}
 }
 \value{
 RCA object.
