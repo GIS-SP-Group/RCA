@@ -6,19 +6,11 @@
 #' @param corMeth Any of the correlation measures supported by R, defaults to pearson
 #' @param power power to raise up to for the RCA features before clustering, default is 4
 #' @param scale True if the data should be scaled, False otherwise
-<<<<<<< HEAD
 #' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step, default is 1%.
 #' @param Logical to use optimized BLAS library if installed (LINUX and 64BIT system required)
 #' @return a projection matrix.
 #'
 dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 1,opt.BLAS = F) {
-=======
-#' @param min.cell.number.expressing Minimum number of cells (0-100) expressing a gene such that it is considered in the projection step, default is 1.
-#' @return a projection matrix.
-
-
-dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 1) {
->>>>>>> fbef4b6159760d32c37ae749e055d2ec160f15ec
 
     # If panel for correlation is GlobalPanel
 
