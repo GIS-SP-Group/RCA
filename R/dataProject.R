@@ -7,9 +7,10 @@
 #' @param power power to raise up to for the RCA features before clustering, default is 4
 #' @param scale True if the data should be scaled, False otherwise
 #' @param min.cell.number.expressing Minimum number of cells (0%-100%) expressing a gene such that it is considered in the projection step, default is 1%.
+#' @param Logical to use optimized BLAS library if installed (LINUX and 64BIT system required)
 #' @return a projection matrix.
 #'
-dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 1) {
+dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 1,opt.BLAS = F) {
 
     # If panel for correlation is GlobalPanel
 
@@ -44,7 +45,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
                 subset_panel = as.matrix(subset_panel)
                 projection_fragment <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
             } else {
-                projection_fragment <- cor(subset_panel, subset_data, method = corMeth)
+                projection_fragment <- cor(subset_panel, subset_data, method = corMeth,optBLAS=opt.BLAS)
             }
 
 
@@ -106,7 +107,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
                 subset_panel = as.matrix(subset_panel)
                 projection_fragment <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
             } else {
-                projection_fragment <- cor(subset_panel, subset_data, method = corMeth)
+                projection_fragment <- cor(subset_panel, subset_data, method = corMeth,optBLAS=opt.BLAS)
             }
 
 
@@ -178,7 +179,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
             subset_panel = as.matrix(subset_panel)
             projection <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
         } else {
-            projection <- cor(subset_panel, subset_data, method = corMeth)
+            projection <- cor(subset_panel, subset_data, method = corMeth,optBLAS=opt.BLAS)
         }
         rownames(projection) <- colnames(subset_panel)
         colnames(projection) <- colnames(subset_data)
@@ -223,7 +224,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
             subset_panel = as.matrix(subset_panel)
             projection <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
         } else {
-            projection <- cor(subset_panel, subset_data, method = corMeth)
+            projection <- cor(subset_panel, subset_data, method = corMeth,optBLAS=opt.BLAS)
         }
         rownames(projection) <- colnames(subset_panel)
         colnames(projection) <- colnames(subset_data)
