@@ -115,7 +115,7 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
         cellFiltDf$isFilt <- ifelse(test = rownames(cellFiltDf) %in% filt.cells, yes = "Retained", no = "Discarded")
 
         # Colors for scatter plot
-        colors <- c("grey", "black")
+        colors <- c("Discarded" = "grey", "Retained" = "black")
 
         # Create 2D plots for all pairwise combinations of nGene, nUMI and pMito
 

@@ -10,19 +10,24 @@ dataProjectMultiPanel(
   customPath = NULL,
   corMeth = "pearson",
   power = 4,
-  scale = T
+  scale = T,
+  min.cell.number.expressing = 1
 )
 }
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{method}{List of panel identifiers containing "GlobalPanel"(default), "ColonEpiPanel", "MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel"}
+\item{method}{List of panel identifiers containing "GlobalPanel"(default), "ColonEpiPanel", "MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel".}
 
 \item{customPath}{list of paths (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".}
 
-\item{corMeth}{Any of the correlation measures supported by R, defaults to pearson}
+\item{corMeth}{Any of the correlation measures supported by R, defaults to pearson.}
 
-\item{power}{power to raise up to for the RCA features before clustering, default is 4}
+\item{power}{power to raise up to for the RCA features before clustering, default is 4.}
+
+\item{scale}{True if the data should be scaled, False otherwise.}
+
+\item{min.cell.number.expressing}{Minimum number of cells (0-100) expressing a gene such that it is considered in the projection step, default is 1.}
 }
 \value{
 RCA object.

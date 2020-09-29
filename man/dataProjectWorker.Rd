@@ -10,7 +10,8 @@ dataProjectWorker(
   customPath = NULL,
   corMeth = "pearson",
   power = 4,
-  scale = T
+  scale = T,
+  min.cell.number.expressing = 1
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ dataProjectWorker(
 \item{power}{power to raise up to for the RCA features before clustering, default is 4}
 
 \item{scale}{True if the data should be scaled, False otherwise}
+
+\item{min.cell.number.expressing}{Minimum number of cells (0-100) expressing a gene such that it is considered in the projection step, default is 1.}
 }
 \value{
 a projection matrix.
