@@ -144,7 +144,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
         fs1 = rownames(ReferencePanel$ColonEpiPanel[apply(fs, 1, function(x)
             sum(x)) > 0,])
         gl_intersect = intersect(rownames(fpkm_temp), fs1)
-        projection = as.data.frame(cor(fpkm_temp[gl_intersect,], ReferencePanel$ColonEpiPanel[gl_intersect,], corMeth))
+        projection = as.data.frame(cor(fpkm_temp[gl_intersect,], ReferencePanel$ColonEpiPanel[gl_intersect,], corMeth,optBLAS=opt.BLAS))
         projection = abs(projection) ^ (power) * sign(projection)
         if (scale) {
             projection = scale(projection,

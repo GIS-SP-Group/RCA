@@ -83,7 +83,7 @@ dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds
     if(!is.null(percent.mito.thresholds)) {
 
         # Select mito genes
-        mito.genes = grep(pattern = "^MT-", x = rownames(data), value = T)
+        mito.genes = grep(pattern = "^MT-|^Mt-", x = rownames(data), value = T)
 
         # Compute percent.mito vector
         pMitoVec <- Matrix::colSums(data[mito.genes, ])/Matrix::colSums(data)
