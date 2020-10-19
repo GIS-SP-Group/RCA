@@ -104,7 +104,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
             nUMI <- Matrix::colSums(rca.obj$raw.data)
             nodg <- Matrix::colSums(rca.obj$raw.data > 0)
 
-            mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$raw.data), value = T)
+            mito.genes = grep(pattern = "^MT-|^Mt-", x = rownames(rca.obj$raw.data), value = T)
             if(length(mito.genes) == 0) {
                 if (is.null(extraCellProperty)){
                     cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg)
@@ -222,7 +222,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
             nUMI <- Matrix::colSums(rca.obj$raw.data)
             nodg <- Matrix::colSums(rca.obj$raw.data > 0)
 
-            mito.genes = grep(pattern = "^MT-", x = rownames(rca.obj$raw.data), value = T)
+            mito.genes = grep(pattern = "^MT-|^Mt-", x = rownames(rca.obj$raw.data), value = T)
             pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
 
             if (is.null(extraCellProperty)){
