@@ -18,19 +18,26 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
 
     # Extract projection data and clustering result from RCA object
     de.genes <- unique(as.character(rca.obj$DE.genes$Top.DE.genes$Gene))
-    heatmapIn = as.matrix(rca.obj$data[de.genes, , drop = FALSE])
     cellTree = rca.obj$clustering.out$cellTree
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
+
+    heatmapIn <- matrix(0,length(de.genes),dim(rca.obj$data)[2])
+    for (i in c(1:length(de.genes))){
+     heatmapIn[i,]<-rca.obj$data[which(row.names(rca.obj$data)==de.genes[i]),]
+    }
+    row.names(heatmapIn)<-de.genes
 
     # if scaling is requested by user
     if(scale) {
         heatmapIn <- t(scale(x = t(heatmapIn), center = TRUE, scale = TRUE))
+        heatmapIn[heatmapIn > 2.5] <- 2.5
+        heatmapIn[heatmapIn < -2.5] <- -2.5
     }
 
     # Set color scheme of heatmap
     if (scale){
 	    if(SeuratColorScheme){
-    colorScheme <-  circlize::colorRamp2(c(min(heatmapIn),0,max(heatmapIn)),c("purple", "black", "yellow"))
+    colorScheme <-  circlize::colorRamp2(c(min(heatmapIn),0,max(heatmapIn)),c("magenta", "black", "yellow"))
 	    }else{
     colorScheme <-
         circlize::colorRamp2(
@@ -67,7 +74,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
                 col = colorScheme,
 
                 cluster_columns = as.dendrogram(cellTree),
-                cluster_rows = TRUE,
+                cluster_rows = FALSE,
 
                 column_dend_side = "top",
                 row_dend_side = "left",
@@ -155,7 +162,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
                 col = colorScheme,
 
                 cluster_columns = as.dendrogram(cellTree),
-                cluster_rows = TRUE,
+                cluster_rows = FALSE,
 
                 column_dend_side = "top",
                 row_dend_side = "left",
@@ -191,7 +198,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
 
                 cluster_columns = FALSE,
                 column_order = order(cellTree),
-                cluster_rows = TRUE,
+                cluster_rows = FALSE,
 
                 row_dend_side = "left",
                 show_row_dend = TRUE,
@@ -267,7 +274,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
                 cluster_columns = FALSE,
                 column_order = order(cellTree),
 
-                cluster_rows = TRUE,
+                cluster_rows = FALSE,
 
                 row_dend_side = "left",
 
