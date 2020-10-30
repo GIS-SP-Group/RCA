@@ -24,8 +24,8 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
     heatmapIn <- matrix(0,length(de.genes),dim(rca.obj$data)[2])
     for (i in c(1:length(de.genes))){
      heatmapIn[i,]<-rca.obj$data[which(row.names(rca.obj$data)==de.genes[i]),]
+     row.names(heatmapIn)[i]<-de.genes[i]
     }
-    row.names(heatmapIn)<-de.genes
 
     # if scaling is requested by user
     if(scale) {
