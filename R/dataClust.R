@@ -3,10 +3,11 @@
 #' @param rca.obj RCA object.
 #' @param deepSplitValues integer vector indicating how deep the dendrogram should be cut. Values can range from 0 to 4.
 #' @param minClustSize integer value indicating the minimum size of the resulting clusters. Default is 5.
+#' @param corMeth Correlation method used to compute the distance matrix of the projection (pearson (default), spearman, kendal).
 #' @return RCA object.
 #' @export
 #'
-dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
+dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5, corMeth = "pearson") {
 
     ### Extract projection data
     projection.data <- as.matrix(rca.obj$projection.data)
@@ -14,7 +15,7 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
     ### Cluster cells
 
     # If HiClimR is available, use fastCor to compute distance matrix
-    if (require(HiClimR)) {
+    if (require(HiClimR) & (corMeth=="pearson")) {
         d = as.dist(1 - HiClimR::fastCor(
             projection.data,
             upperTri = TRUE,
@@ -23,7 +24,7 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5) {
         ))
     } else {
         # else, use cor
-        d = as.dist(1 - cor(projection.data, method = "pearson"))
+        d = as.dist(1 - cor(projection.data, method = corMeth))
     }
 
     # Obtain cell tree using distance matrix
