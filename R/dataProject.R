@@ -44,7 +44,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
                 subset_panel = as.matrix(subset_panel)
                 projection_fragment <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
             } else {
-                projection_fragment <- cor(subset_panel, subset_data, method = corMeth)
+                projection_fragment <- cor(subset_panel, as.matrix(subset_data), method = corMeth)
             }
 
 
