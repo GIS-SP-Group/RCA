@@ -106,7 +106,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
                 subset_panel = as.matrix(subset_panel)
                 projection_fragment <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
             } else {
-                projection_fragment <- cor(subset_panel, subset_data, method = corMeth)
+                projection_fragment <- cor(subset_panel, as.matrix(subset_data), method = corMeth)
             }
 
 
@@ -178,7 +178,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
             subset_panel = as.matrix(subset_panel)
             projection <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
         } else {
-            projection <- cor(subset_panel, subset_data, method = corMeth)
+            projection <- cor(subset_panel, as.matrix(subset_data), method = corMeth)
         }
         rownames(projection) <- colnames(subset_panel)
         colnames(projection) <- colnames(subset_data)
@@ -223,7 +223,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
             subset_panel = as.matrix(subset_panel)
             projection <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
         } else {
-            projection <- cor(subset_panel, subset_data, method = corMeth)
+            projection <- cor(subset_panel, as.matrix(subset_data), method = corMeth)
         }
         rownames(projection) <- colnames(subset_panel)
         colnames(projection) <- colnames(subset_data)
