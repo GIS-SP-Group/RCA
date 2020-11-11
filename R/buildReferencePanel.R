@@ -1,8 +1,8 @@
 #' Function to build a reference panel from your bulk RNA sequencing data
 #' 
-#' @param bulk.rna.data Bulk RNA sequencing data - ideally TPM normalized.
-#' @param celltype.vec Vector of cell type names of each bulk RNA sequencing sample.
-#' @param fc.thrs fold change threshold
+#' @param bulk.rna.data Bulk RNA sequencing data - ideally TPM normalized
+#' @param celltype.vec Vector of cell type names of each bulk RNA sequencing sample. This is used to identify replicates of identical cell type contained in the bulk.rna.data.
+#' @param fc.thrs absolulte log fold change threshold
 #' @param fdr.thrs FDR threshold
 #' @param gene.nomenclature Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols. Default is "SYMBOL".
 #' @param species "HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".
