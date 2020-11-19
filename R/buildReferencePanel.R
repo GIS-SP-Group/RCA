@@ -146,6 +146,7 @@ buildReferencePanel <- function(bulk.rna.data, fc.thrs.general = 6, fc.thrs.spec
 	ct<-unique(cellTypes)
 	n_unique_cellTypes<-length(ct)
 	tmpGeneList<-c()
+	markerGenesLenient<-c()
 	for (i in c(1:(n_unique_cellTypes-1))){
 		for (j in c((i+1):n_unique_cellTypes)){
 			if(verbose){
