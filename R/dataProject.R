@@ -29,7 +29,11 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 	    }else{
 		    filt.genes <- which(geneExpVec < min.cell.number.expressing)
 	            # Select genes that are shared by the input data and the panel
-	            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+		    if(length(filt.genes) > 0) {
+		        shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+		    } else {
+		        shared_genes <- intersect(rownames(sc_data),rownames(panel))
+		    }
 	    }
 
             # Reduce the panel and input data to the shared genes
@@ -88,9 +92,14 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 	    if (min.cell.number.expressing==0){
 	            shared_genes <- intersect(rownames(sc_data),rownames(panel))
 	    }else{
-		    filt.genes <- which(geneExpVec < min.cell.number.expressing)
+    		    filt.genes <- which(geneExpVec < min.cell.number.expressing)
 	            # Select genes that are shared by the input data and the panel
-	            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+		    if(length(filt.genes) > 0) {
+		        shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+		    } else {
+		        shared_genes <- intersect(rownames(sc_data),rownames(panel))
+		    }
+
 	    }
 
 
@@ -166,7 +175,11 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
         }else{
         filt.genes <- which(geneExpVec < min.cell.number.expressing)
         # Select genes that are shared by the input data and the panel
-        shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+        if(length(filt.genes) > 0) {
+            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+        } else {
+            shared_genes <- intersect(rownames(sc_data),rownames(panel))
+        }
         }
 
         # Reduce the panel and input data to the shared genes
@@ -211,7 +224,11 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
        }else{
 	    filt.genes <- which(geneExpVec < min.cell.number.expressing)
             # Select genes that are shared by the input data and the panel
-            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+	    if(length(filt.genes) > 0) {
+	        shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+	    } else {
+	        shared_genes <- intersect(rownames(sc_data),rownames(panel))
+	    }
        }
 
 	# Reduce the panel and input data to the shared genes
