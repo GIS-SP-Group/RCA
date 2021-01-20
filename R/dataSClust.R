@@ -47,9 +47,9 @@ dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=0,nPCs=0) {
 	if (nPCs==0){
 		if (bigCor!=0){
 			bigM<-as.matrix(bigcor(projection.data,nblocks=bigCor)[,])
+			colnames(bigM)<-colnames(projection.data)
+			row.names(bigM)<-colnames(projection.data)
 			projection<-as.dist(1-bigM)
-			colnames(projection)<-colnames(projection.data)
-			row.names(projection)<-colnames(projection.data)
 
 		}else{
 			if (require(HiClimR) & (corMeth=="pearson")){
