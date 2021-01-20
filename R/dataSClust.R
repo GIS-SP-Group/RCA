@@ -48,7 +48,7 @@ dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=0,nPCs=0) {
 	projection.data <- as.matrix(rca.obj$projection.data)
 	tempS<-Seurat::CreateSeuratObject(as.matrix(rca.obj$raw.data))
 	if (nPCs==0){
-		if (bigCor==0){
+		if (bigCor!=0){
 			projection<-as.dist(1-bigcor(projection.data,nblocks=bigCor,method=corMeth))
 		}else{
 			if (require(HiClimR) & (corMeth=="pearson")){
@@ -62,6 +62,7 @@ dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=0,nPCs=0) {
 		pca_result<-irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)
 		projection<-as.dist(1-cor(t(pca_result$rotation),method=corMeth))
 	}
+	cat(dim(as.matrix(projection)))
 	str(projection)
 	tempS@reductions[["pca"]]<-new(Class = "DimReduc", cell.embeddings = matrix(0,0,0), assay.used = "RNA")
 	tempS@reductions$pca@cell.embeddings<-as.matrix(projection)
