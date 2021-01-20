@@ -1,5 +1,5 @@
 #Modified from https://www.r-bloggers.com/2013/02/bigcor-large-correlation-matrices-in-r/
-bigcor <- function(x, nblocks = 10, verbose = TRUE, corMeth="pearson",...)
+bigcor <- function(x, nblocks = 10, verbose = TRUE, ...)
 {
   require(ff)
   NCOL <- ncol(x)
@@ -22,7 +22,7 @@ bigcor <- function(x, nblocks = 10, verbose = TRUE, corMeth="pearson",...)
 		G1 <- SPLIT[[COMB[1]]]
 	        G2 <- SPLIT[[COMB[2]]]
 		flush.console()
-		COR <- cor(x[, G1], x[, G2], method=corMeth, ...)
+		COR <- cor(x[, G1], x[, G2], ...)
 		corMAT[G1, G2] <- COR
 		corMAT[G2, G1] <- t(COR)
 		COR <- NULL
@@ -46,7 +46,7 @@ dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=0,nPCs=0) {
 	tempS<-Seurat::CreateSeuratObject(as.matrix(rca.obj$raw.data))
 	if (nPCs==0){
 		if (bigCor!=0){
-			bigM<-as.matrix(bigcor(projection.data,nblocks=bigCor,method=corMeth)[,])
+			bigM<-as.matrix(bigcor(projection.data,nblocks=bigCor)[,])
 			projection<-as.dist(1-bigM)
 		}else{
 			if (require(HiClimR) & (corMeth=="pearson")){
