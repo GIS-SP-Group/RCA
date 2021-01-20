@@ -31,6 +31,23 @@ bigcor <- function(x, nblocks = 10, verbose = TRUE, ...)
 	  return(corMAT)
 }
 
+
+#' Generate elbow plot for a PCA of the projection matrix.
+#'
+#' @param rca.obj RCA object.
+#' @param nPCs Number of PCs to be used if distance should be computed in PC embedding of the projection (default 0, computation of distance in projection space)
+#' @return NULL.
+#' @export
+#'
+elbowPlot <- function(rca.obj,nPCs=50,filename="Projection_Elbow.png") {
+	tmp<-irlba::prcomp_irlba(as.matrix(rca.obj$projection.data),n=nPCs,center=F,scale.=F)
+	png(filename)
+	plot(tmp$sdev,ylab="Standard deviation",xlab="Component")
+	dev.off()
+	return
+}
+	
+
 #' Generate cell clusters using Seurat graph based clustering.
 #'
 #' @param rca.obj RCA object.
