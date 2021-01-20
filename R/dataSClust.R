@@ -45,7 +45,10 @@ dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=0,nPCs=0) {
 	tempS<-Seurat::CreateSeuratObject(as.matrix(rca.obj$raw.data))
 	if (nPCs==0){
 		if (bigCor!=0){
-			projection<-as.dist(1-as.matrix(bigcor(projection.data,nblocks=bigCor,method=corMeth)))
+			bigM<-as.matrix(bigcor(projection.data,nblocks=bigCor,method=corMeth))
+			cat(head(bigM))
+			cat(dim(bigM))
+			projection<-as.dist(1-bigM)
 		}else{
 			if (require(HiClimR) & (corMeth=="pearson")){
 				projection<-as.dist(1-HiClimR::fastCor(projection.data))
@@ -55,8 +58,10 @@ dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=0,nPCs=0) {
 			}
 	}
 	else{
-		pca_result<-irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)
-		projection<-as.dist(1-cor(t(pca_result$rotation),method=corMeth))
+		pca_result<-cor(t(irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)$rotation),method=corMeth)
+		colnames(pca_result)<-colnames(projection.data)
+		row.names(pca_result)<-colnames(projection.data)
+		projection<-as.dist(1-pca_result)
 	}
 	cat(dim(as.matrix(projection)))
 	cat(head(colnames(as.matrix(projection))))
