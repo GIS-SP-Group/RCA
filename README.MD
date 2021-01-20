@@ -46,10 +46,9 @@ The current release of RCA requires the following packages to be available on yo
 * ggpubr
 
 All missing CRAN-packages can be *automatically installed* during the RCA installation.
-Note that the *HiClimR* package is optional, it allows to speed up the computationally expensive steps. Also the
+Note that the *HiClimR*, *ff* and *irlba* packages are optional, it allows to speed up the computationally expensive steps. Also the
 *randomColoR* package is optional, it is useful to obtain distinguishable colors.
-Further optional packages are *Seurat*, available from CRAN, and *clusterProfiler*, *enrichplot* as well as corresponding annotation libraries, 
-such as 
+Further optional packages are *Seurat*, available from CRAN, and *clusterProfiler*, *enrichplot* as well as corresponding annotation libraries.
 
 ### Load the package
 After installation, load the package with the command
