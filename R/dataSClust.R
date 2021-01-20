@@ -22,7 +22,7 @@ bigcor <- function(x, nblocks = 10, verbose = TRUE, corMeth="pearson",...)
 		G1 <- SPLIT[[COMB[1]]]
 	        G2 <- SPLIT[[COMB[2]]]
    		if (require(HiClimR) & (corMeth=="pearson")){
-		    COR <- HiClimR::fastCor(x[, G1], x[, G2], method=corMeth)
+		    COR <- HiClimR::fastCor(x[, G1], x[, G2])
 		}else{
 		    COR <- cor(x[, G1], x[, G2], method=corMeth)
 		}
