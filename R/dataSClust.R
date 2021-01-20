@@ -21,11 +21,7 @@ bigcor <- function(x, nblocks = 10, verbose = TRUE, corMeth="pearson",...)
 		COMB <- COMBS[i, ]
 		G1 <- SPLIT[[COMB[1]]]
 	        G2 <- SPLIT[[COMB[2]]]
-#   		if (require(HiClimR) & (corMeth=="pearson")){
-#		    COR <- HiClimR::fastCor(x[, G1], x[, G2])
-#		}else{
-		    COR <- cor(x[, G1], x[, G2], method=corMeth)
-#		}
+		COR <- cor(x[, G1], x[, G2], method=corMeth)
 		corMAT[G1, G2] <- COR
 		corMAT[G2, G1] <- t(COR)
 		COR <- NULL
@@ -49,7 +45,7 @@ dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=0,nPCs=0) {
 	tempS<-Seurat::CreateSeuratObject(as.matrix(rca.obj$raw.data))
 	if (nPCs==0){
 		if (bigCor!=0){
-			projection<-as.dist(1-bigcor(projection.data,nblocks=bigCor,method=corMeth))
+			projection<-as.dist(1-as.matrix(bigcor(projection.data,nblocks=bigCor,method=corMeth)))
 		}else{
 			if (require(HiClimR) & (corMeth=="pearson")){
 				projection<-as.dist(1-HiClimR::fastCor(projection.data))
@@ -63,6 +59,8 @@ dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=0,nPCs=0) {
 		projection<-as.dist(1-cor(t(pca_result$rotation),method=corMeth))
 	}
 	cat(dim(as.matrix(projection)))
+	cat(head(colnames(as.matrix(projection))))
+	cat(head(rownames(as.matrix(projection))))
 	str(projection)
 	tempS@reductions[["pca"]]<-new(Class = "DimReduc", cell.embeddings = matrix(0,0,0), assay.used = "RNA")
 	tempS@reductions$pca@cell.embeddings<-as.matrix(projection)
