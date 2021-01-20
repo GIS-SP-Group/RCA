@@ -21,7 +21,8 @@ bigcor <- function(x, nblocks = 10, verbose = TRUE, corMeth="pearson",...)
 		COMB <- COMBS[i, ]
 		G1 <- SPLIT[[COMB[1]]]
 	        G2 <- SPLIT[[COMB[2]]]
-		COR <- cor(x[, G1], x[, G2], method=corMeth)
+		flush.console()
+		COR <- cor(x[, G1], x[, G2], ...)
 		corMAT[G1, G2] <- COR
 		corMAT[G2, G1] <- t(COR)
 		COR <- NULL
