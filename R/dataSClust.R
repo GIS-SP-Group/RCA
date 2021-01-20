@@ -21,11 +21,11 @@ bigcor <- function(x, nblocks = 10, verbose = TRUE, corMeth="pearson",...)
 		COMB <- COMBS[i, ]
 		G1 <- SPLIT[[COMB[1]]]
 	        G2 <- SPLIT[[COMB[2]]]
-   		if (require(HiClimR) & (corMeth=="pearson")){
-		    COR <- HiClimR::fastCor(x[, G1], x[, G2])
-		}else{
+#   		if (require(HiClimR) & (corMeth=="pearson")){
+#		    COR <- HiClimR::fastCor(x[, G1], x[, G2])
+#		}else{
 		    COR <- cor(x[, G1], x[, G2], method=corMeth)
-		}
+#		}
 		corMAT[G1, G2] <- COR
 		corMAT[G2, G1] <- t(COR)
 		COR <- NULL
@@ -39,17 +39,17 @@ bigcor <- function(x, nblocks = 10, verbose = TRUE, corMeth="pearson",...)
 #' @param rca.obj RCA object.
 #' @param res Resolution parameter (between 0.0 and 1.0) to be used for clustering. Default: 0.5. Check the Seurat documentation for details.
 #' @param corMeth Correlation method used to compute the distance matrix of the projection (pearson (default), spearman, kendal).
-#' @param bigCor Using divide and conquer in the bigcor function to compute the correlation distance (advisable for > 100.000 cells if PC embedding is not used)
+#' @param bigCor Number of blocks to be used in the divide and conquer bigcor function to compute the correlation distance (advisable for > 100.000 cells if PC embedding is not used, default 0)
 #' @param nPCs Number of PCs to be used if distance should be computed in PC embedding of the projection (default 0, computation of distance in projection space)
 #' @return RCA object.
 #' @export
 #'
-dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=FALSE,nPCs=0) {
+dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=0,nPCs=0) {
 	projection.data <- as.matrix(rca.obj$projection.data)
 	tempS<-Seurat::CreateSeuratObject(as.matrix(rca.obj$raw.data))
 	if (nPCs==0){
-		if (bigCor){
-			projection<-as.dist(1-bigcor(projection.data,method=corMeth))
+		if (bigCor==0){
+			projection<-as.dist(1-bigcor(projection.data,nblocks=bigCor,method=corMeth))
 		}else{
 			if (require(HiClimR) & (corMeth=="pearson")){
 				projection<-as.dist(1-HiClimR::fastCor(projection.data))
@@ -60,7 +60,7 @@ dataSClust <- function(rca.obj,res=0.5,corMeth="pearson",bigCor=FALSE,nPCs=0) {
 	}
 	else{
 		pca_result<-irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)
-		projection<-as.dist(1-cor(pca_result$rotation ,method=corMeth))
+		projection<-as.dist(1-cor(t(pca_result$rotation),method=corMeth))
 	}
 	str(projection)
 	tempS@reductions[["pca"]]<-new(Class = "DimReduc", cell.embeddings = matrix(0,0,0), assay.used = "RNA")
