@@ -251,16 +251,15 @@ To obtain a less noisy cell type labelling, cell-types can also be predicted on 
 To obtain cluster based cell type predictions, the user can run the function *estimateCellTypeFromProjectionPerCluster*:
 ```R
 
-PBMCs<-RCAv2::createRCAObjectFrom10X("../Documents/10xExample/",cellrangerVersion = 2)
-PBMCs<-RCAv2::dataFilter(PBMCs,nGene.thresholds = c(300,4500), 
-                  nUMI.thresholds = c(400,30000),
+PBMCs<-RCAv2::createRCAObjectFrom10X("../Documents/10xExample/")
+PBMCs<-RCAv2::dataFilter(PBMCs,nGene.thresholds = c(300,4500),
                   percent.mito.thresholds = c(0.025,0.1),
                   min.cell.exp = 3)
 PBMCs<-RCAv2::dataLogNormalise(PBMCs)
 PBMCs<-RCAv2::dataProject(PBMCs,
                           method = "NovershternPanel",
                           corMeth = "pearson")
-PBMCs<-RCAv2::dataSClust(PBMCs,res = 0.1)
+PBMCs<-RCAv2::dataSClust(PBMCs,res = 0.15)
 PBMCs<-estimateCellTypeFromProjectionPerCluster(PBMCs)
 ```
 The figure below shows an example using the PBMC dataset using the Novosthern panel.
