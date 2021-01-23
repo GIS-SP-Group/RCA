@@ -299,6 +299,8 @@ where res is the resolution parameter parsed on to the Seurat clustering functio
 
 ![](Tutorial/RCA_Heatmap_Seurat.png)
 
+This function uses the same approximation of the PCA as the original Seurat function. Setting *approx* to FALSE will compute the exact PCA. If the *corMeth* parameter is set to either *pearson, spearman* or *kendal*, the function will compute a full distance matrix using correlation distance instead of the default euclidean distance. This can also be combined with the exact PCA. However, not that these options require more memory to be available than the default.
+
 ### Clustering free analysis of the projection
 Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering indepent cell-type assignment approach that is purely based on each cells z-score distribution.
 A call to the function 
