@@ -2,9 +2,10 @@
 #'
 #' @param rca.obj RCA object
 #' @param nDIMS number of UMAP dimensions
+#' @param nThreads Number of threads to use for UMAP
 #' @export
 #'
-computeUMAP <- function(rca.obj, nDIMS=2) {
+computeUMAP <- function(rca.obj, nDIMS=2, nThreads=1) {
 
     ### Extract projection data from RCA object
     projection = as.matrix(rca.obj$projection.data)
@@ -15,7 +16,7 @@ computeUMAP <- function(rca.obj, nDIMS=2) {
 	print("Error: nDIMS must be set to 2 or 3")
     	return(rca.obj)}
     else{
-        umap.projection <- umap::umap(t(projection),n_components=nDIMS, random_state=1,transform_state=1)
+        umap.projection <- umap::umap(t(projection),n_components=nDIMS, random_state=1,transform_state=1, n_threads = nThreads)
     }
 
     # Store UMAP layout in data frame for plotting
