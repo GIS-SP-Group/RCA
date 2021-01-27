@@ -140,19 +140,20 @@ PBMCs
 	Filtered data: 4973 cells and 17120 features.
 	Projection data: 4973 cells to 179 cell-types
 
-In addition to the *GlobalPanel*, RCA now provides *10* additional reference panels:
+In addition to the *GlobalPanel*, RCA now provides *12* reference panels:
 
-
+* *Global panel* from the original RCA (Li et al., 2017) containing both primary cell types and tissues.
 * *ColonEpiPanel*: 9 colon epithelial samples from Li et al. (Nature genetics, 2017).
 * *MonacoPanel*: 29 PBMC cell types from Monaco, G., et al. (Cell reports, 2019).
 * *MonacoBCellPanel*: 5 B cell sub-types from Monaco, G., et al. (Cell reports, 2019).
 * *MonacoMonoPanel*: 5 Monocyte sub-types from Monaco, G., et al. (Cell reports, 2019).
 * *MonacoTCellPanel*: 15 T cell sub-types from Monaco, G., et al. (Cell reports, 2019).
-* *ENCODEMousePanel*: 15 mouse cell types from ENCODE.
+* *CITE-seq panel* based on Seurat 4.0 containing 34 cell types.
 * *ENCODEHumanPanel*: 93 human cell types from ENCODE.
-* *ZhangMouseBrainPanel*: 7 mouse brain cell types from Tasic et al. (Nature neuroscience, 2016).
 * *NovershternPanel*: 15 PBMC cell types from Novershtern et al. (Cell, 2011).
 * *NovershternTCellPanel*: 6 T cell sub-types from Novershtern et al. (Cell, 2011).
+* *ENCODEMousePanel*: 15 mouse cell types from ENCODE.
+* *ZhangMouseBrainPanel*: 7 mouse brain cell types from Tasic et al. (Nature neuroscience, 2016).
 
 
 RCAv2 directly allows the user to utilize any custom panel. A user generated panel **has to** have a distinct structure:
@@ -873,7 +874,7 @@ scv.pl.velocity_embedding_stream(merged_data, min_mass = 1.25, basis='umap', col
 
 **The clustering is very slow (or it doesn't work at all), what can I do?**
 
-*First make sure you are indeed using RCA version 2. Secondly you may check whether you can install the HiClimR package for more a more memory efficient clustering algorithm. Also consider to run RCA on a compute cluster or in the cloud using a machine with large main memory. For very big data sets, consider to omit the clustering and use the z-score based cell-type annotation and UMAP coloring introduced with RCA version 2.*
+*First make sure you are indeed using RCA version 2. Secondly you may check whether you want to cluster cells in PC space and avoid to compute a full distance matrix. Also consider to run RCA on a compute cluster or in the cloud using a machine with large main memory.*
 
 **The cell-type I am interested in are not part of the provided panels, can I generate and use my own reference data set in RCA?**
 
