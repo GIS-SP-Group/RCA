@@ -268,7 +268,9 @@ PBMCs<-RCAv2::dataFilter(PBMCs,nGene.thresholds = c(300,4500),
 PBMCs<-RCAv2::dataLogNormalise(PBMCs)
 PBMCs<-RCAv2::dataProject(PBMCs,
                           method = "NovershternPanel",
-                          corMeth = "pearson")
+                          corMeth = "pearson", 
+			  nPCs=0,
+			  approx= FALSE)
 PBMCs<-RCAv2::dataSClust(PBMCs,res = 0.15)
 PBMCs<-estimateCellTypeFromProjectionPerCluster(PBMCs)
 ```
@@ -280,13 +282,14 @@ The figure below shows an example using the PBMC dataset using the Novosthern pa
 Due to the increasing size of single cell datasets, hierarchical clustering requires machines with large main memory. To overcome this putative limitation, RCAv2 also offers graph based clustering using a shared neirest neighbour (snn) approach (Halser et al., Journal of Statistical Software, 2019).
 To cluster the PBMC projection using the snn approach run
 ```R
-PBMCs<-RCAv2::dataSNN(PBMCs,k=100,eps=25,minPts=30)
+PBMCs<-RCAv2::dataSNN(PBMCs,k=100,eps=25,minPts=30,dist.fun="All",corMeth="pearson")
 ```
 This function has three main parameters:
 * *k* as the number of considered neighbours per cell,
 * *eps* as the minimum number of shared neighbours between to cells,
 * *minPts* minimum number of points that share *eps* neighbours such that a point is considered a core point.
 
+The *dist.fun* parameter controls whether the distance matrix used for SNN clustering is based on the full correlation distance matrix or, if *dist.fun* is set to *PCA*, on a PC reduction of the reference projection. The *corMeth* sets which correlation function is used for the distance computation (pearson (default), spearman or kendal).
 As for the hierarchical clustering, heatmaps and umaps can be generated as well.
 
 To help the user choosing the parameters for clustering, we provide a parameter space exploration feature leading to a 3D umap illustrating the number of clusters depending on the three parameters, as shown below. 
@@ -299,20 +302,23 @@ parameterSpaceSNN(PBMCs,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),folderpath=".",
 ```
 where *kL*, *epsL* and *minPtsL* define the search space for *k*, *eps* and *minPts* respectively. Note that executing this function will take longer for large search spaces.
 In addition to those clustering parameters, via the *dist.fun* parameter one can choose whether a PCA reduction of the projection matrix, or the entire projection matrix should be used to construct the snn graph.
+
 ### Using Louvain graph clustering implemented in Seurat
-As the snn clustering approach mentioned above requires multiple parameteres to be tuned, RCAv2 also allows to cluster cells using the graph based clustering implemented in Seurat (Butler et al., Nature Biotechnology, 2018).
+As the snn clustering approach mentioned above requires multiple parameteres to be tuned, RCAv2 also allows to cluster cells using the Louvain graph based clustering used in Seurat (Butler et al., Nature Biotechnology, 2018).
 To cluster the PBMC projection using Seurat clustering, run:
 ```R
 PBMCs<-dataSClust(PBMCs,res=0.5)
 ```
-where res is the resolution parameter parsed on to the Seurat clustering function. Upon graph based clustering, the RCA projection heatmap will be plotted without column dendrogramms.
+where res is the resolution parameter parsed on to the Seurat clustering function. 
+
+Upon graph based clustering, the RCA projection heatmap will be plotted without column dendrogramms.
 
 ![](Tutorial/RCA_Heatmap_Seurat.png)
 
-This function uses the same approximation of the PCA as the original Seurat function. Setting *approx* to FALSE will compute the exact PCA. If the *corMeth* parameter is set to either *pearson, spearman* or *kendal*, the function will compute a full distance matrix using correlation distance instead of the default euclidean distance. This can also be combined with the exact PCA. However, not that these options require more memory to be available than the default.
+This function uses the same approximation of the PCA as the original Seurat function. Setting *approx* to FALSE will compute the exact PCA. If the *corMeth* parameter is set to either *pearson, spearman* or *kendal*, the function will compute a full distance matrix using correlation distance instead of the default euclidean distance. This can also be combined with the exact PCA. However, not that these options require more memory to be available than the default. With the *elbowPlot* function, an ElbowPlot that guides the selection of the number of PCs to be considered can be generated.
 
 ### Clustering free analysis of the projection
-Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering indepent cell-type assignment approach that is purely based on each cells z-score distribution.
+Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering indepent cell-type assignment approach motivated by SingleR and scMatch, that is purely based on each cells z-score distribution based on the reference projection.
 A call to the function 
 ```R
 PBMCs<-estimateCellTypeFromProjection(PBMCs,confidence = NULL)
@@ -467,7 +473,7 @@ PBMCs<-RCAv2::dataProject(PBMCs,
                           corMeth = "pearson")
 
 PBMCs<-RCAv2::dataSClust(PBMCs,res = 0.1)
-RCAv2::plotRCAHeatmap(PBMCs,filename = "CML_Control_HeatmapPostQC.pdf")
+RCAv2::plotRCAHeatmap(PBMCs,filename = "Control_HeatmapPostQC.pdf")
 ```
 Based on the following projection heatmap
 
