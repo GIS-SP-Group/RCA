@@ -8,18 +8,18 @@ Version 2.0
 Release date: September 3, 2019
 
 ## Functionality of RCA
-RCA takes scRNA-seq data as input. For 10X Genomics data processed with CellRanger, build in quality control and preprocessing functions are available. Other data sets that have been preprocessed elsewhere can be incorporated as a count matrix. Reference datasets that can be included in RCA include (sorted) bulk RNA-seq, microarray and scRNA-seq data sets. Within RCA, we provide a function that allows users to easily generate custom reference panels from raw count data. Additionally we provide several reference panels for human cell types as well as one panel for mouse. RCA considers a selected reference panel as well as query single cell data to compute a correlation matrix indicating the similarity of single cell transcriptomes to the reference transcriptomes. This, so called, reference projection, can be clustered and visualized in a heatmap, and/or directly visualized in a UMAP. The most likely cell type can be calculated either per cell or per cluster.
+RCA takes scRNA-seq data as input. For 10X Genomics data processed with CellRanger, build in quality control and preprocessing functions are available. Other data sets that have been preprocessed elsewhere can be incorporated as a count matrix. Reference datasets that can be included in RCA include (sorted) bulk RNA-seq, microarray and scRNA-seq data sets. Within RCA, we provide a function that allows users to easily generate custom reference panels from raw count data. Additionally we provide several reference panels for human cell types as well as for mouse. RCA considers a selected reference panel as well as query single cell data to compute a correlation matrix indicating the similarity of single cell transcriptomes to the reference transcriptomes. This, so called, reference projection, can be clustered and visualized in a heatmap, and/or directly visualized in a UMAP. The most likely cell type can be calculated either per cell or per cluster.
 
 An overview on all features of RCA is provided in the Figure below:
 ![](Tutorial/Overview_Figure.png)
 
 
 ## A beginner's guide to RCA
-This guide will walk you through installing RCA and will showcase a exemplary analysis of publicly available scRNA-seq data from *10X Genomics*.
+This guide will walk you through installing RCA2 and will showcase a exemplary analysis of publicly available scRNA-seq data from *10X Genomics*.
 If you are using the *Seurat* R-package already and want to stick to that, we suggest you to look at the Section *Combining Seurat and RCA*. 
 Further details on parameters and function of the mentioned R functions are provided in the R help
 ### Install the RCA R-package
-Before you try to install RCA make sure that your R-version is at least R 3.5.0.
+Before you try to install RCA make sure that your R-version is at least R 3.5.0. We have tested RCA on Windows, Linux and Mac devices up to R version 4.0.2.
 You can directly install RCA from github using the commands:
 
 ```R
@@ -170,6 +170,14 @@ PBMCs<-RCAv2::dataProject(PBMCs,
                      corMeth = "pearson")
 ```
 
+To benefit from multiple panels at the same time, users can exploit the *dataProjectMultiPanel* function:
+
+```R
+PBMCs<-RCAv2::dataProjectMultiPanel(PBMCs,method=list("NovershternPanel", "MonacoPanel", "GlobalPanel_CellTypes"),corMeth="pearson")
+```
+
+The *dataProjectMultiPanel* function projects cells by default against the *Novershtern*, the *Monaco* and cell types from the *Global panel*.
+
 ### Cluster the projection and visualize it
 The projected data can be clustered using the command:
 ```R
@@ -291,7 +299,7 @@ parameterSpaceSNN(PBMCs,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),folderpath=".",
 ```
 where *kL*, *epsL* and *minPtsL* define the search space for *k*, *eps* and *minPts* respectively. Note that executing this function will take longer for large search spaces.
 In addition to those clustering parameters, via the *dist.fun* parameter one can choose whether a PCA reduction of the projection matrix, or the entire projection matrix should be used to construct the snn graph.
-### Using graph based clustering implemented in Seurat
+### Using Louvain graph clustering implemented in Seurat
 As the snn clustering approach mentioned above requires multiple parameteres to be tuned, RCAv2 also allows to cluster cells using the graph based clustering implemented in Seurat (Butler et al., Nature Biotechnology, 2018).
 To cluster the PBMC projection using Seurat clustering, run:
 ```R
