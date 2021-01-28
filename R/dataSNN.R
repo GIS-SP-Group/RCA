@@ -5,10 +5,11 @@
 #' @param eps Number of cells that have to be similar to connect 2 cells in a network. Default is 8
 #' @param minPts Number of cells with at least eps neighbours to be considered a core point. Default is 5.
 #' @param dist.fun Either PCA or All. For PCA, a PCA reduction of the projection will be performed before the correlation matrix is computed.
+#' @param corMeth Correlation method used to compute distance
 #' @return RCA object.
 #' @export
 #'
-dataSNN <- function(rca.obj,k=10,eps=8,minPts=5,dist.fun="All") {
+dataSNN <- function(rca.obj,k=10,eps=8,minPts=5,dist.fun="All",corMeth="pearson") {
     projection.data <- as.matrix(rca.obj$projection.data)
     if (dist.fun=="PCA"){
     # Extract projection data 
@@ -16,7 +17,7 @@ dataSNN <- function(rca.obj,k=10,eps=8,minPts=5,dist.fun="All") {
     pcaD = stats::prcomp(projection.data)
     components=c(1:(max(which(summary(pcaD)$importance[3,]<0.99))+1))
 
-    if (require(HiClimR)) {
+    if (require(HiClimR) & corMeth=="pearson") {
         d = as.dist(1 - HiClimR::fastCor(
             pcaD$rotation[,components],,
             upperTri = TRUE,
@@ -25,7 +26,7 @@ dataSNN <- function(rca.obj,k=10,eps=8,minPts=5,dist.fun="All") {
         ))
     } else {
         # else, use cor
-        d = as.dist(1 - cor(pcaD$rotation[,components], method = "spearman"))
+        d = as.dist(1 - cor(pcaD$rotation[,components], method = corMeth))
     }
  
     # Obtain cell tree using a reduced projection matrix
@@ -42,7 +43,7 @@ dataSNN <- function(rca.obj,k=10,eps=8,minPts=5,dist.fun="All") {
         ))
     } else {
         # else, use cor
-        d = as.dist(1 - cor(projection.data, method = "spearman"))
+        d = as.dist(1 - cor(projection.data, method = corMeth))
     }
     
     # Obtain cell tree using a reduced projection matrix
