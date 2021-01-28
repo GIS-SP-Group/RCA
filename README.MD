@@ -8,18 +8,18 @@ Version 2.0
 Release date: September 3, 2019
 
 ## Functionality of RCA
-RCA takes scRNA-seq data as input. For 10X Genomics data processed with CellRanger, build in quality control and preprocessing functions are available. Other data sets that have been preprocessed elsewhere can be incorporated as a count matrix. Reference datasets that can be included in RCA include (sorted) bulk RNA-seq, microarray and scRNA-seq data sets. Within RCA, we provide a function that allows users to easily generate custom reference panels from raw count data. Additionally we provide several reference panels for human cell types as well as one panel for mouse. RCA considers a selected reference panel as well as query single cell data to compute a correlation matrix indicating the similarity of single cell transcriptomes to the reference transcriptomes. This, so called, reference projection, can be clustered and visualized in a heatmap, and/or directly visualized in a UMAP. The most likely cell type can be calculated either per cell or per cluster.
+RCA takes scRNA-seq data as input. For 10X Genomics data processed with CellRanger, build in quality control and preprocessing functions are available. Other data sets that have been preprocessed elsewhere can be incorporated as a count matrix. Reference datasets that can be included in RCA include (sorted) bulk RNA-seq, microarray and scRNA-seq data sets. Within RCA, we provide a function that allows users to easily generate custom reference panels from raw count data. Additionally we provide several reference panels for human cell types as well as for mouse. RCA considers a selected reference panel as well as query single cell data to compute a correlation matrix indicating the similarity of single cell transcriptomes to the reference transcriptomes. This, so called, reference projection, can be clustered and visualized in a heatmap, and/or directly visualized in a UMAP. The most likely cell type can be calculated either per cell or per cluster.
 
 An overview on all features of RCA is provided in the Figure below:
-![](Tutorial/OverviewFig.png)
+![](Tutorial/Overview_Figure.png)
 
 
 ## A beginner's guide to RCA
-This guide will walk you through installing RCA and will showcase a exemplary analysis of publicly available scRNA-seq data from *10X Genomics*.
+This guide will walk you through installing RCA2 and will showcase a exemplary analysis of publicly available scRNA-seq data from *10X Genomics*.
 If you are using the *Seurat* R-package already and want to stick to that, we suggest you to look at the Section *Combining Seurat and RCA*. 
 Further details on parameters and function of the mentioned R functions are provided in the R help
 ### Install the RCA R-package
-Before you try to install RCA make sure that your R-version is at least R 3.5.0.
+Before you try to install RCA make sure that your R-version is at least R 3.5.0. We have tested RCA on Windows, Linux and Mac devices up to R version 4.0.2.
 You can directly install RCA from github using the commands:
 
 ```R
@@ -140,19 +140,20 @@ PBMCs
 	Filtered data: 4973 cells and 17120 features.
 	Projection data: 4973 cells to 179 cell-types
 
-In addition to the *GlobalPanel*, RCA now provides *10* additional reference panels:
+In addition to the *GlobalPanel*, RCA now provides *12* reference panels:
 
-
+* *GlobalPanel* from the original RCA (Li et al., 2017) containing both primary cell types and tissues. Can be limited to only cell types with *"GlobalPanel_CellTypes*. 
 * *ColonEpiPanel*: 9 colon epithelial samples from Li et al. (Nature genetics, 2017).
 * *MonacoPanel*: 29 PBMC cell types from Monaco, G., et al. (Cell reports, 2019).
 * *MonacoBCellPanel*: 5 B cell sub-types from Monaco, G., et al. (Cell reports, 2019).
 * *MonacoMonoPanel*: 5 Monocyte sub-types from Monaco, G., et al. (Cell reports, 2019).
 * *MonacoTCellPanel*: 15 T cell sub-types from Monaco, G., et al. (Cell reports, 2019).
-* *ENCODEMousePanel*: 15 mouse cell types from ENCODE.
+* *CITESeqPanel* based on Seurat 4.0 containing 34 cell types.
 * *ENCODEHumanPanel*: 93 human cell types from ENCODE.
-* *ZhangMouseBrainPanel*: 7 mouse brain cell types from Tasic et al. (Nature neuroscience, 2016).
 * *NovershternPanel*: 15 PBMC cell types from Novershtern et al. (Cell, 2011).
 * *NovershternTCellPanel*: 6 T cell sub-types from Novershtern et al. (Cell, 2011).
+* *ENCODEMousePanel*: 15 mouse cell types from ENCODE.
+* *ZhangMouseBrainPanel*: 7 mouse brain cell types from Tasic et al. (Nature neuroscience, 2016).
 
 
 RCAv2 directly allows the user to utilize any custom panel. A user generated panel **has to** have a distinct structure:
@@ -168,6 +169,14 @@ PBMCs<-RCAv2::dataProject(PBMCs,
 		     customPath = "MyPanel.RDS",
                      corMeth = "pearson")
 ```
+
+To benefit from multiple panels at the same time, users can exploit the *dataProjectMultiPanel* function:
+
+```R
+PBMCs<-RCAv2::dataProjectMultiPanel(PBMCs,method=list("NovershternPanel", "MonacoPanel", "GlobalPanel_CellTypes"),corMeth="pearson")
+```
+
+The *dataProjectMultiPanel* function projects cells by default against the *Novershtern*, the *Monaco* and cell types from the *Global panel*.
 
 ### Cluster the projection and visualize it
 The projected data can be clustered using the command:
@@ -290,7 +299,7 @@ parameterSpaceSNN(PBMCs,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),folderpath=".",
 ```
 where *kL*, *epsL* and *minPtsL* define the search space for *k*, *eps* and *minPts* respectively. Note that executing this function will take longer for large search spaces.
 In addition to those clustering parameters, via the *dist.fun* parameter one can choose whether a PCA reduction of the projection matrix, or the entire projection matrix should be used to construct the snn graph.
-### Using graph based clustering implemented in Seurat
+### Using Louvain graph clustering implemented in Seurat
 As the snn clustering approach mentioned above requires multiple parameteres to be tuned, RCAv2 also allows to cluster cells using the graph based clustering implemented in Seurat (Butler et al., Nature Biotechnology, 2018).
 To cluster the PBMC projection using Seurat clustering, run:
 ```R
@@ -873,7 +882,7 @@ scv.pl.velocity_embedding_stream(merged_data, min_mass = 1.25, basis='umap', col
 
 **The clustering is very slow (or it doesn't work at all), what can I do?**
 
-*First make sure you are indeed using RCA version 2. Secondly you may check whether you can install the HiClimR package for more a more memory efficient clustering algorithm. Also consider to run RCA on a compute cluster or in the cloud using a machine with large main memory. For very big data sets, consider to omit the clustering and use the z-score based cell-type annotation and UMAP coloring introduced with RCA version 2.*
+*First make sure you are indeed using RCA version 2. Secondly you may check whether you want to cluster cells in PC space and avoid to compute a full distance matrix. Also consider to run RCA on a compute cluster or in the cloud using a machine with large main memory.*
 
 **The cell-type I am interested in are not part of the provided panels, can I generate and use my own reference data set in RCA?**
 
