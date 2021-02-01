@@ -61,7 +61,7 @@ dataSClust <- function(rca.obj,res=0.5, corMeth="none", nPCs=10, approx=T) {
    }
    #From Seurat RunPCA
    npcs <- min(nPCs, nrow(rca.obj$projection.data) - 1)
-   pca.results <- irlba::irlba(A =t(rca.obj$projection.data), nv = npcs)
+   pca.results <- irlba::irlba(A =BiocGenerics::t(rca.obj$projection.data), nv = npcs)
    feature.loadings <- pca.results$v
    sdev <- pca.results$d/sqrt(max(1, ncol(rca.obj$projection.data) - 1))
    projection <- pca.results$u %*% diag(pca.results$d)
