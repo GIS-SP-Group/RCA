@@ -124,7 +124,9 @@ To project the single-cell RNA-seq data against a reference, we use the *dataPro
 ```R
 PBMCs<-RCAv2::dataProject(PBMCs,
                      method = "GlobalPanel",
-                     corMeth = "pearson")
+                     corMeth = "pearson",
+		     nPCs=0,
+		     approx=FALSE)
 ```
 
 The method parameter specifies the reference panel to be used. In this example, we use the *GlobalPanel* which is the original RCA panel used by Li et al. (Nat Genet, 2017).
