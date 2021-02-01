@@ -4,7 +4,7 @@
 \alias{dataClust}
 \title{Generate cell clusters using hierarchical clustering and dynamic tree cutting.}
 \usage{
-dataClust(rca.obj, deepSplitValues = 1, minClustSize = 5)
+dataClust(rca.obj, deepSplitValues = 1, minClustSize = 5, corMeth = "pearson")
 }
 \arguments{
 \item{rca.obj}{RCA object.}
@@ -12,6 +12,8 @@ dataClust(rca.obj, deepSplitValues = 1, minClustSize = 5)
 \item{deepSplitValues}{integer vector indicating how deep the dendrogram should be cut. Values can range from 0 to 4.}
 
 \item{minClustSize}{integer value indicating the minimum size of the resulting clusters. Default is 5.}
+
+\item{corMeth}{Correlation method used to compute the distance matrix of the projection (pearson (default), spearman, kendal).}
 }
 \value{
 RCA object.

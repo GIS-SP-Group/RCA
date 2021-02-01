@@ -2,36 +2,46 @@
 % Please edit documentation in R/buildReferencePanel.R
 \name{buildReferencePanel}
 \alias{buildReferencePanel}
-\title{Function to build a reference panel from your bulk RNA sequencing data}
+\title{Function to build a reference panel. 
+Celltype and replicate information must be included in the colnames of the bulk.rna.data.object, separted by an underscore ("_"), e.g.: Bnaive_R1.}
 \usage{
 buildReferencePanel(
   bulk.rna.data,
-  celltype.vec = colnames(bulk.rna.data),
-  fc.thrs = 7.5,
+  fc.thrs.general = 6,
+  fc.thrs.specific = 2,
   fdr.thrs = 0.01,
+  cut_height = 1.1,
   gene.nomenclature = "SYMBOL",
   species = "HUMAN",
-  folder.path = ".",
-  filename = "my_reference_panel.rds"
+  filename = "my_reference_panel.rds",
+  verbose = FALSE
 )
 }
 \arguments{
-\item{bulk.rna.data}{Bulk RNA sequencing data - ideally TPM normalized.}
+\item{bulk.rna.data}{Bulk RNA sequencing data}
 
-\item{celltype.vec}{Vector of cell type names of each bulk RNA sequencing sample.}
+\item{fc.thrs.general}{absolulte log fold change threshold applied for coarse marker detection (default 6)}
 
-\item{fc.thrs}{fold change threshold}
+\item{fc.thrs.specific}{absolulte log fold change threshold applied for detailed marker detection (default 2)}
 
-\item{fdr.thrs}{FDR threshold}
+\item{fdr.thrs}{FDR threshold (default 0.01)}
 
 \item{gene.nomenclature}{Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols. Default is "SYMBOL".}
 
 \item{species}{"HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".}
 
-\item{folder.path}{path to store reference panel}
-
 \item{filename}{file name of reference panel (should end with .rds)}
+
+\item{verbose}{Generate debug output and figures (default FALSE)}
+
+\item{height}{to cut the clustering of the reference data sets (default 1.1)}
+
+\item{folder.path}{path to store reference panel}
+}
+\value{
+reference panel as a data.frame
 }
 \description{
-Function to build a reference panel from your bulk RNA sequencing data
+Function to build a reference panel. 
+Celltype and replicate information must be included in the colnames of the bulk.rna.data.object, separted by an underscore ("_"), e.g.: Bnaive_R1.
 }

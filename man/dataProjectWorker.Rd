@@ -17,7 +17,7 @@ dataProjectWorker(
 \arguments{
 \item{sc_data}{data object from a RCA object.}
 
-\item{method}{Either "GlobalPanel"(default), "ColonEpiPanel", "MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel" or "Custom"}
+\item{method}{Either "GlobalPanel"(default) or "GlobalPanel_CellTypes", "ColonEpiPanel","MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel","NovershternTCellPanel","MonacoTCellPanel","MonacoBCellPanel","MonacoMonoPanel", "CITESeqPanel" or "Custom"}
 
 \item{customPath}{directory path (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".}
 
@@ -27,7 +27,7 @@ dataProjectWorker(
 
 \item{scale}{True if the data should be scaled, False otherwise}
 
-\item{min.cell.number.expressing}{Minimum number of cells (0-100) expressing a gene such that it is considered in the projection step, default is 1.}
+\item{min.cell.number.expressing}{Minimum number of cells (0 percent -100 percent) expressing a gene such that it is considered in the projection step, default is 1 percent}
 }
 \value{
 a projection matrix.

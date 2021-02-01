@@ -82,18 +82,6 @@ the mean expression value is in the linear scale!}
 }
 \value{
 returnObj
-returnObj = list(
-'list CompGeneList: List of genes for which the DE statistical test was performed for each pairwise cluster comparison
-list qValueList: list of q-values from the DE statistical test for genes where test was performed for each pairwise cluster comparison
-list log2FCList: list of log2-fold-changes from the DE statistical test for genes where test was performed for each pairwise cluster comparison=
-character vector deGeneUnion: union of top ndeg DE genes from up- and down- regulated set for all pairwise comparison
-numeric matrix deCountMatrix: matrix with number of DE genes for each pairwise cluster comparison
-list deGeneRegulationList: list of up and down regulated DE genes for each pairwise cluster comparison ordered by log2-fold-change
-list log2FCDEList: list of log2-fold-change for up and down regulated DE genes for each pairwise cluster comparison - corresponds to same order as in deGeneRegulationList
-list qValueDEList: list of q-values for up and down regulated DE genes for each pairwise cluster comparison - corresponds to same order as in deGeneRegulationList
-list upregulatedDEGeneList: list of cluster-specific upregulated DE genes
-list downregulatedDEGeneList: list of cluster-specific downregulated DE genes
-)
 }
 \description{
 Find markers (differentially expressed genes) between two group of cells.
