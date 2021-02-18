@@ -4,12 +4,18 @@
 \alias{dataSClust}
 \title{Generate cell clusters using Seurat graph based clustering.}
 \usage{
-dataSClust(rca.obj, res = 0.5)
+dataSClust(rca.obj, res = 0.5, corMeth = "none", nPCs = 10, approx = T)
 }
 \arguments{
 \item{rca.obj}{RCA object.}
 
 \item{res}{Resolution parameter (between 0.0 and 1.0) to be used for clustering. Default: 0.5. Check the Seurat documentation for details.}
+
+\item{corMeth}{Correlation method used to compute the distance matrix of the projection (none(default), pearson , spearman, kendal).}
+
+\item{nPCs}{Number of PCs to be used if distance should be computed in PC embedding of the projection (default 10)}
+
+\item{approx}{Using approximation for PCA computation (default T)}
 }
 \value{
 RCA object.

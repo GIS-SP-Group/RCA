@@ -4,12 +4,24 @@
 \alias{computeUMAP}
 \title{Compute a umap projection into 2 or 3 dimensions}
 \usage{
-computeUMAP(rca.obj, nDIMS = 2)
+computeUMAP(
+  rca.obj,
+  nDIMS = 2,
+  nThreads = 1,
+  nThreadsSGD = 1,
+  approxPow = FALSE
+)
 }
 \arguments{
 \item{rca.obj}{RCA object}
 
 \item{nDIMS}{number of UMAP dimensions}
+
+\item{nThreads}{Number of threads to use for UMAP}
+
+\item{nThreadsSGD}{Number of threads used for stochastic gradient descent (WARNING Results are not reproducible if this is > 1)}
+
+\item{approxPow}{approximate the power function in stochastic gradient descent (Default FALSE)}
 }
 \description{
 Compute a umap projection into 2 or 3 dimensions

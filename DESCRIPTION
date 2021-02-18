@@ -11,4 +11,4 @@ LazyData: true
 Imports: BiocManager, qlcMatrix, fastcluster, WGCNA, dynamicTreeCut, dplyr, ComplexHeatmap, circlize, umap, gridExtra, plotly, Hmisc, dbscan, randomcoloR, plotrix, HiClimR, htmlwidgets
 Depends: Matrix, methods, R (>= 3.5.0), ggplot2, tibble (>= 3.0.0)
 biocViews: impute, preprocessCore, GO.db,  edgeR, ensembldb, EnsDb.Mmusculus.v79, EnsDb.Hsapiens.v86
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
