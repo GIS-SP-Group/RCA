@@ -80,7 +80,7 @@ buildPanel <- function(bulk.rna.data, de.genes, gene.nomenclature = "SYMBOL", sp
 
 buildReferencePanel <- function(bulk.rna.data, fc.thrs.general = 6, fc.thrs.specific =2, fdr.thrs = 0.01, cut_height = 1.1, gene.nomenclature = "SYMBOL", species = "HUMAN", filename = "my_reference_panel.rds", verbose=FALSE) {
 	#Split cell type from replicate information
-	cellTypes<-as.vector(sapply(allColNames,function(x){return(strsplit(x,"_")[[1]][1])}))
+	cellTypes<-as.vector(sapply(colnames(bulk.rna.data),function(x){return(strsplit(x,"_")[[1]][1])}))
 	
 	#Generating pseudo bulk across replicates
 	pseudo_pseudo_bulk<-c()
