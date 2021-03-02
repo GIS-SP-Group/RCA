@@ -124,9 +124,7 @@ To project the single-cell RNA-seq data against a reference, we use the *dataPro
 ```R
 PBMCs<-RCAv2::dataProject(PBMCs,
                      method = "GlobalPanel",
-                     corMeth = "pearson",
-		     nPCs=0,
-		     approx=FALSE)
+                     corMeth = "pearson")
 ```
 
 The method parameter specifies the reference panel to be used. In this example, we use the *GlobalPanel* which is the original RCA panel used by Li et al. (Nat Genet, 2017).
@@ -210,6 +208,7 @@ The *plotRCAUMAP* returns a list of *ggplot2* objects to allow for simple modifi
 
 In addition to the standard 2D umaps, RCA also allows the generation of 3D umaps.
 ```R
+PBMCs<-computeUMAP(PBMCs, nDIMS = 3)
 RCAv2::plotRCAUMAP3D(PBMCs,filename = "UMAP3D_PBMCs.html")
 ```
 3D umaps are stored as *html* files that can be interactively inspected with any browser. Due to github limitations, only a screenshot is shown below:
