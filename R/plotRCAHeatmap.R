@@ -27,9 +27,7 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
     if (SeuratColorScheme){
     colorScheme <-  circlize::colorRamp2(c(min(heatmapIn), 0, max(heatmapIn)),c("purple", "black", "yellow"))
     }else{
-    colorScheme <- colorScheme <- colorRampPalette(c("blue",
-                                                     "white",
-                                                     "red"))(16)
+    colorScheme <-  circlize::colorRamp2(c(min(heatmapIn), 0, max(heatmapIn)),c("blue", "white", "red"))
     }
 
     heatmapIn <- heatmapIn[varVec >= var.thrs, ]
