@@ -36,9 +36,9 @@ dataSClust <- function(rca.obj,res=0.5, corMeth="none", nPCs=10, approx=T) {
  if(!(approx)){
   if ((nPCs==0) & (corMeth !="none")){
 	  if (require(HiClimR) & (corMeth=="pearson")){
-		  projection<-as.dist(1-HiClimR::fastCor(as.matrix(rca.obj$projection.data)))
+		  projection<-1-HiClimR::fastCor(as.matrix(rca.obj$projection.data))
 		  }else{
-			projection<-as.dist(1-cor(rca.obj$projection.data,method=corMeth))
+			projection<-1-cor(rca.obj$projection.data,method=corMeth)
 		  }
   } else{
     if (corMeth != "none"){
@@ -50,11 +50,12 @@ dataSClust <- function(rca.obj,res=0.5, corMeth="none", nPCs=10, approx=T) {
 		  if ((nPCs != 0)&(corMeth=="none")){
         pca_result<-irlba::prcomp_irlba(rca.obj$projection.data,n=nPCs,center=F,scale.=F)$rotation
         row.names(pca_result)<-colnames(rca.obj$projection.data)
-        projection<-pca_result}
+        projection<-pca_result
+		  }
       }
   }
    tempS@reductions[["pca"]]<-new(Class = "DimReduc", cell.embeddings = matrix(0,0,0), assay.used = "RNA")
-   tempS@reductions$pca@cell.embeddings<-as.matrix(projection)
+   tempS@reductions$pca@cell.embeddings<-projection
  }else{
    if (corMeth!="none"){
      print("Ignoring distance metric in approximative computation")
