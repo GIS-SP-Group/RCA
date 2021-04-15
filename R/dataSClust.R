@@ -2,6 +2,7 @@
 #'
 #' @param rca.obj RCA object.
 #' @param nPCs Number of PCs to be used if distance should be computed in PC embedding of the projection (default 0, computation of distance in projection space)
+#' @param filename Name of figure to be stored. Must end with '.png'.
 #' @param approx Flag indicating wheter an approximation of the SVD should be used
 #' @return NULL.
 #' @export
@@ -19,7 +20,7 @@ elbowPlot <- function(rca.obj,nPCs=50,filename="Projection_Elbow.png",approx=F) 
 	dev.off()
 	return()
 }
-	
+
 
 #' Generate cell clusters using Seurat graph based clustering.
 #'
@@ -35,7 +36,7 @@ dataSClust <- function(rca.obj,res=0.5, corMeth="none", nPCs=10, approx=T) {
  tempS<-Seurat::CreateSeuratObject(rca.obj$raw.data)
  if(!(approx)){
   if ((nPCs==0) & (corMeth !="none")){
-	  if (require(HiClimR) & (corMeth=="pearson")){
+	  if (("HiClimR" %in% .packages()) & (corMeth=="pearson")){
 		  projection<-1-HiClimR::fastCor(as.matrix(rca.obj$projection.data))
 		  }else{
 			projection<-1-cor(rca.obj$projection.data,method=corMeth)
@@ -66,7 +67,7 @@ dataSClust <- function(rca.obj,res=0.5, corMeth="none", nPCs=10, approx=T) {
    feature.loadings <- pca.results$v
    sdev <- pca.results$d/sqrt(max(1, ncol(rca.obj$projection.data) - 1))
    projection <- pca.results$u %*% diag(pca.results$d)
-   
+
    rownames(x = feature.loadings) <- rownames(x = rca.obj$projection.data)
    colnames(x = feature.loadings) <- paste0("PC_", 1:npcs)
    rownames(x = projection) <- colnames(x = rca.obj$projection.data)
@@ -88,7 +89,7 @@ dataSClust <- function(rca.obj,res=0.5, corMeth="none", nPCs=10, approx=T) {
 	if (length(unique(tempS$seurat_clusters))<41){
 		dynamicColorsList<-list(WGCNA::labels2colors(tempS$seurat_clusters))
 	} else {
-		if (require(randomcolorR) & require(plotrix)){
+		if (("randomcoloR" %in% .packages()) & require(plotrix)){
 		     clusterColors<-randomcoloR::distinctColorPalette(length(unique(tempS$seurat_clusters)))
 		     clusterColors<-sapply(clusterColors,plotrix::color.id)
 		     clusterColors<-sapply(clusterColors,function(x){return(x[1])})

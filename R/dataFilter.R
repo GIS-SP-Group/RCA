@@ -13,7 +13,7 @@
 #'
 dataFilter <- function(rca.obj, nGene.thresholds = c(100, NULL), nUMI.thresholds = c(1000, NULL), percent.mito.thresholds = c(0.0, 0.2), min.cell.exp = 10, plot = T, folderpath = ".", filename = "RCA_Filter.pdf") {
 
-    if(!(require(gridExtra) && require(ggplot2))){
+    if(!(("gridExtra" %in% .packages()) && require(ggplot2))){
 	print("Ensure that grid.arrange and ggplot2 are installed")
 	}
     # Extract data from RCA object

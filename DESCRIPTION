@@ -2,13 +2,13 @@ Package: RCAv2
 Type: Package
 Title: Reference Component Analysis
 Version: 2.0.0
-Author: Bobby Ranjan, Florian Schmidt
-Maintainer: Bobby Ranjan <ranjanb@gis.a-star.edu.sg>
-Description: RCA correlates single-cell gene expression data with bulk reference transcriptomes for cell type annotation.
+Authors@R: c(person("Florian", "Schmidt", email = "florian_schmidt@gis.a-star.edu.sg", role = c("aut", "cre")), person("Bobby", "Ranjan", email = "ranjan_bobby@gis.a-star.edu.sg", role = c("aut")))
+Maintainer: Prabhakar Lab <florian_schmidt@gis.a-star.edu.sg>
+Description: Single-cell clustering by projection onto bulk reference transcriptomes.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: BiocManager, qlcMatrix, fastcluster, WGCNA, dynamicTreeCut, dplyr, ComplexHeatmap, circlize, umap, gridExtra, plotly, Hmisc, dbscan, randomcoloR, plotrix, HiClimR, htmlwidgets
-Depends: Matrix, methods, R (>= 3.5.0), ggplot2, tibble (>= 3.0.0)
+Imports: BiocManager, ROCR, qlcMatrix, fastcluster, WGCNA, dynamicTreeCut, dplyr, ComplexHeatmap, circlize, umap, gridExtra, plotly, Hmisc, dbscan, randomcoloR, plotrix, HiClimR, htmlwidgets, methods, ggplot2, tibble (>= 3.0.0), Seurat, gplots, irlba, doParallel, pbapply
+Depends: Matrix, R (>= 3.5.0)
 biocViews: impute, preprocessCore, GO.db,  edgeR, ensembldb, EnsDb.Mmusculus.v79, EnsDb.Hsapiens.v86
 RoxygenNote: 7.1.1

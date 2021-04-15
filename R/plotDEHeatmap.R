@@ -14,8 +14,6 @@
 
 plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folderpath = ".", filename = "RCA_DE_Heatmap.pdf", extraCellProperty = NULL,SeuratColorScheme = TRUE) {
 
-    require(ComplexHeatmap)
-
     # Extract projection data and clustering result from RCA object
     de.genes <- unique(as.character(rca.obj$DE.genes$Top.DE.genes$Gene))
     cellTree = rca.obj$clustering.out$cellTree

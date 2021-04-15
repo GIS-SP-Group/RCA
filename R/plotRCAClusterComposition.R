@@ -8,14 +8,13 @@
 #'
 
 plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", filename = "Cluster_Composition.pdf") {
-    require(dplyr)    
-    require(gridExtra)
+
     if (!(is.null(rca.obj$cell.Type.Estimate))){
     # Extract projection data and clustering result from RCA object
     heatmapIn = as.matrix(rca.obj$projection.data)
     cellTree = rca.obj$clustering.out$cellTree
     clusterColors = rca.obj$clustering.out$dynamicColorsList[[deepSplit]]
-    
+
     # Compute the composition of each clust with respect to per cell cell type predictions
     enrichmentAll<-c()
     for(type in unique(clusterColors)){
@@ -33,7 +32,7 @@ plotRCAClusterComposition <- function(rca.obj, deepSplit=1, folderpath = ".", fi
     enrichmentAll$Ratio<-as.numeric(as.character(enrichmentAll$Ratio))
 
     #Generate the cluster composition plots using the randomcolorR package if available
-    if (require(randomcoloR)){
+    if (("randomcoloR" %in% .packages())){
        dColors<-randomcoloR::distinctColorPalette(length(unique(enrichmentAll$CT)))
        nCols<-ceiling(length(unique(enrichmentAll$CT))/26)
        ratioPlot<-ggplot2::ggplot(enrichmentAll,aes(x=Cluster,y=Ratio,fill=CT))+geom_bar(stat="identity")+theme_bw(15)+ylab("Percentage")+coord_flip()+ggtitle("a)")+theme(legend.position = "none")+scale_fill_manual(values=dColors)

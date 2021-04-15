@@ -11,11 +11,11 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5, corMeth = 
 
     ### Extract projection data
     projection.data <- as.matrix(rca.obj$projection.data)
-    
+
     ### Cluster cells
 
     # If HiClimR is available, use fastCor to compute distance matrix
-    if (require(HiClimR) & (corMeth=="pearson")) {
+    if (("HiClimR" %in% .packages()) & (corMeth=="pearson")) {
         d = as.dist(1 - HiClimR::fastCor(
             projection.data,
             upperTri = TRUE,

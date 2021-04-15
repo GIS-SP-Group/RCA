@@ -128,7 +128,7 @@ plotRCAUMAP3D <- function(rca.obj, cellPropertyList = NULL, folderpath = ".", fi
 
 		}
 		else{
-		if (require("randomcoloR")){
+		if (("randomcoloR" %in% .packages())){
 		dColors=randomcoloR::distinctColorPalette(length(unique(umap.df[[CellPropertyName]])))
 		umap3dPlot<-plotly::plot_ly(data = umap.df,
 		            x = ~UMAP1, y = ~UMAP2, z = ~UMAP3,

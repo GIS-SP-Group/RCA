@@ -1,20 +1,20 @@
 #' Internal function to build a reference panel from your bulk RNA sequencing data and a list of marker genes
-#' 
+#'
 #' @param bulk.rna.data Bulk RNA sequencing data - ideally TPM normalized
 #' @param de.genes list of marker genes
 #' @param gene.nomenclature Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols. Default is "SYMBOL".
 #' @param species "HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".
 #' @return reference panel boject
-#' 
+#'
 
 buildPanel <- function(bulk.rna.data, de.genes, gene.nomenclature = "SYMBOL", species = "HUMAN") {
-  
+
     # Get union of DE genes
     de.union <- unique(de.genes)
-    
+
     # Define reference panel
     ref.panel <- bulk.rna.data[de.union, ]
-    unique.ct <- unique(as.vector(sapply(colnames(bulk.rna.data),function(x){return(strsplit(x,"_")[[1]][1])})))    
+    unique.ct <- unique(as.vector(sapply(colnames(bulk.rna.data),function(x){return(strsplit(x,"_")[[1]][1])})))
 
     # Average out replicates
     average.ref.panel <- matrix(0, nrow(ref.panel), ncol = length(unique.ct))
@@ -26,62 +26,61 @@ buildPanel <- function(bulk.rna.data, de.genes, gene.nomenclature = "SYMBOL", sp
         } else {
             average.ref.panel[, ct] <- ref.panel[, grep(pattern = paste0("^", ct, "_"), x = colnames(ref.panel), value = T)]
         }
-        
+
     }
-    
+
     # For Ensembl gene IDs
     if(gene.nomenclature == "ENS") {
         ensembl_genes <- grep(pattern = "^ENS", x = rownames(average.ref.panel), value = T)
-        
+
         # if Ensembl gene version numbers exist, remove them
         ensembl_genes <- gsub(pattern = "\\..*$", replacement = "", x = ensembl_genes)
-        
+
         if(length(ensembl_genes) != length(unique(ensembl_genes))) {
             stop("Non-unique gene names in input data.")
         }
-        
+
         rownames(average.ref.panel) <- ensembl_genes
-        
+
         if(species == "HUMAN") {
             gene.id.df <- ensembldb::select(EnsDb.Hsapiens.v86::EnsDb.Hsapiens.v86, keys= ensembl_genes, keytype = "GENEID", columns = c("SYMBOL","GENEID"))
         } else if(species == "MOUSE") {
             gene.id.df <- ensembldb::select(EnsDb.Mmusculus.v79::EnsDb.Mmusculus.v79, keys= ensembl_genes, keytype = "GENEID", columns = c("SYMBOL","GENEID"))
         }
-        
+
         average.ref.panel <- average.ref.panel[gene.id.df$GENEID, ]
-        
+
         # Removing duplicated gene symbols
         average.ref.panel <- average.ref.panel[-which(duplicated(gene.id.df$SYMBOL)), ]
         rownames(average.ref.panel) <- gene.id.df$SYMBOL[-which(duplicated(gene.id.df$SYMBOL))]
-        
+
     }
-    
+
     # Return object
     return(average.ref.panel)
 }
 
 
-#' Function to build a reference panel. 
+#' Function to build a reference panel.
 #' Celltype and replicate information must be included in the colnames of the bulk.rna.data.object, separted by an underscore ("_"), e.g.: Bnaive_R1.
-#' 
+#'
 #' @param bulk.rna.data Bulk RNA sequencing data
 #' @param fc.thrs.general absolulte log fold change threshold applied for coarse marker detection (default 6)
 #' @param fc.thrs.specific absolulte log fold change threshold applied for detailed marker detection (default 2)
 #' @param fdr.thrs FDR threshold (default 0.01)
-#' @param height to cut the clustering of the reference data sets (default 1.1)
+#' @param cut_height to cut the clustering of the reference data sets (default 1.1)
 #' @param gene.nomenclature Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols. Default is "SYMBOL".
 #' @param species "HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".
-#' @param folder.path path to store reference panel
 #' @param filename file name of reference panel (should end with .rds)
 #' @param verbose Generate debug output and figures (default FALSE)
 #' @return reference panel as a data.frame
-#' @export 
-#' 
+#' @export
+#'
 
 buildReferencePanel <- function(bulk.rna.data, fc.thrs.general = 6, fc.thrs.specific =2, fdr.thrs = 0.01, cut_height = 1.1, gene.nomenclature = "SYMBOL", species = "HUMAN", filename = "my_reference_panel.rds", verbose=FALSE) {
 	#Split cell type from replicate information
 	cellTypes<-as.vector(sapply(colnames(bulk.rna.data),function(x){return(strsplit(x,"_")[[1]][1])}))
-	
+
 	#Generating pseudo bulk across replicates
 	pseudo_pseudo_bulk<-c()
 	for (ct in unique(cellTypes)){
@@ -99,8 +98,8 @@ buildReferencePanel <- function(bulk.rna.data, fc.thrs.general = 6, fc.thrs.spec
 		pca_heatmap
 		dev.off()
 	}
-	
-	        
+
+
 	bulk.rna.data_cluster<-hclust(as.dist(1-cor(t(pca_pseudo$x[,c(1:(min(which(varExplained<0.01))-1))]),method="spearman")))
 	bulk.rna.data_cluster_assignment<-cutree(bulk.rna.data_cluster,h=cut_height)
 
@@ -139,7 +138,7 @@ buildReferencePanel <- function(bulk.rna.data, fc.thrs.general = 6, fc.thrs.spec
 				}
 			}
 		markerGenesSpecific<-unique(union(markerGenesSpecific,tmpGeneList))
-		}	
+		}
 	}
 
 	#Find general markers between all cell types with a strong fold change.
@@ -167,7 +166,7 @@ buildReferencePanel <- function(bulk.rna.data, fc.thrs.general = 6, fc.thrs.spec
 			}
 		}
 	markerGenesLenient<-unique(union(markerGenesLenient,tmpGeneList))
-		
+
 	#Generate the panel considering the union of specific and general marker genes
 	Panel_Selection<-buildPanel(bulk.rna.data,unique(union(markerGenesSpecific,markerGenesLenient)), gene.nomenclature = "SYMBOL", species = "HUMAN")
 

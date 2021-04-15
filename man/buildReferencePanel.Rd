@@ -2,7 +2,7 @@
 % Please edit documentation in R/buildReferencePanel.R
 \name{buildReferencePanel}
 \alias{buildReferencePanel}
-\title{Function to build a reference panel. 
+\title{Function to build a reference panel.
 Celltype and replicate information must be included in the colnames of the bulk.rna.data.object, separted by an underscore ("_"), e.g.: Bnaive_R1.}
 \usage{
 buildReferencePanel(
@@ -26,6 +26,8 @@ buildReferencePanel(
 
 \item{fdr.thrs}{FDR threshold (default 0.01)}
 
+\item{cut_height}{to cut the clustering of the reference data sets (default 1.1)}
+
 \item{gene.nomenclature}{Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols. Default is "SYMBOL".}
 
 \item{species}{"HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".}
@@ -33,15 +35,11 @@ buildReferencePanel(
 \item{filename}{file name of reference panel (should end with .rds)}
 
 \item{verbose}{Generate debug output and figures (default FALSE)}
-
-\item{height}{to cut the clustering of the reference data sets (default 1.1)}
-
-\item{folder.path}{path to store reference panel}
 }
 \value{
 reference panel as a data.frame
 }
 \description{
-Function to build a reference panel. 
+Function to build a reference panel.
 Celltype and replicate information must be included in the colnames of the bulk.rna.data.object, separted by an underscore ("_"), e.g.: Bnaive_R1.
 }

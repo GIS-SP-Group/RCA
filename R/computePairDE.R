@@ -52,9 +52,6 @@ dataDE <- function(rca.obj,
                    p.adjust.methods =  "BH",
                    top.genes.per.cluster = 10,
 		   pairwise=FALSE,nCores=1) {
-    require(foreach)
-    require(doParallel)
-    require(dplyr)
     cl <- makeCluster(nCores)
     registerDoParallel(cl)
     df <- c()
@@ -112,7 +109,7 @@ dataDE <- function(rca.obj,
                 min.cells.group = min.cells.group,
                 pseudocount.use = pseudocount.use,
                 MeanExprsThrs = MeanExprsThrs,
-                p.adjust.methods = p.adjust.methods)   
+                p.adjust.methods = p.adjust.methods)
             if (!(is.null(marker.genes))) {
                 if (colnames(marker.genes)[1] != 'myAUC') {
                     marker.genes = marker.genes[marker.genes$p_val_adj < 0.05, ]
@@ -147,7 +144,7 @@ dataDE <- function(rca.obj,
                 min.cells.group = min.cells.group,
                 pseudocount.use = pseudocount.use,
                 MeanExprsThrs = MeanExprsThrs,
-                p.adjust.methods = p.adjust.methods 
+                p.adjust.methods = p.adjust.methods
     		)
             if (!(is.null(marker.genes))) {
                 if (colnames(marker.genes)[1] != 'myAUC') {
@@ -166,6 +163,7 @@ dataDE <- function(rca.obj,
     #Determine top x DE genes per Cluster#
     ######################################
     if(pairwise){
+
     mC1 <- df %>% dplyr::group_by(group1, group2) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC)
     markers2 <- df
     markers2$avg_logFC <- (-1) * (markers2$avg_logFC)
@@ -243,7 +241,7 @@ dataDE <- function(rca.obj,
 #list log2FCDEList: list of log2-fold-change for up and down regulated DE genes for each pairwise cluster comparison - corresponds to same order as in deGeneRegulationList
 #list qValueDEList: list of q-values for up and down regulated DE genes for each pairwise cluster comparison - corresponds to same order as in deGeneRegulationList
 #list upregulatedDEGeneList: list of cluster-specific upregulated DE genes
-#list downregulatedDEGeneList: list of cluster-specific downregulated DE genes 
+#list downregulatedDEGeneList: list of cluster-specific downregulated DE genes
 
 #' @export
 ComputePairWiseDE <-  function(object,
@@ -262,11 +260,6 @@ ComputePairWiseDE <-  function(object,
                                pseudocount.use = 1,
                                MeanExprsThrs = 0,
                                p.adjust.methods = "BH") {
-    require(future)
-    require(pbapply)
-    require(tidyverse)
-    require(ROCR)
-    require(dplyr)
     ## for Wilcox test
     WilcoxDETest <-
         function(data.use, cells.1, cells.2, verbose = TRUE) {

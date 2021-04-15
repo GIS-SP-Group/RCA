@@ -11,6 +11,8 @@ elbowPlot(rca.obj, nPCs = 50, filename = "Projection_Elbow.png", approx = F)
 
 \item{nPCs}{Number of PCs to be used if distance should be computed in PC embedding of the projection (default 0, computation of distance in projection space)}
 
+\item{filename}{Name of figure to be stored. Must end with '.png'.}
+
 \item{approx}{Flag indicating wheter an approximation of the SVD should be used}
 }
 \value{
