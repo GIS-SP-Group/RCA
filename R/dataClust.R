@@ -10,13 +10,13 @@
 dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5, corMeth = "pearson") {
 
     ### Extract projection data
-    projection.data <- as.matrix(rca.obj$projection.data)
+    projection.data <- base::as.matrix(rca.obj$projection.data)
 
     ### Cluster cells
 
     # If HiClimR is available, use fastCor to compute distance matrix
     if (("HiClimR" %in% .packages()) & (corMeth=="pearson")) {
-        d = as.dist(1 - HiClimR::fastCor(
+        d = stats::as.dist(1 - HiClimR::fastCor(
             projection.data,
             upperTri = TRUE,
             nSplit = 5,
@@ -24,18 +24,22 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5, corMeth = 
         ))
     } else {
         # else, use cor
-        d = as.dist(1 - cor(projection.data, method = corMeth))
+        d = stats::as.dist(1 - stats::cor(projection.data, method = corMeth))
     }
 
     # Obtain cell tree using distance matrix
-    cellTree = fastcluster::hclust(d, method = "average")
+    if ("fastcluster" %in% base::.packages()){
+        cellTree = fastcluster::hclust(d, method = "average")
+    } else {
+        cellTree = stats::hclust(d, method = "average")
+    }
 
     # For each deepsplit value given, compute dynamic groups
     dynamicGroupsList <-
-        lapply(X = deepSplitValues, function(deepSplit) {
+        base::lapply(X = deepSplitValues, function(deepSplit) {
             dynamicTreeCut::cutreeDynamic(
                 dendro = cellTree,
-                distM = as.matrix(d),
+                distM = base::as.matrix(d),
                 deepSplit = deepSplit,
                 pamStage = FALSE,
                 minClusterSize = minClustSize
@@ -43,11 +47,11 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5, corMeth = 
         })
 
     # Convert labels to colours for each tree cut
-    dynamicColorsList <- lapply(dynamicGroupsList, WGCNA::labels2colors)
-    names(dynamicColorsList) <- paste0("deepSplit ", deepSplitValues)
+    dynamicColorsList <- base::lapply(dynamicGroupsList, WGCNA::labels2colors)
+    base::names(dynamicColorsList) <- base::paste0("deepSplit ", deepSplitValues)
 
     # Assign clustering result to RCA object
-    rca.obj$clustering.out <- list(
+    rca.obj$clustering.out <- base::list(
         "cellTree" = cellTree,
         "dynamicColorsList" = dynamicColorsList
     )

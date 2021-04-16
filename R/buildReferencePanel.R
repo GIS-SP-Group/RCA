@@ -10,37 +10,37 @@
 buildPanel <- function(bulk.rna.data, de.genes, gene.nomenclature = "SYMBOL", species = "HUMAN") {
 
     # Get union of DE genes
-    de.union <- unique(de.genes)
+    de.union <- base::unique(de.genes)
 
     # Define reference panel
     ref.panel <- bulk.rna.data[de.union, ]
-    unique.ct <- unique(as.vector(sapply(colnames(bulk.rna.data),function(x){return(strsplit(x,"_")[[1]][1])})))
+    unique.ct <- base::unique(base::as.vector(base::sapply(base::colnames(bulk.rna.data),function(x){return(base::strsplit(x,"_")[[1]][1])})))
 
     # Average out replicates
-    average.ref.panel <- matrix(0, nrow(ref.panel), ncol = length(unique.ct))
-    rownames(average.ref.panel) <- rownames(ref.panel)
-    colnames(average.ref.panel) <- unique.ct
+    average.ref.panel <- base::matrix(0, base::nrow(ref.panel), ncol = base::length(unique.ct))
+    base::rownames(average.ref.panel) <- base::rownames(ref.panel)
+    base::colnames(average.ref.panel) <- unique.ct
     for(ct in unique.ct) {
-        if(sum(grepl(pattern = paste0("^", ct, "_"), x = colnames(ref.panel))) > 1) {
-            average.ref.panel[, ct] <- rowMeans(ref.panel[, grep(pattern = paste0("^", ct, "_"), x = colnames(ref.panel), value = T)])
+        if(base::sum(base::grepl(pattern = base::paste0("^", ct, "_"), x = base::colnames(ref.panel))) > 1) {
+            average.ref.panel[, ct] <- base::rowMeans(ref.panel[, base::grep(pattern = base::paste0("^", ct, "_"), x = base::colnames(ref.panel), value = T)])
         } else {
-            average.ref.panel[, ct] <- ref.panel[, grep(pattern = paste0("^", ct, "_"), x = colnames(ref.panel), value = T)]
+            average.ref.panel[, ct] <- ref.panel[, base::grep(pattern = base::paste0("^", ct, "_"), x = base::colnames(ref.panel), value = T)]
         }
 
     }
 
     # For Ensembl gene IDs
     if(gene.nomenclature == "ENS") {
-        ensembl_genes <- grep(pattern = "^ENS", x = rownames(average.ref.panel), value = T)
+        ensembl_genes <- base::grep(pattern = "^ENS", x = base::rownames(average.ref.panel), value = T)
 
         # if Ensembl gene version numbers exist, remove them
-        ensembl_genes <- gsub(pattern = "\\..*$", replacement = "", x = ensembl_genes)
+        ensembl_genes <- base::gsub(pattern = "\\..*$", replacement = "", x = ensembl_genes)
 
-        if(length(ensembl_genes) != length(unique(ensembl_genes))) {
+        if(base::length(ensembl_genes) != base::length(base::unique(ensembl_genes))) {
             stop("Non-unique gene names in input data.")
         }
 
-        rownames(average.ref.panel) <- ensembl_genes
+        base::rownames(average.ref.panel) <- ensembl_genes
 
         if(species == "HUMAN") {
             gene.id.df <- ensembldb::select(EnsDb.Hsapiens.v86::EnsDb.Hsapiens.v86, keys= ensembl_genes, keytype = "GENEID", columns = c("SYMBOL","GENEID"))
@@ -51,8 +51,8 @@ buildPanel <- function(bulk.rna.data, de.genes, gene.nomenclature = "SYMBOL", sp
         average.ref.panel <- average.ref.panel[gene.id.df$GENEID, ]
 
         # Removing duplicated gene symbols
-        average.ref.panel <- average.ref.panel[-which(duplicated(gene.id.df$SYMBOL)), ]
-        rownames(average.ref.panel) <- gene.id.df$SYMBOL[-which(duplicated(gene.id.df$SYMBOL))]
+        average.ref.panel <- average.ref.panel[-base::which(base::duplicated(gene.id.df$SYMBOL)), ]
+        base::rownames(average.ref.panel) <- gene.id.df$SYMBOL[-base::which(base::duplicated(gene.id.df$SYMBOL))]
 
     }
 
@@ -79,105 +79,105 @@ buildPanel <- function(bulk.rna.data, de.genes, gene.nomenclature = "SYMBOL", sp
 
 buildReferencePanel <- function(bulk.rna.data, fc.thrs.general = 6, fc.thrs.specific =2, fdr.thrs = 0.01, cut_height = 1.1, gene.nomenclature = "SYMBOL", species = "HUMAN", filename = "my_reference_panel.rds", verbose=FALSE) {
 	#Split cell type from replicate information
-	cellTypes<-as.vector(sapply(colnames(bulk.rna.data),function(x){return(strsplit(x,"_")[[1]][1])}))
+	cellTypes<-base::as.vector(base::sapply(base::colnames(bulk.rna.data),function(x){return(base::strsplit(x,"_")[[1]][1])}))
 
 	#Generating pseudo bulk across replicates
-	pseudo_pseudo_bulk<-c()
-	for (ct in unique(cellTypes)){
-		pseudo_pseudo_bulk<-cbind(pseudo_pseudo_bulk,apply(bulk.rna.data[,which(cellTypes==ct)],1,mean))
+	pseudo_pseudo_bulk<-base::c()
+	for (ct in base::unique(cellTypes)){
+		pseudo_pseudo_bulk<-base::cbind(pseudo_pseudo_bulk,base::apply(bulk.rna.data[,base::which(cellTypes==ct)],1,mean))
 	}
-	colnames(pseudo_pseudo_bulk)<-unique(cellTypes)
+	base::colnames(pseudo_pseudo_bulk)<-base::unique(cellTypes)
 
 	#Generate PCA of the pseudo bulk generated above
-	pca_pseudo<-prcomp(t(pseudo_pseudo_bulk),scale. = T)
-	totalVar<-(sum(pca_pseudo$sdev*pca_pseudo$sdev))
+	pca_pseudo<-stats::prcomp(base::t(pseudo_pseudo_bulk),scale. = T)
+	totalVar<-(base::sum(pca_pseudo$sdev*pca_pseudo$sdev))
 	varExplained<-(pca_pseudo$sdev*pca_pseudo$sdev)/totalVar
 	if(verbose){
-		pca_heatmap<-gplots::heatmap.2(cor(t(pca_pseudo$x[,c(1:(min(which(varExplained<0.01))-1))]),method="spearman"),col="bluered",margins=c(10,10),trace = NULL,tracecol = NULL)
-		png("Heatmap_PCA_Clustering.png",width=1280,height=1280)
+		pca_heatmap<-gplots::heatmap.2(stats::cor(base::t(pca_pseudo$x[,base::c(1:(base::min(base::which(varExplained < 0.01)) - 1))]), method="spearman"), col="bluered", margins=base::c(10,10), trace = NULL, tracecol = NULL)
+		grDevices::png("Heatmap_PCA_Clustering.png", width=1280, height=1280)
 		pca_heatmap
-		dev.off()
+		grDevices::dev.off()
 	}
 
 
-	bulk.rna.data_cluster<-hclust(as.dist(1-cor(t(pca_pseudo$x[,c(1:(min(which(varExplained<0.01))-1))]),method="spearman")))
-	bulk.rna.data_cluster_assignment<-cutree(bulk.rna.data_cluster,h=cut_height)
+	bulk.rna.data_cluster <- stats::hclust(stats::as.dist(1 - stats::cor(base::t(pca_pseudo$x[,base::c(1:(base::min(base::which(varExplained < 0.01)) - 1))]),method="spearman")))
+	bulk.rna.data_cluster_assignment<-stats::cutree(bulk.rna.data_cluster,h=cut_height)
 
 
 	#Loop through the cluster identified in the PCA to identify marker genes within those clusters using the fc.thrs.specific
-	SubMat=list()
-	markerGenesSpecific<-c()
-	for(cluster in unique(bulk.rna.data_cluster_assignment)){
+	SubMat = base::list()
+	markerGenesSpecific <- base::c()
+	for(cluster in base::unique(bulk.rna.data_cluster_assignment)){
 		if(verbose)
-			print(cluster)
-		current_CellTypes<-unique(cellTypes[which(cellTypes%in%names(bulk.rna.data_cluster_assignment)[which(bulk.rna.data_cluster_assignment==cluster)])]			      )
+		    base::print(cluster)
+		current_CellTypes <- base::unique(cellTypes[base::which(cellTypes %in% base::names(bulk.rna.data_cluster_assignment)[base::which(bulk.rna.data_cluster_assignment == cluster)])]			      )
 		if(verbose)
-		    	print(current_CellTypes)
+		    base::print(current_CellTypes)
 
-		SubMat[[cluster]]<-bulk.rna.data[,which(cellTypes%in%names(bulk.rna.data_cluster_assignment)[which(bulk.rna.data_cluster_assignment==cluster)])]
-		if (length(current_CellTypes)>1){
-	        	n_unique_cellTypes<-length(unique(current_CellTypes))
-		        tmpGeneList<-c()
-		for (i in c(1:(n_unique_cellTypes-1))){
-			for (j in c((i+1):n_unique_cellTypes)){
+		SubMat[[cluster]] <- bulk.rna.data[, base::which(cellTypes %in% base::names(bulk.rna.data_cluster_assignment)[base::which(bulk.rna.data_cluster_assignment == cluster)])]
+		if (base::length(current_CellTypes) > 1){
+	        	n_unique_cellTypes <- base::length(base::unique(current_CellTypes))
+		        tmpGeneList <- base::c()
+		for (i in base::c(1:(n_unique_cellTypes - 1))){
+			for (j in base::c((i + 1):n_unique_cellTypes)){
 				if(verbose){
-					print(current_CellTypes[i])
-				        print(current_CellTypes[j])
+				    base::print(current_CellTypes[i])
+				    base::print(current_CellTypes[j])
 				}
-			        selected_cellTypes<-bulk.rna.data[,union(which(cellTypes==current_CellTypes[i]),which(cellTypes==current_CellTypes[j]))]
-			        dgeObj <- edgeR::DGEList(selected_cellTypes, group = as.vector(sapply(colnames(selected_cellTypes),function(x){return(strsplit(x,"_")[[1]][1])})))
+			        selected_cellTypes <- bulk.rna.data[, base::union(base::which(cellTypes == current_CellTypes[i]), base::which(cellTypes == current_CellTypes[j]))]
+			        dgeObj <- edgeR::DGEList(selected_cellTypes, group = base::as.vector(base::sapply(base::colnames(selected_cellTypes), function(x){return(base::strsplit(x, "_")[[1]][1])})))
 			        dgeObj <- edgeR::estimateCommonDisp(dgeObj)
 			        dgeObj <- edgeR::estimateTagwiseDisp(dgeObj)
 			        etObj <- edgeR::exactTest(object = dgeObj)
 			        etObj$table$FDR <- stats::p.adjust(p = etObj$table$PValue, method = "fdr")
-				etObj$table<-etObj$table[which(etObj$table$FDR<fdr.thrs),]
-				etObj$table<-etObj$table[which(abs(etObj$table$logFC)>fc.thrs.specific),]
-				tmpGeneList<-unique(c(tmpGeneList,row.names(etObj$table)[order(etObj$table$logFC,decreasing = T)]))
+				etObj$table <- etObj$table[base::which(etObj$table$FDR < fdr.thrs),]
+				etObj$table <- etObj$table[base::which(base::abs(etObj$table$logFC) > fc.thrs.specific),]
+				tmpGeneList <- base::unique(c(tmpGeneList, base::row.names(etObj$table)[base::order(etObj$table$logFC,decreasing = T)]))
 				if(verbose)
-					print(etObj$table)
+				    base::print(etObj$table)
 				}
 			}
-		markerGenesSpecific<-unique(union(markerGenesSpecific,tmpGeneList))
+		markerGenesSpecific <- base::unique(base::union(markerGenesSpecific, tmpGeneList))
 		}
 	}
 
 	#Find general markers between all cell types with a strong fold change.
-	ct<-unique(cellTypes)
-	n_unique_cellTypes<-length(ct)
-	tmpGeneList<-c()
-	markerGenesLenient<-c()
-	for (i in c(1:(n_unique_cellTypes-1))){
-		for (j in c((i+1):n_unique_cellTypes)){
+	ct <- base::unique(cellTypes)
+	n_unique_cellTypes <- base::length(ct)
+	tmpGeneList <- base::c()
+	markerGenesLenient <- base::c()
+	for (i in base::c(1:(n_unique_cellTypes - 1))){
+		for (j in base::c((i + 1):n_unique_cellTypes)){
 			if(verbose){
-				print(ct[i])
-			        print(ct[j])
+			    base::print(ct[i])
+			    base::print(ct[j])
 			}
-		        selected_cellTypes<-bulk.rna.data[,union(which(cellTypes==ct[i]),which(cellTypes==ct[j]))]
-		        dgeObj <- edgeR::DGEList(selected_cellTypes, group = as.vector(sapply(colnames(selected_cellTypes),function(x){return(strsplit(x,"_")[[1]][1])})))
+		        selected_cellTypes<-bulk.rna.data[, base::union(base::which(cellTypes == ct[i]), base::which(cellTypes == ct[j]))]
+		        dgeObj <- edgeR::DGEList(selected_cellTypes, group = base::as.vector(base::sapply(base::colnames(selected_cellTypes), function(x){return(base::strsplit(x, "_")[[1]][1])})))
 		        dgeObj <- edgeR::estimateCommonDisp(dgeObj)
 		        dgeObj <- edgeR::estimateTagwiseDisp(dgeObj)
 		        etObj <- edgeR::exactTest(object = dgeObj)
 		        etObj$table$FDR <- stats::p.adjust(p = etObj$table$PValue, method = "fdr")
-			etObj$table<-etObj$table[which(etObj$table$FDR<fdr.thrs),]
-			etObj$table<-etObj$table[which(abs(etObj$table$logFC)>fc.thrs.general),]
-			tmpGeneList<-unique(c(tmpGeneList,row.names(etObj$table)[order(etObj$table$logFC,decreasing = T)]))
+			etObj$table <- etObj$table[base::which(etObj$table$FDR<fdr.thrs),]
+			etObj$table <- etObj$table[base::which(base::abs(etObj$table$logFC) > fc.thrs.general),]
+			tmpGeneList <- base::unique(base::c(tmpGeneList,base::row.names(etObj$table)[base::order(etObj$table$logFC, decreasing = T)]))
 			if(verbose)
-				print(etObj$table)
+			    base::print(etObj$table)
 			}
 		}
-	markerGenesLenient<-unique(union(markerGenesLenient,tmpGeneList))
+	markerGenesLenient<- base::unique(base::union(markerGenesLenient, tmpGeneList))
 
 	#Generate the panel considering the union of specific and general marker genes
-	Panel_Selection<-buildPanel(bulk.rna.data,unique(union(markerGenesSpecific,markerGenesLenient)), gene.nomenclature = "SYMBOL", species = "HUMAN")
+	Panel_Selection <- buildPanel(bulk.rna.data, base::unique(base::union(markerGenesSpecific, markerGenesLenient)), gene.nomenclature = "SYMBOL", species = "HUMAN")
 
 	if(verbose){
-		heatmap_panel<-gplots::heatmap.2(cor(Panel_Selection,method="kendal"),col="bluered",margins =c(10,10))
-		png("Heatmap_Reference_Panel.png",width=1280,height=1280)
+		heatmap_panel <- gplots::heatmap.2(stats::cor(Panel_Selection, method=  "kendal"), col = "bluered", margins = base::c(10,10))
+		grDevices::png("Heatmap_Reference_Panel.png", width = 1280, height = 1280)
 		heatmap_panel
-		dev.off()
+		grDevices::dev.off()
 	}
 
-	saveRDS(Panel_Selection,file=filename)
+	base::saveRDS(Panel_Selection, file = filename)
 
 	return(Panel_Selection)
 }

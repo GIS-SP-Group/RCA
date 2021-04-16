@@ -257,9 +257,7 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
                                scale = TRUE)
         }
     }
-
     # Store projection result as Matrix
-    projection = as.matrix(projection)
     return(as(as.matrix(projection), "dgCMatrix"))
 }
 

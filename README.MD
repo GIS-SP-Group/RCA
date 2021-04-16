@@ -11,7 +11,7 @@ Release date: September 3, 2019
 RCA takes scRNA-seq data as input. For 10X Genomics data processed with CellRanger, build in quality control and preprocessing functions are available. Other data sets that have been preprocessed elsewhere can be incorporated as a count matrix. Reference datasets that can be included in RCA include (sorted) bulk RNA-seq, microarray and scRNA-seq data sets. Within RCA, we provide a function that allows users to easily generate custom reference panels from raw count data. Additionally we provide several reference panels for human cell types as well as for mouse. RCA considers a selected reference panel as well as query single cell data to compute a correlation matrix indicating the similarity of single cell transcriptomes to the reference transcriptomes. This, so called, reference projection, can be clustered and visualized in a heatmap, and/or directly visualized in a UMAP. The most likely cell type can be calculated either per cell or per cluster.
 
 An overview on all features of RCA is provided in the Figure below:
-![](Tutorial/Overview_Figure.png)
+![](man/figures/Overview_Figure.png)
 
 
 ## A beginner's guide to RCA
@@ -96,7 +96,7 @@ to filter the raw data according to
 
 For easy interpretation of the data, the *dataFilter* function automatically generates a graphical representation of various QC metrics: 
 
-![](Tutorial/QC_Example.png)
+![](man/figures/QC_Example.png)
 
 Plotting can be disabled using the *plot* option.
 
@@ -193,7 +193,7 @@ RCAv2::plotRCAHeatmap(PBMCs,filename = "Heatmap_PBMCs.pdf",var.thrs=1)
 
 The heatmap can be used to manually assign cell-types based on the projection. Via the *var.thrs* parameter, the heatmap can be reduced to show only cell-types with the indicated degree of variation.
 
-![](Tutorial/Heatmap_Example_With_Threshold.png)
+![](man/figures/Heatmap_Example_With_Threshold.png)
 
 In addition to the visuzalization in the heatmap, it can make sense to look at the projection using a UMAP.
 To do so, simple use the functions
@@ -204,7 +204,7 @@ RCAv2::plotRCAUMAP(PBMCs,filename = "UMAP_PBMCs.pdf")
 ```
 The *plotRCAUMAP* returns a list of *ggplot2* objects to allow for simple modification of the generated figures. 
 
-![](Tutorial/Umap_clusters_Example.png)
+![](man/figures/Umap_clusters_Example.png)
 
 In addition to the standard 2D umaps, RCA also allows the generation of 3D umaps.
 ```R
@@ -212,7 +212,7 @@ PBMCs<-computeUMAP(PBMCs, nDIMS = 3)
 RCAv2::plotRCAUMAP3D(PBMCs,filename = "UMAP3D_PBMCs.html")
 ```
 3D umaps are stored as *html* files that can be interactively inspected with any browser. Due to github limitations, only a screenshot is shown below:
-![](Tutorial/Example_3D_Umap.png)
+![](man/figures/Example_3D_Umap.png)
 
 
 To better understand the composition of each cluster we generate a stacked bar plot Figure using the *plotRCAClusterComposition* function:
@@ -222,7 +222,7 @@ PBMCs<-estimateCellTypeFromProjection(PBMCs,confidence = NULL)
 #Generate the cluster composition plot
 RCAv2::plotRCAClusterComposition(PBMCs,filename="Cluster_Composition.pdf")
 ```
-![](Tutorial/Cluster_Enrichment.png)
+![](man/figures/Cluster_Enrichment.png)
 
 In a) we show the relative composition of each cluster and b) shows the absolute number of cells in each cluster. The color code indicates the most likely annotation of the cells.
 
@@ -252,9 +252,9 @@ RCAv2::plotRCAUMAP(PBMCs,cellPropertyList = list(CellTypes=RCAcellTypes,CD56=CD5
 ```
 Each UMAP will be stored in a separate *pdf* where the filename indicates which element from the *cellPropertyList* is depicted in the UMAP.
 
-![](Tutorial/Umap_ct_based_clustering_Example.png)
+![](man/figures/Umap_ct_based_clustering_Example.png)
 
-![](Tutorial/Umap_NK_marker_CD56_Example.png)
+![](man/figures/Umap_NK_marker_CD56_Example.png)
 
 For numerical data, the dots are transparent for low values to avoid overplotting issues. In our example, we can see that *CD56* expression corresponds to the NK annotation.
 
@@ -276,7 +276,7 @@ PBMCs<-RCAv2::dataSClust(PBMCs,res = 0.15)
 PBMCs<-estimateCellTypeFromProjectionPerCluster(PBMCs)
 ```
 The figure below shows an example using the PBMC dataset using the Novosthern panel.
-![](Tutorial/PerClusterAssignment.png)
+![](man/figures/PerClusterAssignment.png)
 
 
 ### Graph based clustering as an alternative to hierarchical clustering
@@ -295,7 +295,7 @@ As for the hierarchical clustering, heatmaps and umaps can be generated as well.
 
 To help the user choosing the parameters for clustering, we provide a parameter space exploration feature leading to a 3D umap illustrating the number of clusters depending on the three parameters, as shown below. 
 
-![](Tutorial/ParameterPlotDBSCAN.PNG)
+![](man/figures/ParameterPlotDBSCAN.PNG)
 
 This figure can be generated using the function
 ```R
@@ -314,7 +314,7 @@ where res is the resolution parameter parsed on to the Seurat clustering functio
 
 Upon graph based clustering, the RCA projection heatmap will be plotted without column dendrogramms.
 
-![](Tutorial/RCA_Heatmap_Seurat.png)
+![](man/figures/RCA_Heatmap_Seurat.png)
 
 This function uses the same approximation of the PCA as the original Seurat function. Setting *approx* to FALSE will compute the exact PCA. If the *corMeth* parameter is set to either *pearson, spearman* or *kendal*, the function will compute a full distance matrix using correlation distance instead of the default euclidean distance. This can also be combined with the exact PCA. However, not that these options require more memory to be available than the default. With the *elbowPlot* function, an ElbowPlot that guides the selection of the number of PCs to be considered can be generated.
 
@@ -374,7 +374,7 @@ umapFigures<-RCAv2::plotRCAUMAP(PBMCs,
 ```
 leads us to a clustering free cell type assignment.
 
-![](Tutorial/Umap_ClusterFree.png)
+![](man/figures/Umap_ClusterFree.png)
 
 ### Compute DE genes for RCA clusters
 To ease cluster interpretation further, RCAv2 allows the user to compute pairwise DE genes for all identified clusters.
@@ -403,8 +403,6 @@ The topDE genes can be plotted in a heatmap via the *plotDEHeatmap* function:
 RCAv2::plotDEHeatmap(PBMCs,scale=FALSE)
 ```
 The *scale* parameter allows the user to plot either the normalized UMI counts or scaled count (z-transformed). An example is shown below.
-
-![](Tutorial/DE_Heatmaps.png)
 
 ### Compute enrichment for GO terms and KEGG pathways
 Using the *clusterProfiler* package, RCAv2 supports enrichment tests for GO terms and KEGG pathways using the
@@ -435,7 +433,7 @@ The parameter *cluster.ID* can be set if the anaysis should be performed for onl
 
 The doEnrichGo functions generates barplots, goplots and dotplots for each cluster separately. The filenames can be modified using the *filename* parameter. Example barplots and dotplots are shown for a PBMC NK-cell cluster. Goplots are depicted for a PBMC B-cell.
 
-![](Tutorial/RCA_GO_Example.png)
+![](man/figures/RCA_GO_Example.png)
 
 
 To perform enrichment against KEGG pathways, the *doEnrichKEGG function* can be used:
@@ -458,7 +456,7 @@ doEnrichKEGG<-function(rca.obj,
 The parameters are similar to the GO enrichment function except for the *org* parameter, which must represent an organism supported by KEGG. This is set to *hsa* for homo sapiens by default.
 Note that the KEGG function does not generate goPlots but only bar- and dotplots. An example for NK cells is shown below.
 
-![](Tutorial/RCA_KEGG_Example.png)
+![](man/figures/RCA_KEGG_Example.png)
 
 ##Cluster/Cell-type specific quality control
 RCAv2 offers straightforward ways to perform cluster-specific quality control. We illustrate this functionality using an inhouse dataset of 45926 cells obtained from five bone marrow samples.
@@ -478,7 +476,7 @@ RCAv2::plotRCAHeatmap(PBMCs,filename = "Control_HeatmapPostQC.pdf")
 ```
 Based on the following projection heatmap
 
-![](Tutorial/BM_heatmap.png)
+![](man/figures/BM_heatmap.png)
 
 we identify the cluster IDs as:
 
@@ -495,7 +493,7 @@ plotClusterQuality(PBMCs,width = 15,height = 9,cluster.labels = cellTypeLabels)
 where *width* and *height* allow the user to customize plot size.
 As shown in the generated scatter plot different clusters require distinct QC parameters:
 
-![](Tutorial/BM_BeforeQC.png)
+![](man/figures/BM_BeforeQC.png)
 
 Therefore, we apply cluster specific NODG thresholds:
 ```R
@@ -508,8 +506,6 @@ and replot the QC metrics
 plotClusterQuality(PBMCs,width = 15,height = 9,cluster.labels = cellTypeLabels.pdf")
 ```
 resulting in a satisfying, cluster-specific QC.
-
-![](Tutorial/BM_AfterQC.png)
 
 ## Combining RCA with Seurat
 Data processing can also be carried out with Seurat. Here is an example how you can combine a RCA analysis with data preprocessed in Seurat.
@@ -567,9 +563,7 @@ pbmc_Seurat <- RunPCA(object = pbmc_Seurat,  npcs = 50, verbose = FALSE)
 ElbowPlot(object = pbmc_Seurat,ndims = 50)
 ```
 
-![](Tutorial/Elbow.png)
-
-Judging based on the Elbowplot shown above, we use 20 PCs for further analysis. 
+Based on the Elbowplot (not shown here), we use 20 PCs for further analysis. 
 ```R
 #Find Neighbors
 pbmc_Seurat <- FindNeighbors(pbmc_Seurat, reduction = "pca", dims = 1:20)
@@ -600,7 +594,7 @@ umapAll_Seurat_RCA<-ggplot(umap_resultSL,aes(x=V1,y=V2,color=pbmc_Seurat$seurat_
 umapAll_Seurat_RCA
 ```
 We obtain the following UMAP:
-![](Tutorial/UMAP_Seurat.png)
+![](man/figures/UMAP_Seurat.png)
 
 ### Generate a RCA object and perform RCA analysis
 We use the RCA function *createRCAObject* to generate a RCA object from the raw and optionally also the normalized data stored in our Seurat object.
@@ -682,7 +676,7 @@ library(gridExtra)
 grid.arrange(umapAll_Seurat_RCA_Clusters,umapAll_Seurat_Estimated_CT,nrow=1)
 ```
 
-![](Tutorial/Combined_UMAPs_Seurat_RCA.png)
+![](man/figures/Combined_UMAPs_Seurat_RCA.png)
 
 The RCA clusters show a high concordance to the Seurat clusters shown in the previous UMAP.
 
@@ -839,21 +833,21 @@ Now, it's finally time to visualize the RNA velocity results. There are 3 visual
 ### Velocity embedding
 scv.pl.velocity_embedding(merged_data, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = 'tab20', figsize = (10,10), save = 'embedding.png')
 ```
-![](Tutorial/scvelo_embedding.png)
+![](man/figures/scvelo_embedding.png)
 
 ```Python
 # Python
 ### Velocity Embedding Grid
 scv.pl.velocity_embedding_grid(merged_data, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = 'tab20', figsize = (10,10), save = 'grid.png')
 ```
-![](Tutorial/scvelo_grid.png)
+![](man/figures/scvelo_grid.png)
 
 ```Python
 # Python
 ### Velocity Embedding Streams
 scv.pl.velocity_embedding_stream(merged_data, min_mass = 1.25, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = 'tab20', figsize = (10,10), save = 'stream.png')
 ```
-![](Tutorial/scvelo_stream.png)
+![](man/figures/scvelo_stream.png)
 
 ### Using RCA colors
 
@@ -865,21 +859,22 @@ Since the RCA clusters already have color annotations, you can use the RCA color
 scv.pl.velocity_embedding(merged_data, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = merged_data.obs['Clusters'].sort_values().unique().tolist(), figsize = (10,10), save = 'RCAColor_embedding.png')
 ```
 
-![](Tutorial/scvelo_RCAColor_embedding.png)
+![](man/figures/scvelo_RCAColor_embedding.png)
+![](man/figures/scvelo_RCAColor_grid.png)
+![](man/figures/scvelo_RCAColor_stream.png)
+
 
 ```Python
 # Python
 ### Velocity Embedding Grid
 scv.pl.velocity_embedding_grid(merged_data, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = merged_data.obs['Clusters'].sort_values().unique().tolist(), figsize = (10,10), save = 'RCAColor_grid.png')
 ```
-![](Tutorial/scvelo_RCAColor_grid.png)
 
 ```Python
 # Python
 ### Velocity Embedding Streams
 scv.pl.velocity_embedding_stream(merged_data, min_mass = 1.25, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = merged_data.obs['Clusters'].sort_values().unique().tolist(), figsize = (10,10), save = 'RCAColor_stream.png')
 ```
-![](Tutorial/scvelo_RCAColor_stream.png)
 
 
 ## FAQ
