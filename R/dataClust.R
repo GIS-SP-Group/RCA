@@ -57,6 +57,5 @@ dataClust <- function(rca.obj, deepSplitValues = 1, minClustSize = 5, corMeth = 
     )
 
     ### Return RCA object
-
     return(rca.obj)
 }

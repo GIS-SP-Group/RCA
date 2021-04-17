@@ -8,12 +8,15 @@
 #' @export
 #'
 elbowPlot <- function(rca.obj,nPCs=50,filename="Projection_Elbow.png",approx=F) {
+
+  projection.data <- base::as.matrix(rca.obj$projection.data)
+
   if (approx){
-    tmp<-irlba::irlba(rca.obj$projection.data,nv=nPCs)
-    tmp$sdev <- tmp$d/sqrt(max(1, ncol(rca.obj$projection.data) - 1))
+    tmp<-irlba::irlba(projection.data,nv=nPCs)
+    tmp$sdev <- tmp$d/sqrt(max(1, ncol(projection.data) - 1))
   }
   else{
-	  tmp<-irlba::prcomp_irlba(rca.obj$projection.data,n=nPCs,center=F,scale.=F)
+	  tmp<-irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)
   }
 	png(filename)
 	plot(tmp$sdev,ylab="Standard deviation",xlab="Component")
@@ -34,23 +37,24 @@ elbowPlot <- function(rca.obj,nPCs=50,filename="Projection_Elbow.png",approx=F) 
 #'
 dataSClust <- function(rca.obj,res=0.5, corMeth="none", nPCs=10, approx=T) {
  tempS<-Seurat::CreateSeuratObject(rca.obj$raw.data)
+ projection.data <- base::as.matrix(rca.obj$projection.data)
  if(!(approx)){
   if ((nPCs==0) & (corMeth !="none")){
 	  if (("HiClimR" %in% .packages()) & (corMeth=="pearson")){
-		  projection<-1-HiClimR::fastCor(as.matrix(rca.obj$projection.data))
+		  projection<-1-HiClimR::fastCor(projection.data)
 		  }else{
-			projection<-1-cor(rca.obj$projection.data,method=corMeth)
+			projection<-1-cor(projection.data,method=corMeth)
 		  }
   } else{
     if (corMeth != "none"){
-		  pca_result<-cor(t(irlba::prcomp_irlba(rca.obj$projection.data,n=nPCs,center=F,scale.=F)$rotation),method=corMeth)
-		  colnames(pca_result)<-colnames(rca.obj$projection.data)
-		  row.names(pca_result)<-colnames(rca.obj$projection.data)
+		  pca_result<-cor(t(irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)$rotation),method=corMeth)
+		  colnames(pca_result)<-colnames(projection.data)
+		  row.names(pca_result)<-colnames(projection.data)
 		  projection<-as.dist(1-pca_result)
 		} else {
 		  if ((nPCs != 0)&(corMeth=="none")){
-        pca_result<-irlba::prcomp_irlba(rca.obj$projection.data,n=nPCs,center=F,scale.=F)$rotation
-        row.names(pca_result)<-colnames(rca.obj$projection.data)
+        pca_result<-irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)$rotation
+        row.names(pca_result)<-colnames(projection.data)
         projection<-pca_result
 		  }
       }
@@ -62,17 +66,17 @@ dataSClust <- function(rca.obj,res=0.5, corMeth="none", nPCs=10, approx=T) {
      print("Ignoring distance metric in approximative computation")
    }
    #From Seurat RunPCA
-   npcs <- min(nPCs, nrow(rca.obj$projection.data) - 1)
-   pca.results <- irlba::irlba(rca.obj$projection.data, nv = npcs)
+   npcs <- min(nPCs, nrow(projection.data) - 1)
+   pca.results <- irlba::irlba(projection.data, nv = npcs)
    feature.loadings <- pca.results$v
-   sdev <- pca.results$d/sqrt(max(1, ncol(rca.obj$projection.data) - 1))
+   sdev <- pca.results$d/sqrt(max(1, ncol(projection.data) - 1))
    projection <- pca.results$u %*% diag(pca.results$d)
 
-   rownames(x = feature.loadings) <- rownames(x = rca.obj$projection.data)
+   rownames(x = feature.loadings) <- rownames(x = projection.data)
    colnames(x = feature.loadings) <- paste0("PC_", 1:npcs)
-   rownames(x = projection) <- colnames(x = rca.obj$projection.data)
+   rownames(x = projection) <- colnames(x = projection.data)
    colnames(x = projection) <- colnames(x = feature.loadings)
-   total.variance <- sum(apply(X=rca.obj$projection.data,MARGIN=2,FUN=var))
+   total.variance <- sum(apply(X=projection.data,MARGIN=2,FUN=var))
    tempS@reductions[["pca"]] <- Seurat::CreateDimReducObject(
      embeddings = projection,
      loadings = feature.loadings,
