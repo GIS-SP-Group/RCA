@@ -8,8 +8,8 @@ Description: Single-cell clustering by projection onto bulk reference transcript
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: qlcMatrix, WGCNA, dynamicTreeCut, dplyr, ComplexHeatmap, circlize, umap, gridExtra, Hmisc,  methods, ggplot2, tibble (>= 3.0.0), Seurat, gplots, irlba, doParallel, pbapply
+Imports: qlcMatrix, WGCNA, dynamicTreeCut, dplyr, ComplexHeatmap, circlize, umap, gridExtra, Hmisc,  methods, ggplot2, tibble (>= 3.0.0), Seurat, gplots, irlba
 Depends: Matrix, R (>= 3.5.0)
-Suggests: BiocManager, ROCR, randomcoloR,fastcluster, HiClimR, htmlwidgets,  plotrix, dbscan, plotly, graphics
+Suggests: BiocManager, ROCR, randomcoloR, fastcluster, HiClimR, htmlwidgets, plotrix, dbscan, plotly, graphics, future, pbapply, future.apply, doParallel, parallel, magrittr
 biocViews: impute, preprocessCore, GO.db, edgeR, ensembldb, EnsDb.Mmusculus.v79, EnsDb.Hsapiens.v86
 RoxygenNote: 7.1.1
