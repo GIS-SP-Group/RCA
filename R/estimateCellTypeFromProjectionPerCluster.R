@@ -36,7 +36,7 @@ estimateCellTypeFromProjectionPerCluster <- function(rca.obj, homogeneity=NULL) 
     base::rownames(enrichmentAll)<-base::c(1:base::dim(enrichmentAll)[1])
     enrichmentAll$Count<-base::as.numeric(base::as.character(enrichmentAll$Count))
     totalCounts<-base::data.frame(dplyr::count(enrichmentAll,wt=Count,Cluster))
-    enrichmentAll<-dplur::left_join(enrichmentAll,totalCounts,by="Cluster")
+    enrichmentAll<-dplyr::left_join(enrichmentAll,totalCounts,by="Cluster")
     enrichmentAll<-cbind(enrichmentAll,enrichmentAll$Count/enrichmentAll$n*100)
     base::colnames(enrichmentAll)[5]<-"Ratio"
     enrichmentAll$Ratio<-base::as.numeric(base::as.character(enrichmentAll$Ratio))

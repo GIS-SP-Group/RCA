@@ -264,6 +264,7 @@ ComputePairWiseDE <-  function(object,
                                pseudocount.use = 1,
                                MeanExprsThrs = 0,
                                p.adjust.methods = "BH") {
+    `%||%` <- rlang::`%||%`
     ## for Wilcox test
     WilcoxDETest <-
         function(data.use, cells.1, cells.2, verbose = TRUE) {
@@ -438,7 +439,7 @@ ComputePairWiseDE <-  function(object,
             "The following cell names provided to cells.1 are not present: ",
             base::paste(bad.cells, collapse = ", ")
         )
-    } else if (paste::any(!cells.2 %in% base::colnames(x = object))) {
+    } else if (base::any(!cells.2 %in% base::colnames(x = object))) {
         bad.cells <-
             base::colnames(x = object)[base::which(x = !base::as.character(x = cells.2) %in% base::colnames(x = object))]
         stop(
@@ -451,7 +452,7 @@ ComputePairWiseDE <-  function(object,
     thresh.min <- 0
     pct.1 <- base::round(
         x = Matrix::rowSums(x = object[features, cells.1, drop = FALSE] > thresh.min) /
-            lbase::ength(x = cells.1),
+            base::length(x = cells.1),
         digits = 16
     )
     pct.2 <- base::round(

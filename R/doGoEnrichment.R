@@ -30,87 +30,87 @@ doEnrichGo<-function(rca.obj,
 		     cluster.ID=NULL,
 		     deep.split=NULL){
 	#check annotation provided
-	if (is.null(annotation)){
-		print("No annotation provided. Download from bioconductor, e.g. org.Hs.eg.db for homo sapiens")
+	if (base::is.null(annotation)){
+	    base::print("No annotation provided. Download from bioconductor, e.g. org.Hs.eg.db for homo sapiens")
 		stop()
 	} else {
-	    print(citation(annotation))
+	    base::print(utils::citation(annotation))
 	}
 
 	#check background.se.thresholds
-	if (!(is.null(background.set.threshold)) & !(is.null(n.Cells.Expressed))){
-		print("Only one threshold can be used.")
+	if (!(base::is.null(background.set.threshold)) & !(base::is.null(n.Cells.Expressed))){
+	    base::print("Only one threshold can be used.")
 		stop()
 	}
 
 	#Check type of clustering
-	if (class(rca.obj$clustering.out)!="hclust"){
+	if (base::class(rca.obj$clustering.out)!="hclust"){
 		deep.split=1
 	}else{
-		if (is.null(deep.split)){
-			print("Please specify the desired cluster split to be used")
+		if (base::is.null(deep.split)){
+		    base::print("Please specify the desired cluster split to be used")
 			stop()
 		}
 	}
 
 	#map cluster colors to numbers#
-	clusters<-unique(rca.obj$clustering.out$dynamicColorsList[[deep.split]])
-	map<-c(1:length(clusters))
-        names(map)<-clusters
+	clusters<-base::unique(rca.obj$clustering.out$dynamicColorsList[[deep.split]])
+	map<-base::c(1:base::length(clusters))
+	base::names(map)<-clusters
 	#Determine clusters to be subjected to go test
- 	if(is.null(cluster.ID)){
+ 	if(base::is.null(cluster.ID)){
 		allClusters<-map
 	}else{
 		allClusters<-map[cluster.ID]
 	    }
 	###Loop through all clusters
 	for (cluster in allClusters){
-		if (is.null(cluster.ID)){
-			print(paste0("Performing Go enrichment for cluster ",names(allClusters)[cluster]))
+		if (base::is.null(cluster.ID)){
+		    base::print(base::paste0("Performing Go enrichment for cluster ",base::names(allClusters)[cluster]))
 		} else {
-			print(paste0("Performing Go enrichment for cluster ",names(allClusters)[1]))
+		    base::print(base::paste0("Performing Go enrichment for cluster ",base::names(allClusters)[1]))
 			}
-		clusterGenes<-as.character(rca.obj$DE.genes$Top.DE.genes$Gene[which(rca.obj$DE.genes$Top.DE.genes$Cluster==cluster)])
-		clusterGenes<-str_to_upper(clusterGenes)
+		clusterGenes<-base::as.character(rca.obj$DE.genes$Top.DE.genes$Gene[base::which(rca.obj$DE.genes$Top.DE.genes$Cluster==cluster)])
+		clusterGenes<-stringr::str_to_upper(clusterGenes)
 		###Generate background set using a threshold based on the mean expression of genes across all cells.
-		backgroundGeneNames=row.names(rca.obj$data)
-		if (!(is.null(background.set.threshold))){
+		backgroundGeneNames=base::row.names(rca.obj$data)
+		if (!(base::is.null(background.set.threshold))){
 			if (background.set=="CLUSTER"){
-				if(is.null(cluster.ID)){
-					clusterMeanExp<-apply(rca.obj$data[,which(rca.obj$clustering.out$dynamicColorsList[[1]]==names(allClusters)[cluster])],1,mean)
+				if(base::is.null(cluster.ID)){
+					clusterMeanExp<-base::apply(rca.obj$data[,base::which(rca.obj$clustering.out$dynamicColorsList[[1]]==base::names(allClusters)[cluster])],1,mean)
 				}else{
-					clusterMeanExp<-apply(rca.obj$data[,which(rca.obj$clustering.out$dynamicColorsList[[1]]==names(allClusters)[1])],1,mean)
+					clusterMeanExp<-base::apply(rca.obj$data[,base::which(rca.obj$clustering.out$dynamicColorsList[[1]]==base::names(allClusters)[1])],1,mean)
 				}
 			}else{
-				clusterMeanExp<-apply(rca.obj$data,1,mean)
+				clusterMeanExp<-base::apply(rca.obj$data,1,mean)
 			}
 
-			if (is.numeric(background.set.threshold)){
-					backgroundGeneNames<-row.names(rca.obj$data)[which(clusterMeanExp>background.set.threshold)]
+			if (base::is.numeric(background.set.threshold)){
+					backgroundGeneNames<-base::row.names(rca.obj$data)[base::which(clusterMeanExp>background.set.threshold)]
 			}else{
-				labels<-c("Min","1stQ","Median","Mean","3rdQ")
-				index<-which(labels == background.set.threshold)
-				if (isEmpty(index)){
-					print("The provided value for the background.set.threshold is not valid")
+				labels<-base::c("Min","1stQ","Median","Mean","3rdQ")
+				index<-base::which(labels == background.set.threshold)
+				if (S4Vectors::isEmpty(index)){
+				    base::print("The provided value for the background.set.threshold is not valid")
 					stop()
 					}
-				backgroundGeneNames<-row.names(rca.obj$data)[which(clusterMeanExp>summary(clusterMeanExp)[index])]
+				backgroundGeneNames<-base::row.names(rca.obj$data)[base::which(clusterMeanExp>base::summary(clusterMeanExp)[index])]
 			}
 		}
 
 
 		###Generate background set using a threshold based on the mean expression of genes across all cells.
-		if (!(is.null(n.Cells.Expressed))){
+		if (!(base::is.null(n.Cells.Expressed))){
 			geneExpVec <- Matrix::rowSums(rca.obj$raw.data>0)
-			backgroundGeneNames<-row.names(rca.obj$data)[which(geneExpVec > min.cell.exp)]
+			backgroundGeneNames<-base::row.names(rca.obj$data)[base::which(geneExpVec > n.Cells.Expressed)]
 			}
 		###Relabel genes in case they are not in ENTREZ gene ID format already
 		if (gene.label.type != "ENTREZID"){
-			backgroundENTREZ<-clusterProfiler::bitr(backgroundGeneNames, fromType = gene.label.type, toType = c("ENTREZID"), OrgDb = annotation)
-			gene.df <- clusterProfiler::bitr(clusterGenes, fromType = gene.label.type, toType = c("ENTREZID"), OrgDb = annotation)
+			backgroundENTREZ<-clusterProfiler::bitr(backgroundGeneNames, fromType = gene.label.type, toType = base::c("ENTREZID"), OrgDb = annotation)
+			gene.df <- clusterProfiler::bitr(clusterGenes, fromType = gene.label.type, toType = base::c("ENTREZID"), OrgDb = annotation)
 		} else {
-			backgroundENTREZ <- data.frame(ENTREZID=backgroundGeneNames)
-			gene.df <- data.frame(ENTREZID=clusterGenes)
+			backgroundENTREZ <- base::data.frame(ENTREZID=backgroundGeneNames)
+			gene.df <- base::data.frame(ENTREZID=clusterGenes)
 			}
 		###Perfom actual enrichemt test
 		ggo <- clusterProfiler::enrichGO(gene = gene.df$ENTREZID,
@@ -122,22 +122,28 @@ doEnrichGo<-function(rca.obj,
 						 readable = TRUE,
 						 universe = backgroundENTREZ$ENTREZID)
 
-		if (!is.null(ggo)){
-			if (dim(as.data.frame(ggo))[1] != 0){
-				if (is.null(cluster.ID)){
+		if (!base::is.null(ggo)){
+			if (base::dim(base::as.data.frame(ggo))[1] != 0){
+				if (base::is.null(cluster.ID)){
 				#Generate and save barplot
-				ggplot2::ggsave(paste0("barplot_",names(allClusters)[cluster],"_",ontology,"_",filename),barplot(ggo),width=15,height=8,units="in")
+				ggplot2::ggsave(base::paste0("barplot_",base::names(allClusters)[cluster],"_",ontology,"_",filename),
+				                graphics::barplot(ggo),width=15,height=8,units="in")
 				#Generate and save dotplot
-				ggplot2::ggsave(paste0("Dotplot_",names(allClusters)[cluster],"_",ontology,"_",filename),clusterProfiler::dotplot(ggo),width=15,height=8,units="in")
+				ggplot2::ggsave(base::paste0("Dotplot_",base::names(allClusters)[cluster],"_",ontology,"_",filename),
+				                clusterProfiler::dotplot(ggo),width=15,height=8,units="in")
 				#Generate and save goplot
-				ggplot2::ggsave(paste0("gotplot_",names(allClusters)[cluster],"_",ontology,"_",filename),clusterProfiler::goplot(ggo),width=15,height=8,units="in")
+				ggplot2::ggsave(base::paste0("gotplot_",base::names(allClusters)[cluster],"_",ontology,"_",filename),
+				                clusterProfiler::goplot(ggo),width=15,height=8,units="in")
 				} else {
 				#Generate and save barplot
-				ggplot2::ggsave(paste0("barplot_",names(allClusters)[1],"_",ontology,"_",filename),barplot(ggo),width=15,height=8,units="in")
+				ggplot2::ggsave(base::paste0("barplot_",base::names(allClusters)[1],"_",ontology,"_",filename),
+				                graphics::barplot(ggo),width=15,height=8,units="in")
 				#Generate and save dotplot
-				ggplot2::ggsave(paste0("Dotplot_",names(allClusters)[1],"_",ontology,"_",filename),clusterProfiler::dotplot(ggo),width=15,height=8,units="in")
+				ggplot2::ggsave(base::paste0("Dotplot_",base::names(allClusters)[1],"_",ontology,"_",filename),
+				                clusterProfiler::dotplot(ggo),width=15,height=8,units="in")
 				#Generate and save goplot
-				ggplot2::ggsave(paste0("gotplot_",names(allClusters)[1],"_",ontology,"_",filename),clusterProfiler::goplot(ggo),width=25,height=8,units="in")
+				ggplot2::ggsave(base::paste0("gotplot_",base::names(allClusters)[1],"_",ontology,"_",filename),
+				                clusterProfiler::goplot(ggo),width=25,height=8,units="in")
 		                }
 		        }
 	      }

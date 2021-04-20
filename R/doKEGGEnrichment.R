@@ -73,7 +73,7 @@ doEnrichKEGG<-function(rca.obj,
 			print(paste0("Performing KEGG enrihment for cluster ",names(allClusters)[1]))
 			}
 		clusterGenes<-as.character(rca.obj$DE.genes$Top.DE.genes$Gene[which(rca.obj$DE.genes$Top.DE.genes$Cluster==cluster)])
-		clusterGenes<-str_to_upper(clusterGenes)
+		clusterGenes<-stringr::str_to_upper(clusterGenes)
 		###Generate background set using a threshold based on the mean expression of genes across all cells.
 		backgroundGeneNames<-row.names(rca.obj$data)
 		if (!(is.null(background.set.threshold))){
@@ -92,7 +92,7 @@ doEnrichKEGG<-function(rca.obj,
 			}else{
 				labels<-c("Min","1stQ","Median","Mean","3rdQ")
 				index<-which(labels == background.set.threshold)
-				if (isEmpty(index)){
+				if (S4Vectors::isEmpty(index)){
 					print("The provided value for the background.set.threshold is not valid")
 					stop()
 					}
@@ -103,7 +103,7 @@ doEnrichKEGG<-function(rca.obj,
 		###Generate background set using a threshold based on the mean expression of genes across all cells.
 		if (!(is.null(n.Cells.Expressed))){
 			geneExpVec <- Matrix::rowSums(rca.obj$raw.data>0)
-			backgroundGeneNames<-row.names(rca.obj$data)[which(geneExpVec > min.cell.exp)]
+			backgroundGeneNames<-row.names(rca.obj$data)[which(geneExpVec > n.Cells.Expressed)]
 			}
 		###Relabel genes in case they are not in ENTREZ gene ID format already
 		if (gene.label.type != "ENTREZID"){
@@ -126,14 +126,18 @@ doEnrichKEGG<-function(rca.obj,
 			if (dim(as.data.frame(ggo))[1] != 0){
 				if (is.null(cluster.ID)){
 				#Generate and save barplot
-				ggplot2::ggsave(paste0("barplot_",names(allClusters)[cluster],"_",filename),barplot(ggo),width=15,height=8,units="in")
+				ggplot2::ggsave(paste0("barplot_",names(allClusters)[cluster],"_",filename),
+				                graphics::barplot(ggo),width=15,height=8,units="in")
 				#Generate and save dotplot
-				ggplot2::ggsave(paste0("Dotplot_",names(allClusters)[cluster],"_",filename),clusterProfiler::dotplot(ggo),width=15,height=8,units="in")
+				ggplot2::ggsave(paste0("Dotplot_",names(allClusters)[cluster],"_",filename),
+				                clusterProfiler::dotplot(ggo),width=15,height=8,units="in")
 				} else {
 				#Generate and save barplot
-				ggplot2::ggsave(paste0("barplot_",names(allClusters)[1],"_",filename),barplot(ggo),width=15,height=8,units="in")
+				ggplot2::ggsave(paste0("barplot_",names(allClusters)[1],"_",filename),
+				                graphics::barplot(ggo),width=15,height=8,units="in")
 				#Generate and save dotplot
-				ggplot2::ggsave(paste0("Dotplot_",names(allClusters)[1],"_",filename),clusterProfiler::dotplot(ggo),width=15,height=8,units="in")
+				ggplot2::ggsave(paste0("Dotplot_",names(allClusters)[1],"_",filename),
+				                clusterProfiler::dotplot(ggo),width=15,height=8,units="in")
 		                }
 		        }
 	      }
