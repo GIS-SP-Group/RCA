@@ -33,16 +33,18 @@ doEnrichKEGG<-function(rca.obj,
 		     deep.split=NULL){
 	#check annotation provided
 	if (is.null(annotation)){
-		print("No annotation provided. Download from bioconductor, e.g. org.Hs.eg.db for homo sapiens") 
+		print("No annotation provided. Download from bioconductor, e.g. org.Hs.eg.db for homo sapiens")
 		stop()
+	} else if (key == "kegg") {
+	    print(httr::content(httr::GET("http://rest.kegg.jp/info/kegg")))
 	}
-  
+
 	#check background.se.thresholds
 	if (!(is.null(background.set.threshold)) & !(is.null(n.Cells.Expressed))){
 		print("Only one threshold can be used.")
 		stop()
 	}
-    
+
 	#Check type of clustering
 	if (class(rca.obj$clustering.out)!="hclust"){
 		deep.split=1
@@ -52,7 +54,7 @@ doEnrichKEGG<-function(rca.obj,
 			stop()
 		}
 	}
-      
+
 	#map cluster colors to numbers#
 	clusters<-unique(rca.obj$clustering.out$dynamicColorsList[[deep.split]])
 	map<-c(1:length(clusters))
@@ -97,7 +99,7 @@ doEnrichKEGG<-function(rca.obj,
 				backgroundGeneNames<-row.names(rca.obj$data)[which(clusterMeanExp>summary(clusterMeanExp)[index])]
 				}
 		}
-		     
+
 		###Generate background set using a threshold based on the mean expression of genes across all cells.
 		if (!(is.null(n.Cells.Expressed))){
 			geneExpVec <- Matrix::rowSums(rca.obj$raw.data>0)
@@ -112,14 +114,14 @@ doEnrichKEGG<-function(rca.obj,
 			gene.df <- data.frame(ENTREZID=clusterGenes)
 			}
 		###Perfom actual enrichemt test
-		ggo <- clusterProfiler::enrichKEGG(gene = gene.df$ENTREZID, 
-						 organism = org, 
-						 keyType = key, 
-						 pAdjustMethod = p.Adjust.Method, 
-						 pvalueCutoff  = p.Val, 
-						 qvalueCutoff  = q.Val, 
+		ggo <- clusterProfiler::enrichKEGG(gene = gene.df$ENTREZID,
+						 organism = org,
+						 keyType = key,
+						 pAdjustMethod = p.Adjust.Method,
+						 pvalueCutoff  = p.Val,
+						 qvalueCutoff  = q.Val,
 						 universe = backgroundENTREZ$ENTREZID)
-		
+
 		if (!is.null(ggo)){
 			if (dim(as.data.frame(ggo))[1] != 0){
 				if (is.null(cluster.ID)){
@@ -135,5 +137,5 @@ doEnrichKEGG<-function(rca.obj,
 		                }
 		        }
 	      }
-      }  
+      }
 }
