@@ -9,13 +9,14 @@
 #' @param min.cell.number.expressing Minimum number of cells (0 percent -100 percent) expressing a gene such that it is considered in the projection step, default is 1 percent
 #' @return a projection matrix.
 #'
-dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 1) {
+dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL,
+                              corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 1) {
 
     # If panel for correlation is GlobalPanel
 
     if (method == "GlobalPanel_CellTypes") {
         # Initialise variable to store projection data from the two fragments of the Global Panel
-        projection_list = list()
+        projection_list = base::list()
 
         # For each fragment of the Global Panel
 
@@ -23,16 +24,16 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
             panel = ReferencePanel[[1]][[1]]
 
             # Select genes with expression in a minimum number of cells
-            geneExpVec <- Matrix::rowSums(sc_data>0)/dim(sc_data)[2]*100
+            geneExpVec <- Matrix::rowSums(sc_data>0)/base::dim(sc_data)[2]*100
 	    if (min.cell.number.expressing==0){
-	            shared_genes <- intersect(rownames(sc_data),rownames(panel))
+	            shared_genes <- base::intersect(base::rownames(sc_data),base::rownames(panel))
 	    }else{
-		    filt.genes <- which(geneExpVec < min.cell.number.expressing)
+		    filt.genes <- base::which(geneExpVec < min.cell.number.expressing)
 	            # Select genes that are shared by the input data and the panel
-		    if(length(filt.genes) > 0) {
-		        shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+		    if(base::length(filt.genes) > 0) {
+		        shared_genes <- base::intersect(base::rownames(sc_data)[-filt.genes], base::rownames(panel))
 		    } else {
-		        shared_genes <- intersect(rownames(sc_data),rownames(panel))
+		        shared_genes <- base::intersect(base::rownames(sc_data),base::rownames(panel))
 		    }
 	    }
 
@@ -45,25 +46,25 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
             # Compute projection of input data with the panel fragment
             if(corMeth == "pearson") {
-                subset_panel = as.matrix(subset_panel)
+                subset_panel = base::as.matrix(subset_panel)
                 projection_fragment <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
             } else {
-                projection_fragment <- cor(subset_panel, as.matrix(subset_data), method = corMeth)
+                projection_fragment <- stats::cor(subset_panel, base::as.matrix(subset_data), method = corMeth)
             }
 
 
             # Reattach dimnames
-            colnames(projection_fragment) <- colnames(subset_data)
-            rownames(projection_fragment) <- colnames(subset_panel)
+            base::colnames(projection_fragment) <- base::colnames(subset_data)
+            base::rownames(projection_fragment) <- base::colnames(subset_panel)
 
             # Raise the projection fragment to power
-            projection_fragment = abs(projection_fragment) ^ (power) * sign(projection_fragment)
+            projection_fragment = base::abs(projection_fragment) ^ (power) * base::sign(projection_fragment)
 
             # If scaling is required
             if (scale) {
 
                 # Scale
-                projection_fragment = scale(projection_fragment, center = TRUE, scale = TRUE)
+                projection_fragment = base::scale(projection_fragment, center = TRUE, scale = TRUE)
             }
 
             # Store projection data of fragment of Global Panel
@@ -77,31 +78,30 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
     else if (method == "GlobalPanel") {
 
         # Initialise variable to store projection data from the two fragments of the Global Panel
-        projection_list = list()
+        projection_list = base::list()
 
         # For each fragment of the Global Panel
-        for (i in 1:length(ReferencePanel[[1]])) {
+        for (i in 1:base::length(ReferencePanel[[1]])) {
 
             # Initialise panel
             panel = ReferencePanel[[1]][[i]]
 
 	    # Select genes with expression in a minimum number of cells
-            geneExpVec <- Matrix::rowSums(sc_data>0)/dim(sc_data)[2]*100
+            geneExpVec <- Matrix::rowSums(sc_data>0)/base::dim(sc_data)[2]*100
 
             # Select genes that are shared by the input data and the panel
 	    if (min.cell.number.expressing==0){
-	            shared_genes <- intersect(rownames(sc_data),rownames(panel))
+	            shared_genes <- base::intersect(base::rownames(sc_data),base::rownames(panel))
 	    }else{
-    		    filt.genes <- which(geneExpVec < min.cell.number.expressing)
+    		    filt.genes <- base::which(geneExpVec < min.cell.number.expressing)
 	            # Select genes that are shared by the input data and the panel
-		    if(length(filt.genes) > 0) {
-		        shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+		    if(base::length(filt.genes) > 0) {
+		        shared_genes <- base::intersect(base::rownames(sc_data)[-filt.genes], base::rownames(panel))
 		    } else {
-		        shared_genes <- intersect(rownames(sc_data),rownames(panel))
+		        shared_genes <- base::intersect(base::rownames(sc_data),base::rownames(panel))
 		    }
 
 	    }
-
 
             # Reduce the panel and input data to the shared genes
             subset_panel = panel[shared_genes, ]
@@ -112,25 +112,25 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
             # Compute projection of input data with the panel fragment
             if(corMeth == "pearson") {
-                subset_panel = as.matrix(subset_panel)
+                subset_panel = base::as.matrix(subset_panel)
                 projection_fragment <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
             } else {
-                projection_fragment <- cor(subset_panel, as.matrix(subset_data), method = corMeth)
+                projection_fragment <- stats::cor(subset_panel, base::as.matrix(subset_data), method = corMeth)
             }
 
 
             # Reattach dimnames
-            colnames(projection_fragment) <- colnames(subset_data)
-            rownames(projection_fragment) <- colnames(subset_panel)
+            base::colnames(projection_fragment) <-  base::colnames(subset_data)
+            base::rownames(projection_fragment) <-  base::colnames(subset_panel)
 
             # Raise the projection fragment to power
-            projection_fragment = abs(projection_fragment) ^ (power) * sign(projection_fragment)
+            projection_fragment =  base::abs(projection_fragment) ^ (power) *  base::sign(projection_fragment)
 
             # If scaling is required
             if (scale) {
 
                 # Scale
-                projection_fragment = scale(projection_fragment, center = TRUE, scale = TRUE)
+                projection_fragment =  base::scale(projection_fragment, center = TRUE, scale = TRUE)
             }
 
             # Store projection data of fragment of Global Panel
@@ -138,47 +138,68 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
         }
 
         # Combine the projection result of multiple Global Panel fragments
-        projection = do.call("rbind", projection_list)
+        projection =  base::do.call("rbind", projection_list)
 
     }
     # If panel for correlation is ColonEpitheliumPanel
     else if (method == "ColonEpitheliumPanel") {
 
-        # Scale panel by median
-        fc = apply(ReferencePanel$ColonEpiPanel, 1, function(x) x - median(x))
+        # Select genes with expression in a minimum number of cells
+        geneExpVec <- Matrix::rowSums(sc_data>0)/base::dim(sc_data)[2]*100
+        if (min.cell.number.expressing==0){
+            shared_genes <- base::intersect(base::rownames(sc_data),base::rownames(ReferencePanel$ColonEpiPanel))
+        }else{
+            filt.genes <- base::which(geneExpVec < min.cell.number.expressing)
+            # Select genes that are shared by the input data and the panel
+            if(base::length(filt.genes) > 0) {
+                shared_genes <- base::intersect(base::rownames(sc_data)[-filt.genes], base::rownames(ReferencePanel$ColonEpiPanel))
+            } else {
+                shared_genes <- base::intersect(base::rownames(sc_data),base::rownames(ReferencePanel$ColonEpiPanel))
+            }
+        }
 
-        fs = fc > 1.5
+        # Reduce the panel and input data to the shared genes
+        subset_panel = ReferencePanel$ColonEpiPanel[shared_genes, ]
+        subset_data = sc_data[shared_genes, , drop = FALSE]
 
-        fs1 = rownames(ReferencePanel$ColonEpiPanel[apply(fs, 1, function(x)
-            sum(x)) > 0,])
-        gl_intersect = intersect(rownames(fpkm_temp), fs1)
-        projection = as.data.frame(cor(fpkm_temp[gl_intersect,], ReferencePanel$ColonEpiPanel[gl_intersect,], corMeth))
-        projection = abs(projection) ^ (power) * sign(projection)
+        # Compute projection of input data with the panel
+        if(corMeth == "pearson") {
+            subset_panel = base::as.matrix(subset_panel)
+            projection <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
+        } else {
+            projection <- stats::cor(subset_panel, base::as.matrix(subset_data), method = corMeth)
+        }
+        base::rownames(projection) <- base::colnames(subset_panel)
+        base::colnames(projection) <- base::colnames(subset_data)
+
+        # Raise the projection to power
+        projection = base::abs(projection) ^ (power) *base::sign(projection)
+
+        # If scaling is required
         if (scale) {
-            projection = scale(projection,
-                               center = TRUE,
-                               scale = TRUE)
+
+            # Scale
+            projection = base::scale(projection,
+                                     center = TRUE,
+                                     scale = TRUE)
         }
     }
     # If any other panel is chosen
-    else if (method %in% names(ReferencePanel)) {
+    else if (method %in% base::names(ReferencePanel)) {
 
         panel <- ReferencePanel[[method]]
 
-        # Initialise variable to store projection data from the two fragments of the Global Panel
-        projection_list = list()
-
         # Select genes with expression in a minimum number of cells
-        geneExpVec <- Matrix::rowSums(sc_data>0)/dim(sc_data)[2]*100
+        geneExpVec <- Matrix::rowSums(sc_data>0)/base::dim(sc_data)[2]*100
         if (min.cell.number.expressing==0){
-           shared_genes <- intersect(rownames(sc_data),rownames(panel))
+           shared_genes <- base::intersect(base::rownames(sc_data),base::rownames(panel))
         }else{
-        filt.genes <- which(geneExpVec < min.cell.number.expressing)
+        filt.genes <- base::which(geneExpVec < min.cell.number.expressing)
         # Select genes that are shared by the input data and the panel
-        if(length(filt.genes) > 0) {
-            shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+        if(base::length(filt.genes) > 0) {
+            shared_genes <- base::intersect(base::rownames(sc_data)[-filt.genes], base::rownames(panel))
         } else {
-            shared_genes <- intersect(rownames(sc_data),rownames(panel))
+            shared_genes <- base::intersect(base::rownames(sc_data),base::rownames(panel))
         }
         }
 
@@ -188,22 +209,22 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
         # Compute projection of input data with the panel
         if(corMeth == "pearson") {
-            subset_panel = as.matrix(subset_panel)
+            subset_panel = base::as.matrix(subset_panel)
             projection <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
         } else {
-            projection <- cor(subset_panel, as.matrix(subset_data), method = corMeth)
+            projection <- stats::cor(subset_panel, base::as.matrix(subset_data), method = corMeth)
         }
-        rownames(projection) <- colnames(subset_panel)
-        colnames(projection) <- colnames(subset_data)
+        base::rownames(projection) <- base::colnames(subset_panel)
+        base::colnames(projection) <- base::colnames(subset_data)
 
         # Raise the projection to power
-        projection = abs(projection) ^ (power) * sign(projection)
+        projection = base::abs(projection) ^ (power) *base::sign(projection)
 
         # If scaling is required
         if (scale) {
 
             # Scale
-            projection = scale(projection,
+            projection = base::scale(projection,
                                center = TRUE,
                                scale = TRUE)
         }
@@ -214,20 +235,20 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
     else {
 
         # Load panel from path provided
-        panel <- readRDS(customPath)
+        panel <- base::readRDS(customPath)
 
 
         # Select genes with expression in a minimum number of cells
-        geneExpVec <- Matrix::rowSums(sc_data>0)/dim(sc_data)[2]*100
+        geneExpVec <- Matrix::rowSums(sc_data>0)/base::dim(sc_data)[2]*100
         if (min.cell.number.expressing==0){
-            shared_genes <- intersect(rownames(sc_data),rownames(panel))
+            shared_genes <- base::intersect(base::rownames(sc_data),base::rownames(panel))
        }else{
 	    filt.genes <- which(geneExpVec < min.cell.number.expressing)
             # Select genes that are shared by the input data and the panel
-	    if(length(filt.genes) > 0) {
-	        shared_genes <- intersect(rownames(sc_data)[-filt.genes], rownames(panel))
+	    if(base::length(filt.genes) > 0) {
+	        shared_genes <- base::intersect(base::rownames(sc_data)[-filt.genes], base::rownames(panel))
 	    } else {
-	        shared_genes <- intersect(rownames(sc_data),rownames(panel))
+	        shared_genes <- base::intersect(base::rownames(sc_data),base::rownames(panel))
 	    }
        }
 
@@ -237,28 +258,28 @@ dataProjectWorker <- function(sc_data, method = "GlobalPanel", customPath = NULL
 
         # Compute projection of input data with the panel
         if(corMeth == "pearson") {
-            subset_panel = as.matrix(subset_panel)
+            subset_panel = base::as.matrix(subset_panel)
             projection <- qlcMatrix::corSparse(X = subset_panel, Y = subset_data)
         } else {
-            projection <- cor(subset_panel, as.matrix(subset_data), method = corMeth)
+            projection <- stats::cor(subset_panel, base::as.matrix(subset_data), method = corMeth)
         }
-        rownames(projection) <- colnames(subset_panel)
-        colnames(projection) <- colnames(subset_data)
+        base::rownames(projection) <- base::colnames(subset_panel)
+        base::colnames(projection) <- base::colnames(subset_data)
 
         # Raise the projection to power
-        projection = abs(projection) ^ (power) * sign(projection)
+        projection = base::abs(projection) ^ (power) * base::sign(projection)
 
         # If scaling is required
         if (scale) {
 
             # Scale
-            projection = scale(projection,
+            projection = base::scale(projection,
                                center = TRUE,
                                scale = TRUE)
         }
     }
     # Store projection result as Matrix
-    return(as(as.matrix(projection), "dgCMatrix"))
+    return(methods::as(base::as.matrix(projection), "dgCMatrix"))
 }
 
 
@@ -301,16 +322,16 @@ dataProject <- function(rca.obj, method = "GlobalPanel", customPath = NULL, corM
 dataProjectMultiPanel <- function(rca.obj, method = list("NovershternPanel","MonacoPanel","GlobalPanel_CellTypes"), customPath = NULL, corMeth = "pearson", power = 4, scale = T, min.cell.number.expressing = 1) {
 
     # Extract data
-    tmp<-c()
-    if (!(is.null(method))){
+    tmp<-base::c()
+    if (!(base::is.null(method))){
     for (element in method){
-      tmp<-rbind(tmp,dataProjectWorker(rca.obj$data,element,customPath,corMeth,power,T, min.cell.number.expressing ))
+      tmp<-base::rbind(tmp,dataProjectWorker(rca.obj$data,element,customPath,corMeth,power,T, min.cell.number.expressing ))
       }
     }
 
     if (!(is.null(customPath))){
     for (element in customPath){
-	tmp<-rbind(tmp,dataProjectWork(rca.obj$data,"Custom",element,corMeth,power,T, min.cell.number.expressing ))
+	tmp<-base::rbind(tmp,dataProjectWorker(rca.obj$data,"Custom",element,corMeth,power,T, min.cell.number.expressing ))
 	   }
     }
     # Assign projection result to RCA object

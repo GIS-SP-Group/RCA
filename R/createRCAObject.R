@@ -9,10 +9,10 @@ createRCAObject <- function(rawData, normData=NULL) {
 
     # Create RCA object using RCAConstruct and the raw data provided
     if (!(is.null(normData))){
-    rca.obj <- RCAConstruct$new(raw.data = rawData, data=normData)
+    rca.obj <- methods::new(Class = "RCAConstruct", raw.data = rawData, data=normData)
     }else
     {
-    rca.obj <- RCAConstruct$new(raw.data = rawData)
+    rca.obj <- methods::new(Class = "RCAConstruct", raw.data = rawData)
     }
     # Return RCA object
     return(rca.obj)

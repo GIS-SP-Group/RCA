@@ -13,14 +13,14 @@ elbowPlot <- function(rca.obj,nPCs=50,filename="Projection_Elbow.png",approx=F) 
 
   if (approx){
     tmp<-irlba::irlba(projection.data,nv=nPCs)
-    tmp$sdev <- tmp$d/sqrt(max(1, ncol(projection.data) - 1))
+    tmp$sdev <- tmp$d/base::sqrt(base::max(1, base::ncol(projection.data) - 1))
   }
   else{
 	  tmp<-irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)
   }
-	png(filename)
-	plot(tmp$sdev,ylab="Standard deviation",xlab="Component")
-	dev.off()
+	grDevices::png(filename)
+	graphics::plot(tmp$sdev,ylab="Standard deviation",xlab="Component")
+	grDevices::dev.off()
 	return()
 }
 
@@ -40,72 +40,72 @@ dataSClust <- function(rca.obj,res=0.5, corMeth="none", nPCs=10, approx=T) {
  projection.data <- base::as.matrix(rca.obj$projection.data)
  if(!(approx)){
   if ((nPCs==0) & (corMeth !="none")){
-	  if (("HiClimR" %in% .packages()) & (corMeth=="pearson")){
+	  if (("HiClimR" %in% base::.packages()) & (corMeth=="pearson")){
 		  projection<-1-HiClimR::fastCor(projection.data)
 		  }else{
-			projection<-1-cor(projection.data,method=corMeth)
+			projection<-1-stats::cor(projection.data,method=corMeth)
 		  }
   } else{
     if (corMeth != "none"){
-		  pca_result<-cor(t(irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)$rotation),method=corMeth)
-		  colnames(pca_result)<-colnames(projection.data)
-		  row.names(pca_result)<-colnames(projection.data)
-		  projection<-as.dist(1-pca_result)
+		  pca_result<-stats::cor(base::t(irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)$rotation),method=corMeth)
+		  base::colnames(pca_result)<-base::colnames(projection.data)
+		  base::row.names(pca_result)<-base::colnames(projection.data)
+		  projection<-stats::as.dist(1-pca_result)
 		} else {
 		  if ((nPCs != 0)&(corMeth=="none")){
         pca_result<-irlba::prcomp_irlba(projection.data,n=nPCs,center=F,scale.=F)$rotation
-        row.names(pca_result)<-colnames(projection.data)
+        base::row.names(pca_result)<-base::colnames(projection.data)
         projection<-pca_result
 		  }
       }
   }
-   tempS@reductions[["pca"]]<-new(Class = "DimReduc", cell.embeddings = matrix(0,0,0), assay.used = "RNA")
+   tempS@reductions[["pca"]]<-methods::new(Class = "DimReduc", cell.embeddings = base::matrix(0,0,0), assay.used = "RNA")
    tempS@reductions$pca@cell.embeddings<-projection
  }else{
    if (corMeth!="none"){
-     print("Ignoring distance metric in approximative computation")
+     base::print("Ignoring distance metric in approximative computation")
    }
    #From Seurat RunPCA
-   npcs <- min(nPCs, nrow(projection.data) - 1)
+   npcs <- base::min(nPCs, base::nrow(projection.data) - 1)
    pca.results <- irlba::irlba(projection.data, nv = npcs)
    feature.loadings <- pca.results$v
-   sdev <- pca.results$d/sqrt(max(1, ncol(projection.data) - 1))
+   sdev <- pca.results$d/base::sqrt(base::max(1, base::ncol(projection.data) - 1))
    projection <- pca.results$u %*% diag(pca.results$d)
 
-   rownames(x = feature.loadings) <- rownames(x = projection.data)
-   colnames(x = feature.loadings) <- paste0("PC_", 1:npcs)
-   rownames(x = projection) <- colnames(x = projection.data)
-   colnames(x = projection) <- colnames(x = feature.loadings)
-   total.variance <- sum(apply(X=projection.data,MARGIN=2,FUN=var))
+   base::rownames(x = feature.loadings) <- base::rownames(x = projection.data)
+   base::colnames(x = feature.loadings) <- base::paste0("PC_", 1:npcs)
+   base::rownames(x = projection) <- base::colnames(x = projection.data)
+   base::colnames(x = projection) <- base::colnames(x = feature.loadings)
+   total.variance <- base::sum(base::apply(X=projection.data,MARGIN=2,FUN=stats::var))
    tempS@reductions[["pca"]] <- Seurat::CreateDimReducObject(
      embeddings = projection,
      loadings = feature.loadings,
      assay = "RNA",
      stdev = sdev,
      key = "PC_",
-     misc = list(total.variance = total.variance))
+     misc = base::list(total.variance = total.variance))
 	}
 
 	tempS<-Seurat::FindNeighbors(object = tempS)
 	tempS<-Seurat::FindClusters(tempS,resolution = res)
 
 	# Convert labels to colours for each tree cut
-	if (length(unique(tempS$seurat_clusters))<41){
-		dynamicColorsList<-list(WGCNA::labels2colors(tempS$seurat_clusters))
+	if (base::length(base::unique(tempS$seurat_clusters))<41){
+		dynamicColorsList<-base::list(WGCNA::labels2colors(tempS$seurat_clusters))
 	} else {
-		if (("randomcoloR" %in% .packages()) & require(plotrix)){
-		     clusterColors<-randomcoloR::distinctColorPalette(length(unique(tempS$seurat_clusters)))
-		     clusterColors<-sapply(clusterColors,plotrix::color.id)
-		     clusterColors<-sapply(clusterColors,function(x){return(x[1])})
-		     names(clusterColors)<-unique(clusteringResult$cluster)
-		     dynamicColorsList<-list(Colors=clusterColors[as.character(clusteringResult$cluster)])
+		if (("randomcoloR" %in% base::.packages()) & ("plotrix" %in% base::.packages())){
+		     clusterColors<-randomcoloR::distinctColorPalette(base::length(base::unique(tempS$seurat_clusters)))
+		     clusterColors<-base::sapply(clusterColors,plotrix::color.id)
+		     clusterColors<-base::sapply(clusterColors,function(x){return(x[1])})
+		     base::names(clusterColors)<-base::unique(tempS$seurat_clusters)
+		     dynamicColorsList<-base::list(Colors=clusterColors[base::as.character(tempS$seurat_clusters)])
 		    } else{
-			dynamicColorsList<-list(WGCNA::labels2colors(tempS$seurat_clusters))
+			dynamicColorsList<-base::list(WGCNA::labels2colors(tempS$seurat_clusters))
 			}
 	}
-	names(dynamicColorsList)<-c("Clusters")
+	base::names(dynamicColorsList)<-c("Clusters")
 	# Assign clustering result to RCA object
-	rca.obj$clustering.out <- list(
+	rca.obj$clustering.out <- base::list(
 	"cellTree" = tempS$seurat_clusters,
 	"dynamicColorsList" = dynamicColorsList
 	)

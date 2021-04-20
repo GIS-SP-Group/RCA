@@ -8,98 +8,98 @@
 #' @export
 #'
 estimateCellTypeFromProjection <- function(rca.obj, confidence = NULL, ctRank = F, cSCompute = F) {
-    
+
         # Extract projection data
         projection <- rca.obj$projection.data
-        
+
         # Returns the likeliest cell type of a cell with respect to a confidence threshold
         cTIdf <- function(x, confidence) {
             temp <- x
-            tempMax <- max(temp)
-            index <- which(temp == tempMax)
+            tempMax <- base::max(temp)
+            index <- base::which(temp == tempMax)
             temp <- temp[-index]
-            deltaMax <- max(temp) / tempMax
+            deltaMax <- base::max(temp) / tempMax
             if (deltaMax < confidence)
-                return(names(x)[index])
+                return(base::names(x)[index])
             else
                 return("Unkown")
         }
-        
+
         # Returns the likeliest cell type of a cell neglecting any confidence value.
         cTIdfWU <- function(x) {
-            return(names(x)[which(x == max(x))])
+            return(base::names(x)[base::which(x == base::max(x))])
         }
-        
+
         # Returns a alpha value for each cell, depending on the confidence score for the cell's cell type annotation among all possible cell types.
         cTIdfAlpha <- function(x) {
             temp <- x
-            tempMax <- max(temp)
-            index <- which(temp == tempMax)
+            tempMax <- base::max(temp)
+            index <- base::which(temp == tempMax)
             temp <- temp[-index]
-            deltaMax <- max(temp) / tempMax
-            return(1.0 - abs(deltaMax))
+            deltaMax <- base::max(temp) / tempMax
+            return(1.0 - base::abs(deltaMax))
         }
 
         # Returns a color for each cell in a grey to 'cell type base color' color scheme, indicating the relative confidence of the annotation for a particular cell among all other cells of the same cell type
         cTIdfConfCol <- function(x, index, bC) {
-            colorVec <- colorRampPalette(c("grey", bC))(50)
-            maxVal <- max(x[, index])
-            maxIndex <- which(x[, index] == maxVal)
-            cellTypeOrder <- order(x[maxIndex, ])
+            colorVec <- grDevices::colorRampPalette(base::c("grey", bC))(50)
+            maxVal <- base::max(x[, index])
+            maxIndex <- base::which(x[, index] == maxVal)
+            cellTypeOrder <- base::order(x[maxIndex, ])
             ratio <-
-                max(1, (which(cellTypeOrder == index) / length(cellTypeOrder)) * 50)
+                base::max(1, (base::which(cellTypeOrder == index) / base::length(cellTypeOrder)) * 50)
             result <- colorVec[ratio]
             return(result)
         }
-        
+
         # Compute cell type assignments and confidence Scores (alpha values for transparency and relative color scale).
-        cellTypes <- list()
-        confidenceScore <- list()
-        relativeColorRank <- list()
-        for (i in c(1:dim(rca.obj$projection.data)[2])) {
-            if (is.null(confidence)) {
-                cellTypes <- c(cellTypes, cTIdfWU(rca.obj$projection.data[, i]))
+        cellTypes <- base::list()
+        confidenceScore <- base::list()
+        relativeColorRank <- base::list()
+        for (i in base::c(1:base::dim(rca.obj$projection.data)[2])) {
+            if (base::is.null(confidence)) {
+                cellTypes <- base::c(cellTypes, cTIdfWU(rca.obj$projection.data[, i]))
             }
             else{
                 cellTypes <-
-                    c(cellTypes,
+                    base::c(cellTypes,
                       cTIdf(rca.obj$projection.data[, i], confidence))
             }
         }
         if (cSCompute) {
-            for (i in c(1:dim(rca.obj$projection.data)[2])) {
+            for (i in base::c(1:base::dim(rca.obj$projection.data)[2])) {
                 confidenceScore <-
-                    c(confidenceScore,
+                    base::c(confidenceScore,
                       cTIdfAlpha(rca.obj$projection.data[, i]))
             }
             rca.obj$cScore <- confidenceScore
         } else{
-            rca.obj$cScore <- list()
+            rca.obj$cScore <- base::list()
         }
         if (ctRank) {
             myColors <-
-                randomcoloR::distinctColorPalette(length(unique(cellTypes)))
-            names(myColors) <- unique(cellTypes)
-            baseColors <- myColors[unlist(cellTypes)]
-            rca.obj$baseColors <- list(Colors = baseColors)
+                randomcoloR::distinctColorPalette(base::length(base::unique(cellTypes)))
+            base::names(myColors) <- base::unique(cellTypes)
+            baseColors <- myColors[base::unlist(cellTypes)]
+            rca.obj$baseColors <- base::list(Colors = baseColors)
             for (i in c(1:dim(rca.obj$projection.data)[2])) {
                 relativeColorRank <-
-                    c(
+                    base::c(
                         relativeColorRank,
                         cTIdfConfCol(rca.obj$projection.data, i, baseColors[i])
                     )
             }
             rca.obj$rRank <- relativeColorRank
         } else{
-            rca.obj$rRank <- list()
-            rca.obj$baseColors <- list()
+            rca.obj$rRank <- base::list()
+            rca.obj$baseColors <- base::list()
         }
-        
-        
+
+
         # Assign projection result to RCA object
         rca.obj$cell.Type.Estimate <- cellTypes
-       
-        
+
+
         # Return RCA object
         return(rca.obj)
     }

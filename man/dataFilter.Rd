@@ -11,7 +11,6 @@ dataFilter(
   percent.mito.thresholds = c(0, 0.2),
   min.cell.exp = 10,
   plot = T,
-  folderpath = ".",
   filename = "RCA_Filter.pdf"
 )
 }
@@ -27,8 +26,6 @@ dataFilter(
 \item{min.cell.exp}{minimum number of cells a gene must be expressed in}
 
 \item{plot}{boolean - if True, plot data filter metrics}
-
-\item{folderpath}{path to save data filter metric plots to}
 
 \item{filename}{file name of saved plots}
 }

@@ -17,12 +17,12 @@ dataLogNormalise <- function(rca.obj, scale.factor = 10000) {
     norm.data<-raw.data/seqDepthVec*scale.factor
 
     # Log-transform normalised data
-    logNorm.data <- log(1+norm.data)
+    logNorm.data <- base::log(1+norm.data)
 
-    colnames(logNorm.data) <- colnames(raw.data)
+    base::colnames(logNorm.data) <- base::colnames(raw.data)
 
     # Store log-transformed normalised data in RCA object
-    rca.obj$data <- as(logNorm.data, "dgCMatrix")
+    rca.obj$data <- methods::as(logNorm.data, "dgCMatrix")
 
     # Return log-normalised data
     return(rca.obj)
