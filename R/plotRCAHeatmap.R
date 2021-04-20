@@ -61,7 +61,9 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             heatmap_legend_param = list(title = "legend", color_bar = "continuous"),
             use_raster = TRUE,
             raster_device = "png",
-            raster_quality = 1
+            raster_quality = 1,
+            raster_resize_mat = TRUE
+
         )
 
     } else {
@@ -151,7 +153,9 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             heatmap_legend_param = list(title = "legend", color_bar = "continuous"),
             use_raster = TRUE,
             raster_device = "png",
-            raster_quality = 1
+            raster_quality = 1,
+            raster_resize_mat = TRUE
+
         )
     }
     } else{
@@ -179,7 +183,9 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             heatmap_legend_param = list(title = "legend", color_bar = "continuous"),
             use_raster = TRUE,
             raster_device = "png",
-            raster_quality = 1
+            raster_quality = 1,
+	    raster_resize_mat = TRUE
+
         )
 
     } else {
@@ -258,7 +264,9 @@ plotRCAHeatmap <- function(rca.obj, var.thrs = 0.1, width = 20, height = 20, fol
             heatmap_legend_param = list(title = "legend", color_bar = "continuous"),
             use_raster = TRUE,
             raster_device = "png",
-            raster_quality = 1
+            raster_quality = 1,
+	        raster_resize_mat = TRUE
+
         )
 
     }
