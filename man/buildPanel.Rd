@@ -4,19 +4,12 @@
 \alias{buildPanel}
 \title{Internal function to build a reference panel from your bulk RNA sequencing data and a list of marker genes}
 \usage{
-buildPanel(
-  bulk.rna.data,
-  de.genes,
-  gene.nomenclature = "SYMBOL",
-  species = "HUMAN"
-)
+buildPanel(bulk.rna.data, de.genes, species = "HUMAN")
 }
 \arguments{
 \item{bulk.rna.data}{Bulk RNA sequencing data - ideally TPM normalized}
 
 \item{de.genes}{list of marker genes}
-
-\item{gene.nomenclature}{Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols. Default is "SYMBOL".}
 
 \item{species}{"HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".}
 }

@@ -11,7 +11,6 @@ buildReferencePanel(
   fc.thrs.specific = 2,
   fdr.thrs = 0.01,
   cut_height = 1.1,
-  gene.nomenclature = "SYMBOL",
   species = "HUMAN",
   filename = "my_reference_panel.rds",
   verbose = FALSE
@@ -27,8 +26,6 @@ buildReferencePanel(
 \item{fdr.thrs}{FDR threshold (default 0.01)}
 
 \item{cut_height}{to cut the clustering of the reference data sets (default 1.1)}
-
-\item{gene.nomenclature}{Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols. Default is "SYMBOL".}
 
 \item{species}{"HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".}
 

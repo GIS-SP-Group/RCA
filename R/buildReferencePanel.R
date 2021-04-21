@@ -1,13 +1,13 @@
 #' Internal function to build a reference panel from your bulk RNA sequencing data and a list of marker genes
+#' Bulk RNA sequencing data must contain gene symbols - we recommend conversion prior to use this function, e.g. using Biomart.
 #'
 #' @param bulk.rna.data Bulk RNA sequencing data - ideally TPM normalized
 #' @param de.genes list of marker genes
-#' @param gene.nomenclature Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols. Default is "SYMBOL".
 #' @param species "HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".
 #' @return reference panel boject
 #'
 
-buildPanel <- function(bulk.rna.data, de.genes, gene.nomenclature = "SYMBOL", species = "HUMAN") {
+buildPanel <- function(bulk.rna.data, de.genes,  species = "HUMAN") {
 
     # Get union of DE genes
     de.union <- base::unique(de.genes)
@@ -29,33 +29,6 @@ buildPanel <- function(bulk.rna.data, de.genes, gene.nomenclature = "SYMBOL", sp
 
     }
 
-    # For Ensembl gene IDs
-    if(gene.nomenclature == "ENS") {
-        ensembl_genes <- base::grep(pattern = "^ENS", x = base::rownames(average.ref.panel), value = T)
-
-        # if Ensembl gene version numbers exist, remove them
-        ensembl_genes <- base::gsub(pattern = "\\..*$", replacement = "", x = ensembl_genes)
-
-        if(base::length(ensembl_genes) != base::length(base::unique(ensembl_genes))) {
-            stop("Non-unique gene names in input data.")
-        }
-
-        base::rownames(average.ref.panel) <- ensembl_genes
-
-        if(species == "HUMAN") {
-            gene.id.df <- ensembldb::select(EnsDb.Hsapiens.v86::EnsDb.Hsapiens.v86, keys= ensembl_genes, keytype = "GENEID", columns = c("SYMBOL","GENEID"))
-        } else if(species == "MOUSE") {
-            gene.id.df <- ensembldb::select(EnsDb.Mmusculus.v79::EnsDb.Mmusculus.v79, keys= ensembl_genes, keytype = "GENEID", columns = c("SYMBOL","GENEID"))
-        }
-
-        average.ref.panel <- average.ref.panel[gene.id.df$GENEID, ]
-
-        # Removing duplicated gene symbols
-        average.ref.panel <- average.ref.panel[-base::which(base::duplicated(gene.id.df$SYMBOL)), ]
-        base::rownames(average.ref.panel) <- gene.id.df$SYMBOL[-base::which(base::duplicated(gene.id.df$SYMBOL))]
-
-    }
-
     # Return object
     return(average.ref.panel)
 }
@@ -69,7 +42,6 @@ buildPanel <- function(bulk.rna.data, de.genes, gene.nomenclature = "SYMBOL", sp
 #' @param fc.thrs.specific absolulte log fold change threshold applied for detailed marker detection (default 2)
 #' @param fdr.thrs FDR threshold (default 0.01)
 #' @param cut_height to cut the clustering of the reference data sets (default 1.1)
-#' @param gene.nomenclature Type of gene nomenclature. "ENS" for Ensembl IDs, "SYMBOL" for gene symbols. Default is "SYMBOL".
 #' @param species "HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".
 #' @param filename file name of reference panel (should end with .rds)
 #' @param verbose Generate debug output and figures (default FALSE)
@@ -77,7 +49,7 @@ buildPanel <- function(bulk.rna.data, de.genes, gene.nomenclature = "SYMBOL", sp
 #' @export
 #'
 
-buildReferencePanel <- function(bulk.rna.data, fc.thrs.general = 6, fc.thrs.specific =2, fdr.thrs = 0.01, cut_height = 1.1, gene.nomenclature = "SYMBOL", species = "HUMAN", filename = "my_reference_panel.rds", verbose=FALSE) {
+buildReferencePanel <- function(bulk.rna.data, fc.thrs.general = 6, fc.thrs.specific =2, fdr.thrs = 0.01, cut_height = 1.1, species = "HUMAN", filename = "my_reference_panel.rds", verbose=FALSE) {
 	#Split cell type from replicate information
 	cellTypes<-base::as.vector(base::sapply(base::colnames(bulk.rna.data),function(x){return(base::strsplit(x,"_")[[1]][1])}))
 
@@ -168,7 +140,7 @@ buildReferencePanel <- function(bulk.rna.data, fc.thrs.general = 6, fc.thrs.spec
 	markerGenesLenient<- base::unique(base::union(markerGenesLenient, tmpGeneList))
 
 	#Generate the panel considering the union of specific and general marker genes
-	Panel_Selection <- buildPanel(bulk.rna.data, base::unique(base::union(markerGenesSpecific, markerGenesLenient)), gene.nomenclature = "SYMBOL", species = "HUMAN")
+	Panel_Selection <- buildPanel(bulk.rna.data, base::unique(base::union(markerGenesSpecific, markerGenesLenient)), species = "HUMAN")
 
 	if(verbose){
 		heatmap_panel <- gplots::heatmap.2(stats::cor(Panel_Selection, method=  "kendal"), col = "bluered", margins = base::c(10,10))

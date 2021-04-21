@@ -9,7 +9,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends: Matrix, R (>= 3.5.0)
-biocViews:  
-Imports: qlcMatrix, WGCNA, dynamicTreeCut, ComplexHeatmap, circlize, umap, gridExtra, methods, ggplot2, Seurat, irlba, EnsDb.Hsapiens.v86, EnsDb.Mmusculus.v79, clusterProfiler, edgeR, ensembldb
-Suggests: BiocManager, dplyr, ROCR, randomcoloR, fastcluster, HiClimR, htmlwidgets, plotrix, dbscan, plotly, graphics, gplots, future, pbapply, future.apply, doParallel, rlang, parallel, magrittr, utils, stringr, foreach, httr, S4Vectors, grDevices
+biocViews:
+Imports: qlcMatrix, WGCNA, dynamicTreeCut, ComplexHeatmap, circlize, umap, gridExtra, methods, ggplot2, Seurat, irlba
+Suggests: dplyr, ROCR, randomcoloR, fastcluster, HiClimR, htmlwidgets, plotrix, dbscan, plotly, graphics, gplots, future, pbapply, future.apply, doParallel, rlang, parallel, magrittr, utils, stringr, foreach, httr, S4Vectors, grDevices, clusterProfiler, edgeR
 RoxygenNote: 7.1.1
