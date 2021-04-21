@@ -30,3 +30,4 @@
 *.Rproj
 .Rbuildignore
 .Rproj.user
+inst/doc
