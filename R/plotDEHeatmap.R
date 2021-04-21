@@ -15,19 +15,19 @@
 plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folderpath = ".", filename = "RCA_DE_Heatmap.pdf", extraCellProperty = NULL,SeuratColorScheme = TRUE) {
 
     # Extract projection data and clustering result from RCA object
-    de.genes <- unique(as.character(rca.obj$DE.genes$Top.DE.genes$Gene))
+    de.genes <- base::unique(base::as.character(rca.obj$DE.genes$Top.DE.genes$Gene))
     cellTree = rca.obj$clustering.out$cellTree
     clusterColorList = rca.obj$clustering.out$dynamicColorsList
 
-    heatmapIn <- matrix(0,length(de.genes),dim(rca.obj$data)[2])
-    for (i in c(1:length(de.genes))){
-     heatmapIn[i,]<-rca.obj$data[which(row.names(rca.obj$data)==de.genes[i]),]
+    heatmapIn <- base::matrix(0,base::length(de.genes),base::dim(rca.obj$data)[2])
+    for (i in base::c(1:base::length(de.genes))){
+     heatmapIn[i,]<-rca.obj$data[base::which(base::row.names(rca.obj$data)==de.genes[i]),]
     }
-    row.names(heatmapIn)<-de.genes
+    base::row.names(heatmapIn)<-de.genes
 
     # if scaling is requested by user
     if(scale) {
-        heatmapIn <- t(scale(x = t(heatmapIn), center = TRUE, scale = TRUE))
+        heatmapIn <- base::t(base::scale(x = base::t(heatmapIn), center = TRUE, scale = TRUE))
         heatmapIn[heatmapIn > 2.5] <- 2.5
         heatmapIn[heatmapIn < -2.5] <- -2.5
     }
@@ -35,43 +35,44 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
     # Set color scheme of heatmap
     if (scale){
 	    if(SeuratColorScheme){
-    colorScheme <-  circlize::colorRamp2(c(min(heatmapIn),0,max(heatmapIn)),c("magenta", "black", "yellow"))
+    colorScheme <-  circlize::colorRamp2(base::c(base::min(heatmapIn),0,base::max(heatmapIn)),
+                                         base::c("magenta", "black", "yellow"))
 	    }else{
     colorScheme <-
         circlize::colorRamp2(
-            c(min(
+            base::c(base::min(
                 heatmapIn
-            ),0, max(
+            ),0, base::max(
                 heatmapIn
             )),
-            c("#7777FF",
+            base::c("#7777FF",
               "white",
               "red"))
 	    }
     }else{
 	    if (SeuratColorScheme){
-     colorScheme <-  colorRampPalette(c("black", "yellow"))(256)
+     colorScheme <-  grDevices::colorRampPalette(base::c("black", "yellow"))(256)
 	    }else{
     colorScheme <-
         circlize::colorRamp2(
-            c(min(
+            base::c(base::min(
                 heatmapIn
-            ), max(
+            ), base::max(
                 heatmapIn
             )),
-            c("white",
+            base::c("white",
               "red"))
     }}
-    if ((class(cellTree) == "hclust") && (length(cellTree$order) == ncol(heatmapIn))){
+    if ((base::class(cellTree) == "hclust") && (base::length(cellTree$order) == base::ncol(heatmapIn))){
         # If no cluster colors or cell properties are to be plotted
-        if(is.null(clusterColorList)) {
+        if(base::is.null(clusterColorList)) {
 
             # Initialize heatmap object
             ht <- ComplexHeatmap::Heatmap(
                 matrix = heatmapIn,
                 col = colorScheme,
 
-                cluster_columns = as.dendrogram(cellTree),
+                cluster_columns = stats::as.dendrogram(cellTree),
                 cluster_rows = FALSE,
 
                 column_dend_side = "top",
@@ -89,7 +90,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
                 show_row_names = TRUE,
                 row_names_gp = grid::gpar(fontsize = 15),
 
-                heatmap_legend_param = list(title = "legend", color_bar = "continuous"),
+                heatmap_legend_param = base::list(title = "legend", color_bar = "continuous"),
                 use_raster = TRUE,
                 raster_device = "png",
                 raster_quality = 1
@@ -98,50 +99,50 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
         } else {
 
             # Ensure each cluster color list is a list of named vectors
-            for(index in 1:length(clusterColorList)) {
-                names(clusterColorList[[index]]) <- clusterColorList[[index]]
+            for(index in 1:base::length(clusterColorList)) {
+                base::names(clusterColorList[[index]]) <- clusterColorList[[index]]
             }
 
-            clusterColorDf <- data.frame(clusterColorList)
-            names(clusterColorDf) <- names(clusterColorList)
+            clusterColorDf <- base::data.frame(clusterColorList)
+            base::names(clusterColorDf) <- base::names(clusterColorList)
 
             # Create cell property list - list of NODG, nUMI and percent.mito
             nUMI <- Matrix::colSums(rca.obj$raw.data)
             nodg <- Matrix::colSums(rca.obj$raw.data > 0)
 
-            mito.genes = grep(pattern = "^MT-|^Mt-", x = rownames(rca.obj$raw.data), value = T)
-            if(length(mito.genes) == 0) {
-                if (is.null(extraCellProperty)){
-                    cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg)
+            mito.genes = base::grep(pattern = "^MT-|^Mt-", x = base::rownames(rca.obj$raw.data), value = T)
+            if(base::length(mito.genes) == 0) {
+                if (base::is.null(extraCellProperty)){
+                    cellPropertyList <- base::list("nUMI" = nUMI, "NODG" = nodg)
                 }else{
-                    cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg,"extra" = extraCellProperty)
+                    cellPropertyList <- base::list("nUMI" = nUMI, "NODG" = nodg,"extra" = extraCellProperty)
                 }
             } else {
                 pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
-                if (is.null(extraCellProperty)){
-                    cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
+                if (base::is.null(extraCellProperty)){
+                    cellPropertyList <- base::list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
                 }else{
-                    cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito, "extra" = extraCellProperty)
+                    cellPropertyList <- base::list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito, "extra" = extraCellProperty)
                 }
             }
 
 
             # Create list of annotation bar plots from cell property list
-            annoBarPlotList <- lapply(cellPropertyList, function(cellPropertyVec){
+            annoBarPlotList <- base::lapply(cellPropertyList, function(cellPropertyVec){
                 ComplexHeatmap::anno_barplot(
                     cellPropertyVec,
                     gp = grid::gpar(fill = "#777777", col = "#777777"),
                     axis = TRUE,
-                    axis_param = list(side = "right"),
+                    axis_param = base::list(side = "right"),
                     which = "column"
                 )
             })
 
             # Set names of annotation bar plots
-            names(annoBarPlotList) <- names(cellPropertyList)
+            base::names(annoBarPlotList) <- base::names(cellPropertyList)
 
             # Set parameter list for dynamic number of cell property plots
-            paramList <- list(df = clusterColorDf,
+            paramList <- base::list(df = clusterColorDf,
                               col = clusterColorList,
                               show_annotation_name = TRUE,
                               annotation_name_side = "left",
@@ -149,17 +150,17 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
                               which = "column")
 
             # Add cell property plots
-            paramList <- append(paramList, annoBarPlotList)
+            paramList <- base::append(paramList, annoBarPlotList)
 
             # Create HeatmapAnnotation object
-            columnColorBar <- do.call(what = ComplexHeatmap::HeatmapAnnotation, args = paramList)
+            columnColorBar <- base::do.call(what = ComplexHeatmap::HeatmapAnnotation, args = paramList)
 
             # Initialize heatmap object
             ht <- ComplexHeatmap::Heatmap(
                 matrix = heatmapIn,
                 col = colorScheme,
 
-                cluster_columns = as.dendrogram(cellTree),
+                cluster_columns = stats::as.dendrogram(cellTree),
                 cluster_rows = FALSE,
 
                 column_dend_side = "top",
@@ -179,7 +180,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
 
                 top_annotation = columnColorBar,
 
-                heatmap_legend_param = list(title = "legend", color_bar = "continuous"),
+                heatmap_legend_param = base::list(title = "legend", color_bar = "continuous"),
                 use_raster = TRUE,
                 raster_device = "png",
                 raster_quality = 1
@@ -188,14 +189,14 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
     } else{
         heatmapIn<-heatmapIn[]
         #graph based clustering
-        if(is.null(clusterColorList)) {
+        if(base::is.null(clusterColorList)) {
             # Initialize heatmap object
             ht <- ComplexHeatmap::Heatmap(
                 matrix = heatmapIn,
                 col = colorScheme,
 
                 cluster_columns = FALSE,
-                column_order = order(cellTree),
+                column_order = base::order(cellTree),
                 cluster_rows = FALSE,
 
                 row_dend_side = "left",
@@ -208,7 +209,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
                 show_row_names = TRUE,
                 row_names_gp = grid::gpar(fontsize = 15),
 
-                heatmap_legend_param = list(title = "legend", color_bar = "continuous"),
+                heatmap_legend_param = base::list(title = "legend", color_bar = "continuous"),
                 use_raster = TRUE,
                 raster_device = "png",
                 raster_quality = 1
@@ -217,41 +218,41 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
         } else {
 
             # Ensure each cluster color list is a list of named vectors
-            for(index in 1:length(clusterColorList)) {
-                names(clusterColorList[[index]]) <- clusterColorList[[index]]
+            for(index in 1:base::length(clusterColorList)) {
+                base::names(clusterColorList[[index]]) <- clusterColorList[[index]]
             }
-            clusterColorDf <- data.frame(clusterColorList)
-            names(clusterColorDf) <- names(clusterColorList)
+            clusterColorDf <- base::data.frame(clusterColorList)
+            base::names(clusterColorDf) <- base::names(clusterColorList)
 
             # Create cell property list - list of NODG, nUMI and percent.mito
             nUMI <- Matrix::colSums(rca.obj$raw.data)
             nodg <- Matrix::colSums(rca.obj$raw.data > 0)
 
-            mito.genes = grep(pattern = "^MT-|^Mt-", x = rownames(rca.obj$raw.data), value = T)
+            mito.genes = base::grep(pattern = "^MT-|^Mt-", x = base::rownames(rca.obj$raw.data), value = T)
             pMito <- Matrix::colSums(rca.obj$raw.data[mito.genes, ])/Matrix::colSums(rca.obj$raw.data)
 
-            if (is.null(extraCellProperty)){
-                cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
+            if (base::is.null(extraCellProperty)){
+                cellPropertyList <- base::list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito)
             }else{
-                cellPropertyList <- list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito,"extra" = extraCellProperty)
+                cellPropertyList <- base::list("nUMI" = nUMI, "NODG" = nodg, "pMito" = pMito,"extra" = extraCellProperty)
             }
 
             # Create list of annotation bar plots from cell property list
-            annoBarPlotList <- lapply(cellPropertyList, function(cellPropertyVec){
+            annoBarPlotList <- base::lapply(cellPropertyList, function(cellPropertyVec){
                 ComplexHeatmap::anno_barplot(
                     cellPropertyVec,
                     gp = grid::gpar(fill = "#777777", col = "#777777"),
                     axis = TRUE,
-                    axis_param = list(side = "right"),
+                    axis_param = base::list(side = "right"),
                     which = "column"
                 )
             })
 
             # Set names of annotation bar plots
-            names(annoBarPlotList) <- names(cellPropertyList)
+            base::names(annoBarPlotList) <- base::names(cellPropertyList)
 
             # Set parameter list for dynamic number of cell property plots
-            paramList <- list(df = clusterColorDf,
+            paramList <- base::list(df = clusterColorDf,
                               col = clusterColorList,
                               show_annotation_name = TRUE,
                               annotation_name_side = "left",
@@ -259,10 +260,10 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
                               which = "column")
 
             # Add cell property plots
-            paramList <- append(paramList, annoBarPlotList)
+            paramList <- base::append(paramList, annoBarPlotList)
 
             # Create HeatmapAnnotation object
-            columnColorBar <- do.call(what = ComplexHeatmap::HeatmapAnnotation, args = paramList)
+            columnColorBar <- base::do.call(what = ComplexHeatmap::HeatmapAnnotation, args = paramList)
 
             # Initialize heatmap object
             ht <- ComplexHeatmap::Heatmap(
@@ -270,7 +271,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
                 col = colorScheme,
 
                 cluster_columns = FALSE,
-                column_order = order(cellTree),
+                column_order = base::order(cellTree),
 
                 cluster_rows = FALSE,
 
@@ -287,7 +288,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
 
                 top_annotation = columnColorBar,
 
-                heatmap_legend_param = list(title = "legend", color_bar = "continuous"),
+                heatmap_legend_param = base::list(title = "legend", color_bar = "continuous"),
                 use_raster = TRUE,
                 raster_device = "png",
                 raster_quality = 1
@@ -297,7 +298,7 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
 
     }
     # Create pdf object to hold heatmap
-    pdf(paste0(folderpath, "/", filename),
+    grDevices::pdf(base::paste0(folderpath, "/", filename),
         width = width,
         height = height)
 
@@ -307,6 +308,6 @@ plotDEHeatmap <- function(rca.obj, scale = FALSE, width = 20, height = 20, folde
                          annotation_legend_side = "left")
 
     # Shut down device
-    dev.off()
+    grDevices::dev.off()
 
 }

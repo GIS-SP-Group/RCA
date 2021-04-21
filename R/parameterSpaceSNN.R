@@ -9,50 +9,52 @@
 #' @return a data frame holding parameter values and resulting cluster numbers.
 #' @export
 #'
-parameterSpaceSNN <- function(rca.obj,kL=c(30:50),epsL=c(5:20),minPtsL=c(5:10),folderpath=".",filename="Graph_based_Clustering_Parameter_Space.html") {
+parameterSpaceSNN <- function(rca.obj, kL=base::c(30:50), epsL=base::c(5:20),
+                              minPtsL=base::c(5:10), folderpath=".",
+                              filename="Graph_based_Clustering_Parameter_Space.html") {
 
     # Extract projection data
-    projection.data <- as.matrix(rca.obj$projection.data)
+    projection.data <- base::as.matrix(rca.obj$projection.data)
 
 
     pcaD = stats::prcomp(projection.data)
-    components=c(1:(max(which(summary(pcaD)$importance[3,]<0.99))+1))
-    d=pcaD$rotation[,components]
+    components = base::c(1:(base::max(base::which(base::summary(pcaD)$importance[3,] < 0.99)) + 1))
+    d = pcaD$rotation[,components]
 
     # Obtain parameter space
-    kList<-c()
-    epsList<-c()
-    minPtsList<-c()
-    cNumbers<-c()
-    for (k in kL){
-      for (eps in epsL){
-          for (minPts in minPtsL){
-	        kList<-c(kList,k)
-		      epsList<-c(epsList,eps)
-		      minPtsList<-c(minPtsList,minPts)
-		      clusteringResult<-dbscan::sNNclust(d,k,eps,minPts,borderPoints = T)
-		      cNumbers<-c(cNumbers,length(unique(clusteringResult$cluster)))
+    kList <- base::c()
+    epsList <- base::c()
+    minPtsList <- base::c()
+    cNumbers <- base::c()
+    for (k in kL) {
+      for (eps in epsL) {
+          for (minPts in minPtsL) {
+	        kList <- base::c(kList, k)
+		      epsList <- base::c(epsList, eps)
+		      minPtsList <- base::c(minPtsList, minPts)
+		      clusteringResult <- dbscan::sNNclust(d, k, eps, minPts, borderPoints = T)
+		      cNumbers <- base::c(cNumbers,base::length(base::unique(clusteringResult$cluster)))
 		      }
 	    }
     }
 
     # Generate a complete data frame
-    paramcolors<-colorRampPalette(c("blue","red"))(length(unique(cNumbers)))
-    cNumbersf<-factor(cNumbers)
-    hoverInfo<-paste0("k: ",kList,"\neps: ",epsList, "\nminPts: ",minPtsList,"\n#clusters: ", cNumbers)
-    snnDataO<-data.frame(cbind(kList,epsList,minPtsList))
-    parameterSpace3D<-plotly::plot_ly(data = snnDataO,
+    paramcolors <- grDevices::colorRampPalette(base::c("blue","red"))(base::length(base::unique(cNumbers)))
+    cNumbersf <- base::factor(cNumbers)
+    hoverInfo <- base::paste0("k: ",kList,"\neps: ",epsList, "\nminPts: ",minPtsList,"\n#clusters: ", cNumbers)
+    snnDataO <- base::data.frame(base::cbind(kList,epsList,minPtsList))
+    parameterSpace3D <- plotly::plot_ly(data = snnDataO,
 	        x = ~kList, y = ~epsList, z = ~minPtsList,
 	        color = ~cNumbersf,
 	        colors = paramcolors,
 	        type = "scatter3d",
 	        mode = "markers",
-	        marker = list(size = 5, width=2),
-	        text=~hoverInfo, #This is that extra column we made earlier for which we will use for cell ID
-                hoverinfo="text")
-    htmlwidgets::saveWidget(as_widget(parameterSpace3D),  paste0(folderpath, "/",filename))
-    pspace<-data.frame(cbind(snnDataO,cNumbers))
-    colnames(pspace)<-c("K","eps","minPts","clusters")
-    return (pspace)
+	        marker = base::list(size = 5, width = 2),
+	        text = ~hoverInfo,
+            hoverinfo = "text")
+    htmlwidgets::saveWidget(plotly::as_widget(parameterSpace3D), base::paste0(folderpath, "/",filename))
+    pspace <- base::data.frame(base::cbind(snnDataO,cNumbers))
+    base::colnames(pspace) <- base::c("K","eps","minPts","clusters")
+    return(pspace)
 
 }

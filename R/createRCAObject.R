@@ -3,7 +3,11 @@
 #' @param rawData A matrix of expression values
 #' @param normData A matrix of normalized expression values
 #' @return RCA object.
+#'
+#' @importClassesFrom Matrix dgCMatrix
+#'
 #' @export
+#'
 #'
 createRCAObject <- function(rawData, normData=NULL) {
 

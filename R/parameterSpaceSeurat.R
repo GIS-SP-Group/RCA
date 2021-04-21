@@ -7,24 +7,27 @@
 #' @return a data frame holding parameter values and resulting cluster numbers.
 #' @export
 #'
-parameterSpaceSeurat <- function(rca.obj,stepsize=0.1,folderpath="./",filename="Seurat_Parameter_Space.png") {
+parameterSpaceSeurat <- function(rca.obj, stepsize = 0.1, folderpath = "./", filename = "Seurat_Parameter_Space.png") {
 
 	# Extract projection data
-	nClusters<-c()
-	stepsize=0.1
-	for (RES in seq(0,1,stepsize)){
-		nClusters<-rbind(nClusters,cbind(Resolution=RES,Clusters=length(unique(RCAv2::dataSClust(rca.obj,res = RES)$clustering.out$dynamicColorsList$Clusters))))
+	nClusters <- base::c()
+	stepsize = 0.1
+	for (RES in base::seq(0,1,stepsize)) {
+		nClusters <- base::rbind(nClusters,
+		                       base::cbind(Resolution = RES,
+		                                   Clusters = base::length(base::unique(RCAv2::dataSClust(rca.obj,res = RES)$clustering.out$dynamicColorsList$Clusters))))
 	}
-	nClusters<-data.frame(nClusters)
-	parameterFigure<-ggplot2::ggplot(nClusters,ggplot2::aes(x=Resolution,y=Clusters))+
-		ggplot2::geom_point()+
-		ggplot2::geom_line()+
-		ggplot2::theme_bw(15)+
-		ggplot2::ylab("#Clusters")+
+	nClusters <- base::data.frame(nClusters)
+	Resolution <- Clusters <- NULL
+	parameterFigure <- ggplot2::ggplot(nClusters, ggplot2::aes(x = Resolution,y = Clusters)) +
+		ggplot2::geom_point() +
+		ggplot2::geom_line() +
+		ggplot2::theme_bw(15) +
+		ggplot2::ylab("#Clusters") +
 		ggplot2::xlab("Seurat resolution")
 
-	png(paste0(folderpath,"/",filename),width=800,height=800)
-	print(parameterFigure)
-	dev.off()
-	return (nClusters)
+	grDevices::png(base::paste0(folderpath,"/",filename),width = 800,height = 800)
+	base::print(parameterFigure)
+	grDevices::dev.off()
+	return(nClusters)
 }

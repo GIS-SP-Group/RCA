@@ -9,7 +9,6 @@ plotClusterQuality(
   cluster.labels,
   width = 20,
   height = 20,
-  folderpath = ".",
   filename = "RCA_Cluster_Quality.pdf"
 )
 }
@@ -21,8 +20,6 @@ plotClusterQuality(
 \item{width}{width of plot in inches. Default is 20.}
 
 \item{height}{height of plot in inches. Default is 20.}
-
-\item{folderpath}{path to save heatmap to}
 
 \item{filename}{file name of saved heatmap}
 }

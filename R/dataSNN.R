@@ -9,61 +9,80 @@
 #' @return RCA object.
 #' @export
 #'
-dataSNN <- function(rca.obj,k=10,eps=8,minPts=5,dist.fun="All",corMeth="pearson") {
-    projection.data <- base::as.matrix(rca.obj$projection.data)
-    if (dist.fun=="PCA"){
-    # Extract projection data
-    base::print("Computing PCA on projection")
-    pcaD = stats::prcomp(projection.data)
-    components=base::c(1:(base::max(base::which(base::summary(pcaD)$importance[3,]<0.99))+1))
+dataSNN <-
+    function(rca.obj,
+             k = 10,
+             eps = 8,
+             minPts = 5,
+             dist.fun = "All",
+             corMeth = "pearson") {
+        projection.data <- base::as.matrix(rca.obj$projection.data)
+        if (dist.fun == "PCA") {
+            # Extract projection data
+            base::print("Computing PCA on projection")
+            pcaD = stats::prcomp(projection.data)
+            components = base::c(1:(base::max(
+                base::which(base::summary(pcaD)$importance[3, ] < 0.99)
+            ) + 1))
 
-    if (("randomcoloR" %in% base::.packages()) & corMeth=="pearson") {
-        d = stats::as.dist(1 - HiClimR::fastCor(
-            pcaD$rotation[,components],
-            upperTri = TRUE,
-            nSplit = 5,
-            optBLAS = T
-        ))
-    } else {
-        # else, use cor
-        d = stats::as.dist(1 - stats::cor(pcaD$rotation[,components], method = corMeth))
+            if (("randomcoloR" %in% base::.packages()) &
+                corMeth == "pearson") {
+                d = stats::as.dist(
+                    1 - HiClimR::fastCor(
+                        pcaD$rotation[, components],
+                        upperTri = TRUE,
+                        nSplit = 5,
+                        optBLAS = T
+                    )
+                )
+            } else {
+                # else, use cor
+                d = stats::as.dist(1 - stats::cor(pcaD$rotation[, components], method = corMeth))
+            }
+
+            # Obtain cell tree using a reduced projection matrix
+            clusteringResult <-
+                dbscan::sNNclust(d, k, eps, minPts, borderPoints = T)
+        } else {
+            base::print("Compute correlation distance matrix from projection")
+            # If HiClimR is available, use fastCor to compute distance matrix
+            if (("randomcoloR" %in% .packages())) {
+                d = stats::as.dist(
+                    1 - HiClimR::fastCor(
+                        projection.data,
+                        upperTri = TRUE,
+                        nSplit = 5,
+                        optBLAS = T
+                    )
+                )
+            } else {
+                # else, use cor
+                d = stats::as.dist(1 - stats::cor(projection.data, method = corMeth))
+            }
+
+            # Obtain cell tree using a reduced projection matrix
+            clusteringResult <-
+                dbscan::sNNclust(d, k, eps, minPts, borderPoints = T)
+        }
+
+        # Convert labels to colours for each tree cut
+        clusterColors <-
+            randomcoloR::distinctColorPalette(base::length(base::unique(clusteringResult$cluster)))
+        clusterColors <- base::sapply(clusterColors, plotrix::color.id)
+        clusterColors <-
+            base::sapply(clusterColors, function(x) {
+                return(x[1])
+            })
+        base::names(clusterColors) <-
+            base::unique(clusteringResult$cluster)
+
+        dynamicColorsList <-
+            base::list(Colors = clusterColors[base::as.character(clusteringResult$cluster)])
+        base::names(dynamicColorsList) <- base::c("Clusters")
+        # Assign clustering result to RCA object
+        rca.obj$clustering.out <- base::list("cellTree" = clusteringResult$cluster,
+                                             "dynamicColorsList" = dynamicColorsList)
+
+        # Return RCA object
+        return(rca.obj)
     }
-
-    # Obtain cell tree using a reduced projection matrix
-    clusteringResult<-dbscan::sNNclust(d,k,eps,minPts,borderPoints = T)
-    } else {
-    base::print("Compute correlation distance matrix from projection")
-    # If HiClimR is available, use fastCor to compute distance matrix
-    if (("randomcoloR" %in% .packages())) {
-        d = stats::as.dist(1 - HiClimR::fastCor(
-            projection.data,
-            upperTri = TRUE,
-            nSplit = 5,
-            optBLAS = T
-        ))
-    } else {
-        # else, use cor
-        d = stats::as.dist(1 - stats::cor(projection.data, method = corMeth))
-    }
-
-    # Obtain cell tree using a reduced projection matrix
-    clusteringResult<-dbscan::sNNclust(d,k,eps,minPts,borderPoints = T)
-}
-
-    # Convert labels to colours for each tree cut
-    clusterColors<-randomcoloR::distinctColorPalette(base::length(base::unique(clusteringResult$cluster)))
-    clusterColors<-base::sapply(clusterColors,plotrix::color.id)
-    clusterColors<-base::sapply(clusterColors,function(x){return(x[1])})
-    base::names(clusterColors)<-base::unique(clusteringResult$cluster)
-
-    dynamicColorsList<-base::list(Colors=clusterColors[base::as.character(clusteringResult$cluster)])
-    base::names(dynamicColorsList)<-base::c("Clusters")
-    # Assign clustering result to RCA object
-    rca.obj$clustering.out <- base::list(
-        "cellTree" = clusteringResult$cluster,
-        "dynamicColorsList" = dynamicColorsList
-    )
-
-    # Return RCA object
-    return(rca.obj)
-}

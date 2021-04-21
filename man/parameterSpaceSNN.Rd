@@ -6,9 +6,9 @@
 \usage{
 parameterSpaceSNN(
   rca.obj,
-  kL = c(30:50),
-  epsL = c(5:20),
-  minPtsL = c(5:10),
+  kL = base::c(30:50),
+  epsL = base::c(5:20),
+  minPtsL = base::c(5:10),
   folderpath = ".",
   filename = "Graph_based_Clustering_Parameter_Space.html"
 )

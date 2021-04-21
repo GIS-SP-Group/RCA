@@ -66,7 +66,7 @@ dataDE <- function(rca.obj,
     temp.exp.row = temp.exp.row[6:base::length(temp.exp.row)]
     MeanExprsThrs = base::mean(temp.exp.row)}
     else{
-	    MeanExprsThrs=mean.Exp
+	    MeanExprsThrs = mean.Exp
     }
     ############################
     #hclust used for clustering#
@@ -91,9 +91,9 @@ dataDE <- function(rca.obj,
     ###########################
     #Compute pairwise DE genes#
     ###########################
-    if (pairwise){
-      df<-foreach::foreach(clusteri = 1:(total.clus - 1), .combine=rbind) %dopar% {
-	 tmp<-base::c()
+    if (pairwise) {
+      df <- foreach::foreach(clusteri = 1:(total.clus - 1), .combine = rbind) %dopar% {
+	 tmp <- base::c()
        	 for (clusterj in (clusteri + 1):(total.clus)) {
             cells.1 <- base::colnames(rca.obj$data)[base::which(clusters == clusteri)]
             cells.2 <- base::colnames(rca.obj$data)[base::which(clusters == clusterj)]
@@ -118,18 +118,18 @@ dataDE <- function(rca.obj,
                 if (base::colnames(marker.genes)[1] != 'myAUC') {
                     marker.genes = marker.genes[marker.genes$p_val_adj < 0.05, ]
                 }
-                if(base::nrow(marker.genes) > 0) {
+                if (base::nrow(marker.genes) > 0) {
                     marker.genes$group1 = clusteri
                     marker.genes$group2 = clusterj
                     marker.genes$gene = base::rownames(marker.genes)
-                    tmp<-base::rbind(tmp, marker.genes)
+                    tmp <- base::rbind(tmp, marker.genes)
                 }
             }
         }
 	tmp
       }
     }else{
-      df<-foreach::foreach (clusteri=1:(total.clus),.combine=rbind) %dopar%{
+      df <- foreach::foreach(clusteri = 1:(total.clus),.combine = rbind) %dopar% {
             cells.1 <- base::colnames(rca.obj$data)[base::which(clusters == clusteri)]
             cells.2 <- base::colnames(rca.obj$data)[base::which(clusters != clusteri)]
             marker.genes = ComputePairWiseDE(
@@ -154,7 +154,7 @@ dataDE <- function(rca.obj,
                 if (base::colnames(marker.genes)[1] != 'myAUC') {
                     marker.genes = marker.genes[marker.genes$p_val_adj < 0.05, ]
                 }
-                if(base::nrow(marker.genes) > 0) {
+                if (base::nrow(marker.genes) > 0) {
                     marker.genes$group1 = clusteri
                     marker.genes$gene = base::rownames(marker.genes)
 #                    df = rbind(df, marker.genes)
@@ -166,7 +166,7 @@ dataDE <- function(rca.obj,
 
     #Determine top x DE genes per Cluster#
     ######################################
-    if(pairwise){
+    if (pairwise) {
 
     mC1 <- df %>% dplyr::group_by(group1, group2) %>% dplyr::top_n(n = top.genes.per.cluster, wt = avg_logFC)
     markers2 <- df
