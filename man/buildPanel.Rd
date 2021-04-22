@@ -2,7 +2,8 @@
 % Please edit documentation in R/buildReferencePanel.R
 \name{buildPanel}
 \alias{buildPanel}
-\title{Internal function to build a reference panel from your bulk RNA sequencing data and a list of marker genes}
+\title{Internal function to build a reference panel from your bulk RNA sequencing data and a list of marker genes
+Bulk RNA sequencing data must contain gene symbols - we recommend conversion prior to use this function, e.g. using Biomart.}
 \usage{
 buildPanel(bulk.rna.data, de.genes, species = "HUMAN")
 }
@@ -18,4 +19,5 @@ reference panel boject
 }
 \description{
 Internal function to build a reference panel from your bulk RNA sequencing data and a list of marker genes
+Bulk RNA sequencing data must contain gene symbols - we recommend conversion prior to use this function, e.g. using Biomart.
 }
