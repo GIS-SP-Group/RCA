@@ -826,29 +826,15 @@ rca_clusters = pd.read_csv('rca_cluster_df.csv')
 merged_data.obs = rca_clusters
 ```
 
-Now, it's finally time to visualize the RNA velocity results. There are 3 visualization options provided by scvelo, demonstrated below:
+Now, it's finally time to visualize the RNA velocity results. There are 3 visualization options provided by scvelo, namely velocity_embedding, velocity_embedding_grid and velocity_embedding_stream. Use them as demonstrated below
 
 ```Python
 # Python
 ### Velocity embedding
 scv.pl.velocity_embedding(merged_data, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = 'tab20', figsize = (10,10), save = 'embedding.png')
 ```
-![](man/figures/scvelo_embedding.png)
 
-```Python
-# Python
-### Velocity Embedding Grid
-scv.pl.velocity_embedding_grid(merged_data, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = 'tab20', figsize = (10,10), save = 'grid.png')
-```
-![](man/figures/scvelo_grid.png)
-
-```Python
-# Python
-### Velocity Embedding Streams
-scv.pl.velocity_embedding_stream(merged_data, min_mass = 1.25, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = 'tab20', figsize = (10,10), save = 'stream.png')
-```
-![](man/figures/scvelo_stream.png)
-
+![](../man/figures/scvelo_embedding.png){width=100%}
 ### Using RCA colors
 
 Since the RCA clusters already have color annotations, you can use the RCA colors in the palette as described below:
@@ -857,23 +843,6 @@ Since the RCA clusters already have color annotations, you can use the RCA color
 # Python
 ### Velocity embedding
 scv.pl.velocity_embedding(merged_data, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = merged_data.obs['Clusters'].sort_values().unique().tolist(), figsize = (10,10), save = 'RCAColor_embedding.png')
-```
-
-![](man/figures/scvelo_RCAColor_embedding.png)
-![](man/figures/scvelo_RCAColor_grid.png)
-![](man/figures/scvelo_RCAColor_stream.png)
-
-
-```Python
-# Python
-### Velocity Embedding Grid
-scv.pl.velocity_embedding_grid(merged_data, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = merged_data.obs['Clusters'].sort_values().unique().tolist(), figsize = (10,10), save = 'RCAColor_grid.png')
-```
-
-```Python
-# Python
-### Velocity Embedding Streams
-scv.pl.velocity_embedding_stream(merged_data, min_mass = 1.25, basis='umap', color = ['Clusters'], legend_loc = 'right margin', palette = merged_data.obs['Clusters'].sort_values().unique().tolist(), figsize = (10,10), save = 'RCAColor_stream.png')
 ```
 
 
