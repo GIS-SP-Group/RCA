@@ -2,8 +2,8 @@ Package: RCAv2
 Type: Package
 Title: Reference Component Analysis
 Version: 2.0.0
-Authors@R: c(person("Florian", "Schmidt", email = "florian_schmidt@gis.a-star.edu.sg", role = c("aut", "cre")), person("Bobby", "Ranjan", email = "ranjan_bobby@gis.a-star.edu.sg", role = c("aut")))
-Maintainer: Prabhakar Lab <florian_schmidt@gis.a-star.edu.sg>
+Authors@R: c(person("Florian", "Schmidt", email = "florian_schmidt@gis.a-star.edu.sg", role = c("aut", "cre")), person("Bobby", "Ranjan", email = "ranjan_bobby@gis.a-star.edu.sg", role = c("aut")), person("Shyam", "Lab", email = "shyam_lab@gis.a-star.edu.sg", role = c("cph")))
+Maintainer: Florian Schmidt <florian_schmidt@gis.a-star.edu.sg>
 Description: Single-cell clustering by projection onto bulk reference transcriptomes.
 License: MIT + file LICENSE
 Encoding: UTF-8
