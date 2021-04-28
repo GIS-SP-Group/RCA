@@ -1,5 +1,4 @@
 library(RCAv2)
-library(SingleCellExperiment)
 library(scuttle)
 
 ct_num = 1
@@ -18,7 +17,7 @@ test_that("buildReferencePanel throws errors for random matrix", {
 })
 
 test_that("buildReferencePanel works for RNA matrix", {
-    pbmc_tpm <- calculateTPM(x = as.matrix(pbmc_small_counts))/1000
+    pbmc_tpm <- scuttle::calculateTPM(x = as.matrix(pbmc_small_counts))/1000
     colnames(pbmc_tpm) <- ct_colnames
     expect_equal(ncol(buildReferencePanel(bulk.rna.data = pbmc_tpm, verbose = FALSE)), 4)
     expect_equal(colnames(buildReferencePanel(bulk.rna.data = pbmc_tpm, verbose = FALSE)), c("Celltype1", "Celltype2", "Celltype3", "Celltype4"))
