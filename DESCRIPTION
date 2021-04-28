@@ -39,6 +39,8 @@ Suggests:
     clusterProfiler,
     edgeR,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
+Config/testthat/edition: 3
