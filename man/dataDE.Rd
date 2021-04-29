@@ -24,7 +24,7 @@ dataDE(
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{logFoldChange}{Log fold change required to call gene DE.}
+\item{logFoldChange}{Log fold change required to call gene DE (default is log(1.5)).}
 
 \item{method}{Denotes which test to use. Available options are:
 \itemize{
@@ -46,28 +46,28 @@ dataDE(
  cells using the Student's t-test.
  }}
 
-\item{mean.Exp}{Minimum mean expression of a gene to be considered in the DE gene calculation}
+\item{mean.Exp}{Minimum mean expression of a gene to be considered in the DE gene calculation (default 0.5))}
 
-\item{deepsplit}{If hclust was used for clustering, the desired deepsplit can be specified here.. Values can range from 0 to 4. Default is 1.}
+\item{deepsplit}{If hclust was used for clustering, the desired deepsplit can be specified here. Values can range from 0 to 4 (default is 1).}
 
 \item{min.pct}{only test genes that are detected in a minimum fraction of
 min.pct cells in either of the two populations. Meant to speed up the function
-by not testing genes that are very infrequently expressed. Default is 0.25}
+by not testing genes that are very infrequently expressed (default is 0.25).}
 
 \item{min.diff.pct}{only test genes that show a minimum difference in the
-fraction of detection between the two groups. Set to -Inf by default}
+fraction of detection between the two groups (-Inf by default).}
 
-\item{random.seed}{Random seed for downsampling. default is 1}
+\item{random.seed}{Random seed for downsampling (default 1).}
 
-\item{min.cells.group}{Minimum number of cells in one of the groups}
+\item{min.cells.group}{Minimum number of cells in one of the groups (default 3).}
 
-\item{pseudocount.use}{Pseudocount to add to averaged expression values when calculating logFC. 1 by default.}
+\item{pseudocount.use}{Pseudocount to add to averaged expression values when calculating logFC (default 1).}
 
-\item{p.adjust.methods}{correction method for calculating qvalue. default is BH (or FDR)}
+\item{p.adjust.methods}{correction method for calculating q-value (default is BH ).}
 
-\item{top.genes.per.cluster}{Number of top DE genes to be considered per cluster}
+\item{top.genes.per.cluster}{Number of top DE genes to be considered per cluster(default 10).}
 
-\item{pairwise}{Flag indicating whether DE genes should be compared derived in pairwise manner or 1 cluster vs all others (Default).}
+\item{pairwise}{Flag indicating whether DE genes should be compared derived in pairwise manner or 1 cluster vs all others (default).}
 
 \item{nCores}{Number of cores to used for parallel computation (default 1).}
 }
@@ -76,4 +76,12 @@ RCA object.
 }
 \description{
 Compute pairwise DE genes for supervised clustering result.
+}
+\examples{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+RCA.pbmcs <- dataClust(RCA.pbmcs)
+RCA.pbmcs <- dataDE(RCA.pbmcs)
+
 }

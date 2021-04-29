@@ -17,21 +17,28 @@ dataFilter(
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{nGene.thresholds}{numeric vector with lower and upper nGene thresholds}
+\item{nGene.thresholds}{numeric vector with lower and upper nGene thresholds (default: c(100, NULL)).}
 
-\item{nUMI.thresholds}{numeric vector with lower and upper nUMI thresholds}
+\item{nUMI.thresholds}{numeric vector with lower and upper nUMI thresholds (default: c(100, NULL)).}
 
-\item{percent.mito.thresholds}{numeric vector with lower and upper pMito thresholds}
+\item{percent.mito.thresholds}{numeric vector with lower and upper pMito thresholds (default: c(0.0, 0.2)).}
 
-\item{min.cell.exp}{minimum number of cells a gene must be expressed in}
+\item{min.cell.exp}{minimum number of cells a gene must be expressed in (default: 10)}
 
-\item{plot}{boolean - if True, plot data filter metrics}
+\item{plot}{boolean - if True, plot data filter metrics (default: TRUE).}
 
-\item{filename}{file name of saved plots}
+\item{filename}{file name of saved plots (default: "RCA_Filter.pdf")}
 }
 \value{
 RCA object.
 }
 \description{
 Filter the dataset and remove genes and cells that could be of poor quality using user-defined thresholds
+}
+\examples{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+print(RCA.pbmcs)
+RCA.pbmcs <- dataFilter(RCA.pbmcs,nGene.thresholds = c(20,80),
+ nUMI.thresholds = c(0,500), plot=FALSE)
+print(RCA.pbmcs)
 }

@@ -9,26 +9,31 @@ parameterSpaceSNN(
   kL = base::c(30:50),
   epsL = base::c(5:20),
   minPtsL = base::c(5:10),
-  folderpath = ".",
-  filename = "Graph_based_Clustering_Parameter_Space.html"
+  filename = NULL
 )
 }
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{kL}{vector of k values to be used. Default is 10-50.}
+\item{kL}{vector of k values to be used (default is 30 to 50).}
 
-\item{epsL}{vector of values indicating the number of neighbours between two nodes such that cells are shared. Default is 5 to 20.}
+\item{epsL}{vector of values indicating the number of neighbors between two nodes such that cells are shared (default is 5 to 20).}
 
-\item{minPtsL}{Vector of minimum points with at least eps neighbours to be considered a core point. Default is 5 to 10.}
+\item{minPtsL}{Vector of minimum points with at least eps neighbors to be considered a core point (default is 5 to 10)}
 
-\item{folderpath}{Path to store the html file. Defaults to working directory.}
-
-\item{filename}{name of the html file produced that visuzalizes the parameter space.}
+\item{filename}{name of the html file produced that visualizes the parameter space (default NULL)}
 }
 \value{
-a data frame holding parameter values and resulting cluster numbers.
+list of a data frame holding parameter values and resulting cluster numbers and the 3D parameter figure
 }
 \description{
 Generates an overview on the dependence of SNN parameters to the number of clusters
+}
+\examples{
+\dontrun{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+parameterSpaceSNN(RCA.pbmcs)
+}
 }

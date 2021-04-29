@@ -9,11 +9,18 @@ estimateCellTypeFromProjectionPerCluster(rca.obj, homogeneity = NULL)
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{homogeneity}{a parameter indicating the homogeneity of the cluster. If the difference is below this threshold, the cell type will be set to unknown. Default is NULL.}
+\item{homogeneity}{a parameter indicating the homogeneity of the cluster. If the difference is below this threshold, the cell type will be set to unknown (default NULL).}
 }
 \value{
 RCA object.
 }
 \description{
 Estimate the most likely cell type from the projection to the reference panel
+}
+\examples{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+RCA.pbmcs <- dataClust(RCA.pbmcs)
+RCA.pbmcs <- estimateCellTypeFromProjectionPerCluster(RCA.pbmcs)
 }

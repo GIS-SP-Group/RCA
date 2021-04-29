@@ -18,23 +18,33 @@ performClusterSpecificQC(
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{cluster.labels}{vector of cluster labels}
+\item{cluster.labels}{vector of cluster labels for each cell}
 
-\item{nGene.low.thresholds}{numeric vector with lower nGene thresholds. Length of vector should be length(unique(cluster.labels)).}
+\item{nGene.low.thresholds}{numeric vector with lower nGene thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).}
 
-\item{nGene.high.thresholds}{numeric vector with upper nGene thresholds. Length of vector should be length(unique(cluster.labels)).}
+\item{nGene.high.thresholds}{numeric vector with upper nGene thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).}
 
-\item{nUMI.low.thresholds}{numeric vector with lower nUMI thresholds. Length of vector should be length(unique(cluster.labels)).}
+\item{nUMI.low.thresholds}{numeric vector with lower nUMI thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).}
 
-\item{nUMI.high.thresholds}{numeric vector withupper nUMI thresholds. Length of vector should be length(unique(cluster.labels)).}
+\item{nUMI.high.thresholds}{numeric vector withupper nUMI thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).}
 
-\item{pMito.low.thresholds}{numeric vector with lower pMito thresholds. Length of vector should be length(unique(cluster.labels)).}
+\item{pMito.low.thresholds}{numeric vector with lower pMito thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).}
 
-\item{pMito.high.thresholds}{numeric vector and upper pMito thresholds. Length of vector should be length(unique(cluster.labels)).}
+\item{pMito.high.thresholds}{numeric vector and upper pMito thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).}
 }
 \value{
 RCA object.
 }
 \description{
 Filter the dataset and remove genes and cells that could be of poor quality using user-defined thresholds
+}
+\examples{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+RCA.pbmcs <- dataClust(RCA.pbmcs)
+RCA.pmbcs <- performClusterSpecificQC(RCA.pbmcs,
+RCA.pbmcs$clustering.out$dynamicColorsList[[1]],
+nGene.low.thresholds=c(10,20,10,20,10,20,10))
+
 }

@@ -9,11 +9,16 @@ createRCAObject(rawData, normData = NULL)
 \arguments{
 \item{rawData}{A matrix of expression values}
 
-\item{normData}{A matrix of normalized expression values}
+\item{normData}{A matrix of normalized expression values (default NULL)}
 }
 \value{
 RCA object.
 }
 \description{
 Create RCA object
+}
+\examples{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+print(RCA.pbmcs)
+
 }

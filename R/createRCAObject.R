@@ -1,10 +1,14 @@
 #' Create RCA object
 #'
 #' @param rawData A matrix of expression values
-#' @param normData A matrix of normalized expression values
+#' @param normData A matrix of normalized expression values (default NULL)
 #' @return RCA object.
 #'
 #' @importClassesFrom Matrix dgCMatrix
+#'
+#' @examples
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' print(RCA.pbmcs)
 #'
 #' @export
 #'

@@ -1,9 +1,16 @@
 #' Generate cell clusters using hierarchical clustering and dynamic tree cutting.
 #'
 #' @param rca.obj RCA object.
-#' @param deepSplitValues integer vector indicating how deep the dendrogram should be cut. Values can range from 0 to 4.
-#' @param minClustSize integer value indicating the minimum size of the resulting clusters. Default is 5.
+#' @param deepSplitValues integer vector indicating how deep the dendrogram should be cut. Values can range from 0 to 4 (default 1).
+#' @param minClustSize integer value indicating the minimum size of the resulting clusters (default 5).
 #' @param corMeth Correlation method used to compute the distance matrix of the projection (pearson (default), spearman, kendal).
+#'
+#' @examples
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+#' RCA.pbmcs <- dataClust(RCA.pbmcs)
+#'
 #' @return RCA object.
 #' @export
 #'

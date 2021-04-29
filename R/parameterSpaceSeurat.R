@@ -1,13 +1,21 @@
 #' Generates a data frame showcasing the dependence between resolution and cluster quantity
 #'
 #' @param rca.obj RCA object.
-#' @param stepsize Stepsize used to generate an overview on clustering results.
-#' @param folderpath Path to store the html file. Defaults to working directory.
-#' @param filename name of the pdf file produced that visuzalizes the parameter space.
-#' @return a data frame holding parameter values and resulting cluster numbers.
+#' @param stepsize Stepsize used to generate an overview on clustering results (default 0.1)
+#' @param filename name of the pdf file produced that visuzalizes the parameter space (default NULL)
+#' @return list of a a data frame holding parameter values and resulting cluster numbers and the parameter figure
+#'
+#' @examples
+#' \dontrun{
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+#' parameterSpaceSeurat(RCA.pbmcs)
+#' }
+#'
 #' @export
 #'
-parameterSpaceSeurat <- function(rca.obj, stepsize = 0.1, folderpath = "./", filename = "Seurat_Parameter_Space.png") {
+parameterSpaceSeurat <- function(rca.obj, stepsize = 0.1, filename = NULL) {
 
 	# Extract projection data
 	nClusters <- base::c()
@@ -26,8 +34,11 @@ parameterSpaceSeurat <- function(rca.obj, stepsize = 0.1, folderpath = "./", fil
 		ggplot2::ylab("#Clusters") +
 		ggplot2::xlab("Seurat resolution")
 
-	grDevices::png(base::paste0(folderpath,"/",filename),width = 800,height = 800)
-	base::print(parameterFigure)
-	grDevices::dev.off()
-	return(nClusters)
+
+	if (!(is.null(filename))) {
+	    grDevices::png(filename, width = 800, height = 800)
+	    base::print(parameterFigure)
+	    grDevices::dev.off()
+	}
+	return(list(nClusters, parameterFigure))
 }

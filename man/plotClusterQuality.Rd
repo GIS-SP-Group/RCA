@@ -15,14 +15,24 @@ plotClusterQuality(
 \arguments{
 \item{rca.obj}{RCA object}
 
-\item{cluster.labels}{vector of cluster labels}
+\item{cluster.labels}{vector of cluster labels for each cell}
 
-\item{width}{width of plot in inches. Default is 20.}
+\item{width}{width of plot in inches (default 20).}
 
-\item{height}{height of plot in inches. Default is 20.}
+\item{height}{height of plot in inches (default 20).}
 
-\item{filename}{file name of saved heatmap}
+\item{filename}{file name of saved scatter plots}
 }
 \description{
 Perform cluster specific QC
+}
+\examples{
+\dontrun{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+RCA.pbmcs <- dataClust(RCA.pbmcs)
+plotClusterQuality(RCA.pbmcs,
+RCA.pbmcs$clustering.out$dynamicColorsList[[1]])
+}
 }

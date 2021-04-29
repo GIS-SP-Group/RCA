@@ -27,7 +27,7 @@ buildReferencePanel(
 
 \item{cut_height}{to cut the clustering of the reference data sets (default 1.1)}
 
-\item{species}{"HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".}
+\item{species}{"HUMAN" for human data, "MOUSE" for mouse data (default "HUMAN").}
 
 \item{filename}{file name of reference panel (should end with .rds)}
 
@@ -39,4 +39,16 @@ reference panel as a data.frame
 \description{
 Function to build a reference panel.
 Celltype and replicate information must be included in the colnames of the bulk.rna.data.object, separted by an underscore ("_"), e.g.: Bnaive_R1.
+}
+\examples{
+\dontrun{
+newPanel <- buildReferencePanel(reference_Data_Set,
+            fc.thrs.general = 4,
+            fc.thrs.specific = 1,
+            fdr.thrs = 0.05,
+            cut_height = 1.1,
+            species = "HUMAN",
+            filename = "my_reference_panel.rds",
+            verbose=TRUE)
+}
 }

@@ -9,17 +9,24 @@ dataSClust(rca.obj, res = 0.5, corMeth = "none", nPCs = 10, approx = T)
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{res}{Resolution parameter (between 0.0 and 1.0) to be used for clustering. Default: 0.5. Check the Seurat documentation for details.}
+\item{res}{Resolution parameter (between 0.0 and 1.0) to be used for clustering. Check the Seurat documentation for details (default 0.5)}
 
-\item{corMeth}{Correlation method used to compute the distance matrix of the projection (none(default), pearson , spearman, kendal).}
+\item{corMeth}{Correlation method used to compute the distance matrix of the projection (none (default), pearson , spearman, kendal).}
 
 \item{nPCs}{Number of PCs to be used if distance should be computed in PC embedding of the projection (default 10)}
 
-\item{approx}{Using approximation for PCA computation (default T)}
+\item{approx}{Build a neighborhood graph on a PCA of the reference projection (default TRUE)}
 }
 \value{
 RCA object.
 }
 \description{
 Generate cell clusters using Seurat graph based clustering.
+}
+\examples{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+RCA.pbmcs <- dataSClust(RCA.pbmcs, corMeth="pearson", approx=FALSE, nPCs=0)
+
 }

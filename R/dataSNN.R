@@ -1,12 +1,19 @@
 #' Generate cell clusters using hierarchical clustering and dynamic tree cutting.
 #'
 #' @param rca.obj RCA object.
-#' @param k Number of cells to consider in the neirest neighbour graph. Default is 10.
-#' @param eps Number of cells that have to be similar to connect 2 cells in a network. Default is 8
-#' @param minPts Number of cells with at least eps neighbours to be considered a core point. Default is 5.
-#' @param dist.fun Either PCA or All. For PCA, a PCA reduction of the projection will be performed before the correlation matrix is computed.
-#' @param corMeth Correlation method used to compute distance
+#' @param k Number of cells to consider in the neirest neighbour graph (default 10).
+#' @param eps Number of cells that have to be similar to connect 2 cells in a network (default 8).
+#' @param minPts Number of cells with at least eps neighbours to be considered a core point (default 5).
+#' @param dist.fun Either PCA or All. For PCA, a PCA reduction of the projection will be performed before the correlation matrix is computed (default All).
+#' @param corMeth Correlation method used to compute distance (default pearson).
 #' @return RCA object.
+#'
+#' @examples
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+#' RCA.pbmcs <- dataSNN(RCA.pbmcs)
+#'
 #' @export
 #'
 dataSNN <-

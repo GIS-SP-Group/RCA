@@ -1,11 +1,20 @@
 #' Perform cluster specific QC
 #'
 #' @param rca.obj RCA object
-#' @param cluster.labels vector of cluster labels
-#' @param width width of plot in inches. Default is 20.
-#' @param height height of plot in inches. Default is 20.
-#' @param filename file name of saved heatmap
+#' @param cluster.labels vector of cluster labels for each cell
+#' @param width width of plot in inches (default 20).
+#' @param height height of plot in inches (default 20).
+#' @param filename file name of saved scatter plots
 #'
+#' @examples
+#' \dontrun{
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+#' RCA.pbmcs <- dataClust(RCA.pbmcs)
+#' plotClusterQuality(RCA.pbmcs,
+#' RCA.pbmcs$clustering.out$dynamicColorsList[[1]])
+#' }
 #' @export
 #'
 

@@ -1,7 +1,7 @@
 #' Compute pairwise DE genes for supervised clustering result.
 #'
 #' @param rca.obj RCA object.
-#' @param logFoldChange Log fold change required to call gene DE.
+#' @param logFoldChange Log fold change required to call gene DE (default is log(1.5)).
 #' @param method Denotes which test to use. Available options are:
 #' \itemize{
 #'  \item{"wilcox"} : Identifies differentially expressed genes between two
@@ -21,22 +21,29 @@
 #'  \item{"t"} : Identify differentially expressed genes between two groups of
 #'  cells using the Student's t-test.
 #'  }
-#' @param mean.Exp Minimum mean expression of a gene to be considered in the DE gene calculation
-#' @param deepsplit If hclust was used for clustering, the desired deepsplit can be specified here.. Values can range from 0 to 4. Default is 1.
+#' @param mean.Exp Minimum mean expression of a gene to be considered in the DE gene calculation (default 0.5))
+#' @param deepsplit If hclust was used for clustering, the desired deepsplit can be specified here. Values can range from 0 to 4 (default is 1).
 #' @param min.pct  only test genes that are detected in a minimum fraction of
 #' min.pct cells in either of the two populations. Meant to speed up the function
-#' by not testing genes that are very infrequently expressed. Default is 0.25
+#' by not testing genes that are very infrequently expressed (default is 0.25).
 #' @param min.diff.pct  only test genes that show a minimum difference in the
-#' fraction of detection between the two groups. Set to -Inf by default
-#' @param random.seed Random seed for downsampling. default is 1
-#' @param min.cells.group Minimum number of cells in one of the groups
-#' @param pseudocount.use Pseudocount to add to averaged expression values when calculating logFC. 1 by default.
-#' @param p.adjust.methods correction method for calculating qvalue. default is BH (or FDR)
-#' @param top.genes.per.cluster Number of top DE genes to be considered per cluster
-#' @param pairwise Flag indicating whether DE genes should be compared derived in pairwise manner or 1 cluster vs all others (Default).
+#' fraction of detection between the two groups (-Inf by default).
+#' @param random.seed Random seed for downsampling (default 1).
+#' @param min.cells.group Minimum number of cells in one of the groups (default 3).
+#' @param pseudocount.use Pseudocount to add to averaged expression values when calculating logFC (default 1).
+#' @param p.adjust.methods correction method for calculating q-value (default is BH ).
+#' @param top.genes.per.cluster Number of top DE genes to be considered per cluster(default 10).
+#' @param pairwise Flag indicating whether DE genes should be compared derived in pairwise manner or 1 cluster vs all others (default).
 #' @param nCores Number of cores to used for parallel computation (default 1).
-
 #' @return RCA object.
+#'
+#' @examples
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+#' RCA.pbmcs <- dataClust(RCA.pbmcs)
+#' RCA.pbmcs <- dataDE(RCA.pbmcs)
+#'
 #' @export
 #'
 dataDE <- function(rca.obj,
@@ -187,6 +194,7 @@ dataDE <- function(rca.obj,
 	df$group1<-base::names(remap)[df$group1]
     }
     rca.obj$DE.genes <- base::list(All.DE.genes = df, Top.DE.genes = topMarkers)
+    parallel::stopCluster(cl)
     return(rca.obj)
 }
 

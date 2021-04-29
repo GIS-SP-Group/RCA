@@ -9,15 +9,22 @@ elbowPlot(rca.obj, nPCs = 50, filename = "Projection_Elbow.png", approx = F)
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{nPCs}{Number of PCs to be used if distance should be computed in PC embedding of the projection (default 0, computation of distance in projection space)}
+\item{nPCs}{Number of PCs to be used if distance should be computed in PC embedding of the projection (default 50, computation of distance in projection space)}
 
-\item{filename}{Name of figure to be stored. Must end with '.png'.}
+\item{filename}{Name of png file where the figure should be stored (default: "Projection_Elbow.png"). If set to NULL, the figure will not be saved and just returned.}
 
-\item{approx}{Flag indicating wheter an approximation of the SVD should be used}
+\item{approx}{Flag indicating wheter an approximation of the SVD should be used (default FALSE)}
 }
 \value{
 NULL.
 }
 \description{
 Generate elbow plot for a PCA of the projection matrix.
+}
+\examples{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+elbowPlot(RCA.pbmcs,filename=NULL,approx=FALSE)
+
 }

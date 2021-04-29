@@ -42,10 +42,22 @@ buildPanel <- function(bulk.rna.data, de.genes,  species = "HUMAN") {
 #' @param fc.thrs.specific absolulte log fold change threshold applied for detailed marker detection (default 2)
 #' @param fdr.thrs FDR threshold (default 0.01)
 #' @param cut_height to cut the clustering of the reference data sets (default 1.1)
-#' @param species "HUMAN" for human data, "MOUSE" for mouse data. Default is "HUMAN".
+#' @param species "HUMAN" for human data, "MOUSE" for mouse data (default "HUMAN").
 #' @param filename file name of reference panel (should end with .rds)
 #' @param verbose Generate debug output and figures (default FALSE)
 #' @return reference panel as a data.frame
+#'
+#' @examples
+#' \dontrun{
+#' newPanel <- buildReferencePanel(reference_Data_Set,
+#'             fc.thrs.general = 4,
+#'             fc.thrs.specific = 1,
+#'             fdr.thrs = 0.05,
+#'             cut_height = 1.1,
+#'             species = "HUMAN",
+#'             filename = "my_reference_panel.rds",
+#'             verbose=TRUE)
+#' }
 #' @export
 #'
 

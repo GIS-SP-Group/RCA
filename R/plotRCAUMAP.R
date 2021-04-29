@@ -3,16 +3,26 @@
 #' The presence of cell type estimates, relative ranks and confindence scores are detected automatically and are plotted accordingly.
 #' @param rca.obj RCA object
 #' @param cellPropertyList list of cell properties to plot
-#' @param folderpath path to save umap to
 #' @param filename file name of saved umap
 #' @param fontsize Size of the font used for plotting
+#'
+#' @return list of UMAP plots
+#'
+#' @examples
+#' \dontrun{
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+#' RCA.pbmcs <- computeUMAP(RCA.pbmcs)
+#' plotRCAUMAP(RCA.pbmcs)
+#' }
+#'
 #' @export
 #'
 
 plotRCAUMAP <-
     function(rca.obj,
              cellPropertyList = NULL,
-             folderpath = ".",
              filename = "RCA_UMAP.pdf",
              fontsize = 10) {
         UMAP1 <- UMAP2 <- .data <- NULL
@@ -43,7 +53,7 @@ plotRCAUMAP <-
                 ggplot2::theme_classic(fontsize)
             umapPlots <- c(umapPlots, list(umap.plot))
             # Save UMAP
-            ggplot2::ggsave(filename = base::paste0(folderpath, "/", filename),
+            ggplot2::ggsave(filename = base::paste0(filename),
                    plot = umap.plot)
 
         } else {
@@ -75,8 +85,6 @@ plotRCAUMAP <-
                     # Save plot
                     ggplot2::ggsave(
                         filename = base::paste0(
-                            folderpath,
-                            "/",
                             "ClusterColors_",
                             clusterColorName,
                             "_",
@@ -123,15 +131,15 @@ plotRCAUMAP <-
                                y = UMAP2,
                                colour = base::unlist(rBaseColors)
                            )) + ggplot2::geom_point(size = .5) +
-                    ggplot2::scale_color_identity(labels = names(colorVec), guide ="legend") +
+                    ggplot2::scale_color_identity(labels = names(colorVec), guide = "legend") +
                     ggplot2::theme_bw(fontsize) + ggplot2::ggtitle("b)") +
-                    ggplot2::theme(legend.position ="right") +
+                    ggplot2::theme(legend.position = "right") +
                     ggplot2::labs(color = "Cell type") +
                     ggplot2::guides(colour = ggplot2::guide_legend(override.aes = base::list(size = 4)))
 
                 # Save plot
                 grDevices::pdf(
-                    base::paste0(folderpath, "/", "RelativeRank_", filename),
+                    base::paste0("RelativeRank_", filename),
                     width = 14,
                     height = 7
                 )
@@ -185,7 +193,7 @@ plotRCAUMAP <-
 
                 # Save plot
                 grDevices::pdf(
-                    base::paste0(folderpath, "/", "ConfidenceScore_", filename),
+                    base::paste0("ConfidenceScore_", filename),
                     width = 14,
                     height = 7
                 )
@@ -247,8 +255,6 @@ plotRCAUMAP <-
                     # Save plot
                     ggplot2::ggsave(
                         filename = base::paste0(
-                            folderpath,
-                            "/",
                             "CellProperty_",
                             CellPropertyName,
                             "_",

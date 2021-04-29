@@ -7,7 +7,6 @@
 plotRCAUMAP(
   rca.obj,
   cellPropertyList = NULL,
-  folderpath = ".",
   filename = "RCA_UMAP.pdf",
   fontsize = 10
 )
@@ -17,12 +16,23 @@ plotRCAUMAP(
 
 \item{cellPropertyList}{list of cell properties to plot}
 
-\item{folderpath}{path to save umap to}
-
 \item{filename}{file name of saved umap}
 
 \item{fontsize}{Size of the font used for plotting}
 }
+\value{
+list of UMAP plots
+}
 \description{
 The presence of cell type estimates, relative ranks and confindence scores are detected automatically and are plotted accordingly.
+}
+\examples{
+\dontrun{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+RCA.pbmcs <- computeUMAP(RCA.pbmcs)
+plotRCAUMAP(RCA.pbmcs)
+}
+
 }

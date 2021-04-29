@@ -9,7 +9,6 @@ plotDEHeatmap(
   scale = FALSE,
   width = 20,
   height = 20,
-  folderpath = ".",
   filename = "RCA_DE_Heatmap.pdf",
   extraCellProperty = NULL,
   SeuratColorScheme = TRUE
@@ -18,20 +17,28 @@ plotDEHeatmap(
 \arguments{
 \item{rca.obj}{data matrix (genes x cells)}
 
-\item{scale}{TRUE if genes should be z-transformed before plotting. Default is FALSE.}
+\item{scale}{TRUE if genes should be z-transformed before plotting (default FALSE).}
 
-\item{width}{width of plot in inches. Default is 20.}
+\item{width}{width of plot in inches (default is 20).}
 
-\item{height}{height of plot in inches. Default is 20.}
+\item{height}{height of plot in inches (default is 20).}
 
-\item{folderpath}{path to save heatmap to}
+\item{filename}{file name of saved heatmap (default RCA_DE_Heatmap)}
 
-\item{filename}{file name of saved heatmap}
+\item{extraCellProperty}{vector indicating cell property to be plotted in heatmap (default NULL)}
 
-\item{extraCellProperty}{vector indicating cell property to be plotted in heatmap}
-
-\item{SeuratColorScheme}{Use the color scheme known from Seurat (Default). Otherwise use a blue to red color scheme.}
+\item{SeuratColorScheme}{Use the color scheme known from Seurat (default TRUE). Otherwise use a blue to red color scheme.}
 }
 \description{
 Plot heatmap of DE genes
+}
+\examples{
+\dontrun{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+RCA.pbmcs <- dataClust(RCA.pbmcs)
+RCA.pbmcs <- dataDE(RCA.pbmcs)
+plotDEHeatmap(RCA.pbmcs, scale = TRUE)
+}
 }

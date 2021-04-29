@@ -1,15 +1,25 @@
 #' Filter the dataset and remove genes and cells that could be of poor quality using user-defined thresholds
 #'
 #' @param rca.obj RCA object.
-#' @param cluster.labels vector of cluster labels
-#' @param nGene.low.thresholds numeric vector with lower nGene thresholds. Length of vector should be length(unique(cluster.labels)).
-#' @param nGene.high.thresholds numeric vector with upper nGene thresholds. Length of vector should be length(unique(cluster.labels)).
-#' @param nUMI.low.thresholds numeric vector with lower nUMI thresholds. Length of vector should be length(unique(cluster.labels)).
-#' @param nUMI.high.thresholds numeric vector withupper nUMI thresholds. Length of vector should be length(unique(cluster.labels)).
-#' @param pMito.low.thresholds numeric vector with lower pMito thresholds. Length of vector should be length(unique(cluster.labels)).
-#' @param pMito.high.thresholds numeric vector and upper pMito thresholds. Length of vector should be length(unique(cluster.labels)).
+#' @param cluster.labels vector of cluster labels for each cell
+#' @param nGene.low.thresholds numeric vector with lower nGene thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).
+#' @param nGene.high.thresholds numeric vector with upper nGene thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).
+#' @param nUMI.low.thresholds numeric vector with lower nUMI thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).
+#' @param nUMI.high.thresholds numeric vector withupper nUMI thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).
+#' @param pMito.low.thresholds numeric vector with lower pMito thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).
+#' @param pMito.high.thresholds numeric vector and upper pMito thresholds. Length of vector should be length(unique(cluster.labels)) (default NULL).
 #'
 #' @return RCA object.
+#'
+#' @examples
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+#' RCA.pbmcs <- dataClust(RCA.pbmcs)
+#' RCA.pmbcs <- performClusterSpecificQC(RCA.pbmcs,
+#' RCA.pbmcs$clustering.out$dynamicColorsList[[1]],
+#' nGene.low.thresholds=c(10,20,10,20,10,20,10))
+#'
 #' @export
 #'
 performClusterSpecificQC <- function(rca.obj, cluster.labels, nGene.low.thresholds = NULL, nGene.high.thresholds = NULL, nUMI.low.thresholds = NULL, nUMI.high.thresholds = NULL, pMito.low.thresholds = NULL, pMito.high.thresholds = NULL) {

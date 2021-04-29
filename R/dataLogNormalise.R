@@ -1,8 +1,13 @@
 #' Log-transform and normalise data by sequencing depth
 #'
 #' @param rca.obj RCA object.
-#' @param scale.factor scaling factor for log-normalization
+#' @param scale.factor scaling factor for log-normalization (default 10,000).
 #' @return RCA object.
+#' @examples
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' print(RCA.pbmcs)
+#'
 #' @export
 #'
 dataLogNormalise <- function(rca.obj, scale.factor = 10000) {

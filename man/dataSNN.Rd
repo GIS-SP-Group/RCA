@@ -16,19 +16,26 @@ dataSNN(
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{k}{Number of cells to consider in the neirest neighbour graph. Default is 10.}
+\item{k}{Number of cells to consider in the neirest neighbour graph (default 10).}
 
-\item{eps}{Number of cells that have to be similar to connect 2 cells in a network. Default is 8}
+\item{eps}{Number of cells that have to be similar to connect 2 cells in a network (default 8).}
 
-\item{minPts}{Number of cells with at least eps neighbours to be considered a core point. Default is 5.}
+\item{minPts}{Number of cells with at least eps neighbours to be considered a core point (default 5).}
 
-\item{dist.fun}{Either PCA or All. For PCA, a PCA reduction of the projection will be performed before the correlation matrix is computed.}
+\item{dist.fun}{Either PCA or All. For PCA, a PCA reduction of the projection will be performed before the correlation matrix is computed (default All).}
 
-\item{corMeth}{Correlation method used to compute distance}
+\item{corMeth}{Correlation method used to compute distance (default pearson).}
 }
 \value{
 RCA object.
 }
 \description{
 Generate cell clusters using hierarchical clustering and dynamic tree cutting.
+}
+\examples{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+RCA.pbmcs <- dataSNN(RCA.pbmcs)
+
 }

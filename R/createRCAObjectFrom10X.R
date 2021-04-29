@@ -1,8 +1,13 @@
 #' Create RCA Object from 10X data
 #'
 #' @param dataDir Directory containing 10X data
-#' @param min.barcode.umi Minimum UMIs needed for a barcode to be considered. Default is 100.
+#' @param min.barcode.umi Minimum UMIs needed for a barcode to be considered (default 100).
 #' @return RCA object.
+#' @examples
+#' \dontrun{
+#' RCA.pbmcs <- createRCAObjectFrom10X("directory_containing_10X_files",min.barcode.umi=50)
+#' print(RCA.pbmcs)
+#' }
 #' @export
 #'
 createRCAObjectFrom10X <- function(dataDir, min.barcode.umi = 100) {

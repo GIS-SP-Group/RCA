@@ -15,6 +15,17 @@
 #' @param cluster.ID ID of a cluster for which the GO enrichment should be computed. If this is not provided, enrichment will be computed for all clusters. Default: NULL
 #' @param deep.split Deep.split to be used if hierachical clustering was used to cluster the projection
 #' @return RCA object.
+#'
+#' @examples
+#' \dontrun{
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+#' RCA.pbmcs <- dataClust(RCA.pbmcs)
+#' doEnrichKEGG(RCA.pbmcs,annotation = org.Hs.eg.db,
+#' deep.split = 1, filename = "PBMC_RCA2_KEGG_Enrichment.pdf")
+#' }
+#'
 #' @export
 #'
 doEnrichKEGG<-function(rca.obj,

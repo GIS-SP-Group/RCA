@@ -1,16 +1,20 @@
 #' Estimate the most likely cell type from the projection to the reference panel
 #'
 #' @param rca.obj RCA object.
-#' @param confidence a parameter indicating the difference between z-scores. If the difference is below this threshold, the cell type will be set to unknown. Default is NULL.
-#' @param ctRank parameter indicating whether a relative rank coloring for each cell type shall be computed. Default is FALSE.
-#' @param cSCompute parameter indicating wheter the confidence score should be computed for each cell. Default is FALSE.
+#' @param confidence a parameter indicating the difference between z-scores. If the difference is below this threshold, the cell type will be set to unknown (default NULL).
+#' @param ctRank parameter indicating whether a relative rank coloring for each cell type shall be computed (default FALSE).
+#' @param cSCompute parameter indicating wheter the confidence score should be computed for each cell (default FALSE).
 #' @return RCA object.
+#'
+#' @examples
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+#' RCA.pbmcs <- dataClust(RCA.pbmcs)
+#' RCA.pbmcs <- estimateCellTypeFromProjection(RCA.pbmcs)
 #' @export
 #'
 estimateCellTypeFromProjection <- function(rca.obj, confidence = NULL, ctRank = F, cSCompute = F) {
-
-        # Extract projection data
-        projection <- rca.obj$projection.data
 
         # Returns the likeliest cell type of a cell with respect to a confidence threshold
         cTIdf <- function(x, confidence) {

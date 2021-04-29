@@ -4,22 +4,24 @@
 \alias{plotRCAUMAP3D}
 \title{Plot umap of projection to the RCA panel}
 \usage{
-plotRCAUMAP3D(
-  rca.obj,
-  cellPropertyList = NULL,
-  folderpath = ".",
-  filename = "RCA_UMAP.html"
-)
+plotRCAUMAP3D(rca.obj, cellPropertyList = NULL, filename = "RCA_UMAP.html")
 }
 \arguments{
 \item{rca.obj}{RCA object}
 
-\item{cellPropertyList}{list of cell properties to plot}
+\item{cellPropertyList}{list of cell properties to plot (default NULL)}
 
-\item{folderpath}{path to save umap to}
-
-\item{filename}{file name of saved umap}
+\item{filename}{file name of saved umap (filename RCA_UMAP.html)}
 }
 \description{
 Plot umap of projection to the RCA panel
+}
+\examples{
+\dontrun{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+RCA.pbmcs <- computeUMAP(RCA.pbmcs, nDIMS = 3)
+plotRCAUMAP3D(RCA.pbmcs)
+}
 }

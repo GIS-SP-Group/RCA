@@ -4,25 +4,27 @@
 \alias{parameterSpaceSeurat}
 \title{Generates a data frame showcasing the dependence between resolution and cluster quantity}
 \usage{
-parameterSpaceSeurat(
-  rca.obj,
-  stepsize = 0.1,
-  folderpath = "./",
-  filename = "Seurat_Parameter_Space.png"
-)
+parameterSpaceSeurat(rca.obj, stepsize = 0.1, filename = NULL)
 }
 \arguments{
 \item{rca.obj}{RCA object.}
 
-\item{stepsize}{Stepsize used to generate an overview on clustering results.}
+\item{stepsize}{Stepsize used to generate an overview on clustering results (default 0.1)}
 
-\item{folderpath}{Path to store the html file. Defaults to working directory.}
-
-\item{filename}{name of the pdf file produced that visuzalizes the parameter space.}
+\item{filename}{name of the pdf file produced that visuzalizes the parameter space (default NULL)}
 }
 \value{
-a data frame holding parameter values and resulting cluster numbers.
+list of a a data frame holding parameter values and resulting cluster numbers and the parameter figure
 }
 \description{
 Generates a data frame showcasing the dependence between resolution and cluster quantity
+}
+\examples{
+\dontrun{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+parameterSpaceSeurat(RCA.pbmcs)
+}
+
 }

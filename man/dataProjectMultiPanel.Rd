@@ -19,19 +19,26 @@ dataProjectMultiPanel(
 
 \item{method}{List of panel identifiers containing "GlobalPanel", "GlobalPanel_CellTypes", "ColonEpiPanel","MonacoPanel","ENCODEMousePanel","ENCODEHumanPanel","ZhangMouseBrainPanel","NovershternPanel","NovershternTCellPanel","MonacoTCellPanel","MonacoBCellPanel","MonacoMonoPanel", "CITESeqPanel" or "Custom". Default is: list("NovershternPanel","MonacoPanel","GlobalPanel_CellTypes").}
 
-\item{customPath}{list of paths (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".}
+\item{customPath}{directory path (including filename) to any custom panel stored in RDS format. Only used if method == "Custom".}
 
-\item{corMeth}{Any of the correlation measures supported by R, defaults to pearson.}
+\item{corMeth}{Any of the correlation measures supported by R (default pearson)}
 
-\item{power}{power to raise up to for the RCA features before clustering, default is 4.}
+\item{power}{power to raise up to for the RCA features before clustering (default 4)}
 
-\item{scale}{True if the data should be scaled, False otherwise.}
+\item{scale}{True if the data should be scaled, False otherwise (default TRUE)}
 
-\item{min.cell.number.expressing}{Minimum number of cells (0-100) expressing a gene such that it is considered in the projection step, default is 1.}
+\item{min.cell.number.expressing}{Minimum number of cells (0-100) expressing a gene such that it is considered in the projection step (default 1).}
 }
 \value{
 RCA object.
 }
 \description{
 Compute Reference Component features for clustering analysis against a list of panels
+}
+\examples{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProjectMultiPanel(RCA.pbmcs)
+print(RCA.pbmcs)
+
 }

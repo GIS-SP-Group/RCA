@@ -9,7 +9,6 @@ plotRCAHeatmap(
   var.thrs = 0.1,
   width = 20,
   height = 20,
-  folderpath = ".",
   filename = "RCA_Heatmap.pdf",
   extraCellProperty = NULL,
   SeuratColorScheme = FALSE
@@ -18,20 +17,28 @@ plotRCAHeatmap(
 \arguments{
 \item{rca.obj}{data matrix (genes x cells)}
 
-\item{var.thrs}{Minimum threshold of variance for cell type correlations.}
+\item{var.thrs}{Minimum threshold of variance for cell type correlations (default 0.1).}
 
-\item{width}{width of plot in inches. Default is 20.}
+\item{width}{width of plot in inches (default 20).}
 
-\item{height}{height of plot in inches. Default is 20.}
+\item{height}{height of plot in inches (default 20).}
 
-\item{folderpath}{path to save heatmap to}
+\item{filename}{file name of saved heatmap (RCA_Heatmap.pdf)}
 
-\item{filename}{file name of saved heatmap}
+\item{extraCellProperty}{vector indicating cell property to be plotted in heatmap (default NULL)}
 
-\item{extraCellProperty}{vector indicating cell property to be plotted in heatmap}
-
-\item{SeuratColorScheme}{Use the color scheme known from Seurat (default is FALSE). Otherwise, use a blue to red color scheme}
+\item{SeuratColorScheme}{Use the color scheme known from Seurat (default FALSE). Otherwise, use a blue to red color scheme}
 }
 \description{
 Plot heatmap of projection to the RCA panel
+}
+\examples{
+\dontrun{
+RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+RCA.pbmcs <- dataClust(RCA.pbmcs)
+plotRCAHeatmap(RCA.pbmcs)
+}
+
 }

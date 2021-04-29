@@ -1,16 +1,23 @@
 #' Plot umap of projection to the RCA panel
 #'
 #' @param rca.obj RCA object
-#' @param cellPropertyList list of cell properties to plot
-#' @param folderpath path to save umap to
-#' @param filename file name of saved umap
+#' @param cellPropertyList list of cell properties to plot (default NULL)
+#' @param filename file name of saved umap (filename RCA_UMAP.html)
+#'
+#' @examples
+#' \dontrun{
+#' RCA.pbmcs <- createRCAObject(RCAv2::pbmc_small_counts)
+#' RCA.pbmcs <- dataLogNormalise(RCA.pbmcs)
+#' RCA.pbmcs <- dataProject(RCA.pbmcs, method = "GlobalPanel_CellTypes")
+#' RCA.pbmcs <- computeUMAP(RCA.pbmcs, nDIMS = 3)
+#' plotRCAUMAP3D(RCA.pbmcs)
+#' }
 #' @export
 #'
 
 plotRCAUMAP3D <-
     function(rca.obj,
              cellPropertyList = NULL,
-             folderpath = ".",
              filename = "RCA_UMAP.html") {
         UMAP1 <- UMAP2 <- NULL
         ### Extract projection data from RCA object
@@ -46,7 +53,7 @@ plotRCAUMAP3D <-
 
             # Save UMAP
             htmlwidgets::saveWidget(plotly::as_widget(umap3dPlot),
-                                    base::paste0(folderpath, "/", filename))
+                                    filename)
 
 
         } else {
@@ -83,7 +90,6 @@ plotRCAUMAP3D <-
                     htmlwidgets::saveWidget(
                         plotly::as_widget(umap3dPlot),
                         base::paste0(
-                            folderpath,
                             "/ClusterColors_",
                             clusterColorName,
                             "_",
@@ -136,8 +142,7 @@ plotRCAUMAP3D <-
                 htmlwidgets::saveWidget(
                     plotly::as_widget(umap3dPlot),
                     base::paste0(
-                        folderpath,
-                        "/RelativeColoring_CellTypes_",
+                    "RelativeColoring_CellTypes_",
                         filename
                     )
                 )
@@ -214,8 +219,7 @@ plotRCAUMAP3D <-
                     htmlwidgets::saveWidget(
                         plotly::as_widget(umap3dPlot),
                         base::paste0(
-                            folderpath,
-                            "/CellProperty_",
+                            "CellProperty_",
                             CellPropertyName,
                             "_",
                             filename
