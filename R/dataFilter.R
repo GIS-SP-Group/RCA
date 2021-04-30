@@ -109,30 +109,35 @@ dataFilter <- function(rca.obj,
             x = base::rownames(data),
             value = T
         )
+        if (length(mito.genes) != 0) {
+            # Compute percent.mito vector
+            pMitoVec <-
+                Matrix::colSums(data[mito.genes, ]) / Matrix::colSums(data)
 
-        # Compute percent.mito vector
-        pMitoVec <-
-            Matrix::colSums(data[mito.genes,]) / Matrix::colSums(data)
 
+            if (base::is.numeric(percent.mito.thresholds) &
+                (base::length(percent.mito.thresholds) == 2)) {
+                pMito.filt.cells <-
+                    filt.cells[base::which((pMitoVec >= percent.mito.thresholds[1]) &
+                                               (pMitoVec <= percent.mito.thresholds[2])
+                    )]
+            } else if (base::is.numeric(percent.mito.thresholds) &
+                       (base::length(percent.mito.thresholds) == 1)) {
+                pMito.filt.cells <-
+                    filt.cells[, base::which(pMitoVec >= percent.mito.thresholds)]
+            } else {
+                warning(
+                    "percent.mito.thresholds was not of the appropriate format. Please enter a numeric vector with lower and upper thresholds."
+                )
+                pMito.filt.cells <- filt.cells
 
-        if (base::is.numeric(percent.mito.thresholds) &
-            (base::length(percent.mito.thresholds) == 2)) {
-            pMito.filt.cells <-
-                filt.cells[base::which((pMitoVec >= percent.mito.thresholds[1]) &
-                                           (pMitoVec <= percent.mito.thresholds[2])
-                )]
-        } else if (base::is.numeric(percent.mito.thresholds) &
-                   (base::length(percent.mito.thresholds) == 1)) {
-            pMito.filt.cells <-
-                filt.cells[, base::which(pMitoVec >= percent.mito.thresholds)]
+            }
         } else {
-            warning(
-                "percent.mito.thresholds was not of the appropriate format. Please enter a numeric vector with lower and upper thresholds."
-            )
+            warning("No mito genes found.")
             pMito.filt.cells <- filt.cells
-
         }
-    } else {
+    }
+    else {
         warning("No percent.mito.thresholds provided.")
         pMito.filt.cells <- filt.cells
     }
@@ -145,6 +150,10 @@ dataFilter <- function(rca.obj,
     # If plot is True
     if (plot) {
         # Create dataframe for 3D plot
+        if (length(mito.genes) == 0) {
+            pMitoVec <- c(1:length(nGeneVec))
+        }
+
         cellFiltDf <-
             base::data.frame(nGene = nGeneVec,
                              nUMI = nUMIVec,
@@ -248,21 +257,31 @@ dataFilter <- function(rca.obj,
             ggplot2::theme(legend.key.height = ggplot2::unit(1.5, "cm")) +
             ggplot2::labs(colour = "")
 
-        grDevices::pdf(file = filename,
-                       width = 15,
-                       height = 5)
+        if (length(mito.genes) != 0) {
+            grDevices::pdf(file = filename,
+                           width = 15,
+                           height = 5)
 
-        # Arrange scatter plots
-        gridExtra::grid.arrange(
-            nGene_pMito_plot,
-            nUMI_pMito_plot,
-            nGene_nUMI_plot,
-            nrow = 1,
-            widths = base::c(1, 1, 1.3)
-        )
-
-        # Save plot
-        grDevices::dev.off()
+            # Arrange scatter plots
+            gridExtra::grid.arrange(
+                nGene_pMito_plot,
+                nUMI_pMito_plot,
+                nGene_nUMI_plot,
+                nrow = 1,
+                widths = base::c(1, 1, 1.3)
+            )
+            grDevices::dev.off()
+        }
+        else{
+            # Arrange scatter plots
+            ggplot2::ggsave(
+                filename,
+                plot = nGene_nUMI_plot + ggplot2::ggtitle("a) nGene vs nUMI") ,
+                width = 5,
+                height = 5,
+                units = c("in")
+            )
+        }
     }
 
     # Combine results from cell and gene filtering
