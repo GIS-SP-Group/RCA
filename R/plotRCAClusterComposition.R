@@ -56,12 +56,12 @@ plotRCAClusterComposition <-
             base::colnames(enrichmentAll)[5] <- "Ratio"
             enrichmentAll$Ratio <-
                 base::as.numeric(base::as.character(enrichmentAll$Ratio))
-
+            nCols <- ceiling(length(unique(enrichmentAll$CT)) / 26)
             #Generate the cluster composition plots using the randomcolorR package if available
             if (("randomcoloR" %in% base::.packages())) {
                 dColors <-
                     randomcoloR::distinctColorPalette(base::length(base::unique(enrichmentAll$CT)))
-                nCols <- ceiling(length(unique(enrichmentAll$CT)) / 26)
+
                 ratioPlot <-
                     ggplot2::ggplot(enrichmentAll,
                                     ggplot2::aes(
