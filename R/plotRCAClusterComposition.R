@@ -116,11 +116,7 @@ plotRCAClusterComposition <-
                 gridExtra::grid.arrange(ratioPlot, countPlot, widths = c(1, (1.4 + (nCols -
                                                                                         1) / 10), nrow = 1))
             if (!(is.null(filename))) {
-                grDevices::pdf(filename,
-                               width = 15 + (nCols - 1),
-                               height = 7)
-                fig
-                grDevices::dev.off()
+                ggplot2::ggsave(filename = filename, plot = fig, device = "pdf", width = 15 + (nCols - 1), height = 7)
             }
             return(fig)
         } else{
