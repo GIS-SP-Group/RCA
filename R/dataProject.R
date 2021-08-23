@@ -6,7 +6,7 @@
 #' @param corMeth Any of the correlation measures supported by R, defaults to pearson
 #' @param power power to raise up to for the RCA features before clustering, default is 4
 #' @param scale True if the data should be scaled, False otherwise
-#' @param min.cell.number.expressing Minimum number of cells (0 percent -100 percent) expressing a gene such that it is considered in the projection step, default is 1 percent
+#' @param min.cell.number.expressing Minimum percent of cells (0 percent -100 percent) expressing a gene such that it is considered in the projection step, default is 1 percent
 #' @return a projection matrix.
 #'
 dataProjectWorker <-
