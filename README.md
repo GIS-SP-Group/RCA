@@ -458,7 +458,7 @@ Note that the KEGG function does not generate goPlots but only bar- and dotplots
 
 ![](man/figures/RCA_KEGG_Example.png)
 
-##Cluster/Cell-type specific quality control
+## Cluster/Cell-type specific quality control
 RCAv2 offers straightforward ways to perform cluster-specific quality control. We illustrate this functionality using an inhouse dataset of 45926 cells obtained from five bone marrow samples.
 A link to download the data will be made available here at a later stage.
 First, we load the data, project it against the global panel and cluster it:
