@@ -11,6 +11,7 @@ Release date: September 3, 2019
 RCA takes scRNA-seq data as input. For 10X Genomics data processed with CellRanger, build in quality control and preprocessing functions are available. Other data sets that have been preprocessed elsewhere can be incorporated as a count matrix. Reference datasets that can be included in RCA include (sorted) bulk RNA-seq, microarray and scRNA-seq data sets. Within RCA, we provide a function that allows users to easily generate custom reference panels from raw count data. Additionally we provide several reference panels for human cell types as well as for mouse. RCA considers a selected reference panel as well as query single cell data to compute a correlation matrix indicating the similarity of single cell transcriptomes to the reference transcriptomes. This, so called, reference projection, can be clustered and visualized in a heatmap, and/or directly visualized in a UMAP. The most likely cell type can be calculated either per cell or per cluster.
 
 An overview on all features of RCA is provided in the Figure below:
+
 ![](man/figures/Overview_Figure.png)
 
 
@@ -264,7 +265,8 @@ Each UMAP will be stored in a separate *pdf* where the filename indicates which 
 
 For numerical data, the dots are transparent for low values to avoid overplotting issues. In our example, we can see that *CD56* expression corresponds to the NK annotation.
 
-To obtain a less noisy cell type labelling, cell-types can also be predicted on the cluster level. To this end, RCAv2 carries out a majority vote using the cluster-composition plot mentioned above.
+To obtain a less noisy cell type labelling, cell types should be predicted at the cluster level. To this end, RCAv2 carries out a majority vote using the cluster-composition plot mentioned above.
+
 To obtain cluster based cell type predictions, the user can run the function *estimateCellTypeFromProjectionPerCluster*:
 ```R
 
@@ -323,69 +325,6 @@ Upon graph based clustering, the RCA projection heatmap will be plotted without 
 ![](man/figures/RCA_Heatmap_Seurat.png)
 
 This function uses the same approximation of the PCA as the original Seurat function. Setting *approx* to FALSE will compute the exact PCA. If the *corMeth* parameter is set to either *pearson, spearman* or *kendal*, the function will compute a full distance matrix using correlation distance instead of the default euclidean distance. This can also be combined with the exact PCA. However, not that these options require more memory to be available than the default. With the *elbowPlot* function, an ElbowPlot that guides the selection of the number of PCs to be considered can be generated.
-
-### Clustering free analysis of the projection
-
-__We highly recommend that you aggregate individual cell type labels across a cluster, identify the cell type label that corresponds to the majority of the cells in the cluster, and use this majority-vote cell type label as the cell type annotation for the cluster.__
-
-__Please see _estimateCellTypeFromProjectionPerCluster_ above for an automated implementation of this procedure in RCAv2.__
-
-Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering independent cell-type assignment approach motivated by SingleR and scMatch, that is purely based on each cells z-score distribution based on the reference projection.
-A call to the function 
-```R
-PBMCs<-estimateCellTypeFromProjection(PBMCs,confidence = NULL)
-```
-will return the most likely cell type for each cell and save it in the PBMCs object. With the parameter *confidence* a threshold (between 0 and 1) can be imposed on the ratio between the two most likely cell-types. In uncertain cases, a cell will be labelled as unkown.
-
-The above call results in the following cell type predictions:
-```R
-table(unlist(PBMCs$cell.Type.Estimate))
-
-              BDCA4._DentriticCells                     CD14._Monocytes             CD19._BCells.neg._sel.. 
-                                 69                                 108                                 307 
-                      CD33._Myeloid                               CD34.                         CD4._Tcells 
-                               1363                                   3                                2266 
-                      CD56._NKCells                         CD8._Tcells                 L45_CMP_Bone.Marrow 
-                                458                                 364                                   4 
-             L51_B.Cell_Bone.Marrow                        L52_Platelet  
-```
-
-Slightly simplifying the annotation via
-```R
-#Retrieve annotation
-SimplifiedAnnotation<-unlist(PBMCs$cell.Type.Estimate)
-#Relabel it
-SimplifiedAnnotation[which(SimplifiedAnnotation=="CD33._Myeloid")]<-"Myeloid"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="CD4._Tcells")]<-"T cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="CD8._Tcells")]<-"T cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="CD14._Monocytes")]<- "Monocytes"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="BDCA4._DentriticCells")]<-"Dentritic cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L93_B.Cell_Plasma.Cell")]<- "B cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L52_Platelet")]<-"Myeloid"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L74_T.Cell_CD4.Centr..Memory")]<-"T cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L51_B.Cell_Bone.Marrow")]<-"T cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L75_T.Cell_CD4.Centr..Memory")]<-"T cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L85_NK.Cell_CD56Hi")]<-"NK cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="CD34.")]<-"Progenitor"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L45_CMP_Bone.Marrow")]<- "Progenitor"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="WholeBlood")]<- "Myeloid"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L69_Dendritic.Cell_Monocyte.derived")]<- "Myeloid"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L80_T.Cell_CD8.Eff..Memory")]<-"T cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L60_Monocyte_CD16")]<- "Monocytes"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L86_NK.Cell_CD56Lo")]<-"NK cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="L73_T.Cell_CD4.Naive")]<-"T cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="CD56._NKCells")]<-"NK cells"
-SimplifiedAnnotation[which(SimplifiedAnnotation=="CD19._BCells.neg._sel..")]<- "B cells"
-```
-and plotting a new UMAP with
-```R
-umapFigures<-RCAv2::plotRCAUMAP(PBMCs,
-                      cellPropertyList = list(`Cell Type`=SimplifiedAnnotation),
-                      filename = "UMAP_PBMCs.pdf")
-```
-leads us to a clustering free cell type assignment.
-
-![](man/figures/Umap_ClusterFree.png)
 
 ### Compute DE genes for RCA clusters
 To ease cluster interpretation further, RCAv2 allows the user to compute pairwise DE genes for all identified clusters.
