@@ -212,6 +212,7 @@ PBMCs<-computeUMAP(PBMCs, nDIMS = 3)
 RCAv2::plotRCAUMAP3D(PBMCs,filename = "UMAP3D_PBMCs.html")
 ```
 3D umaps are stored as *html* files that can be interactively inspected with any browser. Due to github limitations, only a screenshot is shown below:
+
 ![](man/figures/Example_3D_Umap.png)
 
 
@@ -222,6 +223,11 @@ PBMCs<-estimateCellTypeFromProjection(PBMCs,confidence = NULL)
 #Generate the cluster composition plot
 RCAv2::plotRCAClusterComposition(PBMCs,filename="Cluster_Composition.pdf")
 ```
+
+__We highly recommend that you aggregate individual cell type labels across a cluster, identify the cell type label that corresponds to the majority of the cells in the cluster, and use this majority-vote cell type label as the cell type annotation for the cluster.__
+
+__Please see _estimateCellTypeFromProjectionPerCluster_ below for an automated implementation of this procedure in RCAv2.__
+
 ![](man/figures/Cluster_Enrichment.png)
 
 In a) we show the relative composition of each cluster and b) shows the absolute number of cells in each cluster. The color code indicates the most likely annotation of the cells.
@@ -275,7 +281,7 @@ PBMCs<-RCAv2::dataProject(PBMCs,
 PBMCs<-RCAv2::dataSClust(PBMCs,res = 0.15)
 PBMCs<-estimateCellTypeFromProjectionPerCluster(PBMCs)
 ```
-The figure below shows an example using the PBMC dataset using the Novosthern panel.
+The figure below shows an example using the PBMC dataset using the Novershtern panel.
 ![](man/figures/PerClusterAssignment.png)
 
 
@@ -319,7 +325,12 @@ Upon graph based clustering, the RCA projection heatmap will be plotted without 
 This function uses the same approximation of the PCA as the original Seurat function. Setting *approx* to FALSE will compute the exact PCA. If the *corMeth* parameter is set to either *pearson, spearman* or *kendal*, the function will compute a full distance matrix using correlation distance instead of the default euclidean distance. This can also be combined with the exact PCA. However, not that these options require more memory to be available than the default. With the *elbowPlot* function, an ElbowPlot that guides the selection of the number of PCs to be considered can be generated.
 
 ### Clustering free analysis of the projection
-Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering indepent cell-type assignment approach motivated by SingleR and scMatch, that is purely based on each cells z-score distribution based on the reference projection.
+
+__We highly recommend that you aggregate individual cell type labels across a cluster, identify the cell type label that corresponds to the majority of the cells in the cluster, and use this majority-vote cell type label as the cell type annotation for the cluster.__
+
+__Please see _estimateCellTypeFromProjectionPerCluster_ above for an automated implementation of this procedure in RCAv2.__
+
+Especially for very large datasets it can be challenging to cluster the projection. For these instances, RCA includes a clustering independent cell-type assignment approach motivated by SingleR and scMatch, that is purely based on each cells z-score distribution based on the reference projection.
 A call to the function 
 ```R
 PBMCs<-estimateCellTypeFromProjection(PBMCs,confidence = NULL)
