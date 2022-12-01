@@ -9,7 +9,8 @@ RCAConstruct <- setRefClass(Class = "RCA",
 					  projection.data = "Matrix",
 					  clustering.out = "list",
 					  umap.coordinates = "data.frame",
-					  cell.Type.Estimate = "list",
+					  cell.Type.Estimate.per.cell = "list",
+					  cell.Type.Estimate.per.cluster = "list",
 					  baseColors = "list",
 					  rRank = "list",
 					  cScore = "list",
@@ -34,9 +35,12 @@ RCAConstruct$methods(show = function(){
 			     dataSize = length(unique(clustering.out$dynamicColorsList[[1]]));
 			     print(paste0("The data set contains ",dataSize," RCA clusters."))
 
-			     dataSize = length(unique(cell.Type.Estimate));
-			     print(paste0("The data set contains ",dataSize," unique cell types."))
-
+			     dataSize = length(unique(cell.Type.Estimate.per.cell));
+			     print(paste0("The data set contains ",dataSize," unique cell types. (per cell annotation)"))
+			     
+			     
+			     dataSize = length(unique(cell.Type.Estimate.per.cluster));
+			     print(paste0("The data set contains ",dataSize," unique cell types. (per cell annotation)"))
 
 		})
 
