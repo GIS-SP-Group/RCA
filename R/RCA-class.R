@@ -40,7 +40,7 @@ RCAConstruct$methods(show = function(){
 			     
 			     
 			     dataSize = length(unique(cell.Type.Estimate.per.cluster));
-			     print(paste0("The data set contains ",dataSize," unique cell types. (per cell annotation)"))
+			     print(paste0("The data set contains ",dataSize," unique cell types. (per cluster annotation)"))
 
 		})
 
