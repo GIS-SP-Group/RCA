@@ -75,7 +75,7 @@ estimateCellTypeFromProjectionPerCluster <- function(rca.obj, homogeneity=NULL) 
     clusterConfidence <- homologyScores[clusterColors]
     estimatedCellTypes <- maxCellTypeCluster[clusterColors]
 
-    rca.obj$cell.Type.Estimate <- estimatedCellTypes
+    rca.obj$cell.Type.Estimate.per.cluster <- estimatedCellTypes
     rca.obj$cScore <- clusterConfidence
 
 
