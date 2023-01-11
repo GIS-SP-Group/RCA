@@ -102,7 +102,7 @@ plotRCAUMAP <-
             }
 
             # If cluster rank is to be plotted
-            if (!base::is.null(rRank) & base::length(rRank) != 0) {
+            if ( base::length(rRank) != 0) {
                 #Get the name of this cluster annotation
                 clusterColorName = base::names(clusterColorList[index])
 
@@ -154,8 +154,7 @@ plotRCAUMAP <-
             }
 
             # If cluster confidence is to be plotted
-            if (!base::is.null(confScore) &
-                base::length(confScore) != 0 & base::length(rca.obj$cell.Type.Estimate != 0)) {
+            if (base::length(confScore) != 0 & (base::length(rca.obj$cell.Type.Estimate.per.cluster) != 0)) {
                 #Get the name of this cluster annotation
                 clusterColorName = base::names(clusterColorList[index])
 
@@ -183,13 +182,13 @@ plotRCAUMAP <-
                            mapping = ggplot2::aes(
                                x = UMAP1,
                                y = UMAP2,
-                               colour = names(rca.obj$cell.Type.Estimate)
+                               colour = names(rca.obj$cell.Type.Estimate.per.cluster)
                            )) +
                     ggplot2::geom_point(size = .5) +  ggplot2::theme(legend.position = "right") +
                     ggplot2::labs(color = "Cell type") +
                     ggplot2::theme_bw(fontsize) + ggplot2::ggtitle("b)") +
                     ggplot2::guides(colour = ggplot2::guide_legend(override.aes = base::list(size = 4))) +
-                    ggplot2::scale_color_identity(labels = base::unlist(rca.obj$cell.Type.Estimate), guide = "legend")
+                    ggplot2::scale_color_identity(labels = base::unlist(rca.obj$cell.Type.Estimate.per.cluster), guide = "legend")
 
                 # Save plot
                 grDevices::pdf(
