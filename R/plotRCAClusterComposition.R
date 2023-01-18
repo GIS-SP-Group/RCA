@@ -23,14 +23,15 @@
 plotRCAClusterComposition <-
   function(rca.obj,
            deepSplit = 1,
-           filename = "Cluster_Composition.pdf") {
+           filename = "Cluster_Composition.pdf", confidence = NULL, ctRank = F, cSCompute = F, homogeneity=NULL) {
     Count <- Cluster <- Ratio <- CT <- NULL
     if (!(base::length(rca.obj$cell.Type.Estimate.per.cell) == 0)) {
-      rca.obj <- estimateCellTypeFromProjectionPerCluster(rca.obj)
+      rca.obj <- estimateCellTypeFromProjectionPerCluster(rca.obj , homogeneity)
     } else{
       base::print("Cell specific estimates are not computed yet, computing both per cell as well as per cluster")
-      rca.obj <- estimateCellTypeFromProjectionPerCluster(rca.obj)
-      rca.obj <- estimateCellTypeFromProjection(rca.obj)
+      
+      rca.obj <- estimateCellTypeFromProjection(rca.obj,  confidence, ctRank, cSCompute)
+      rca.obj <- estimateCellTypeFromProjectionPerCluster(rca.obj, homogeneity)
       
     }
     # Extract projection data and clustering result from RCA object
