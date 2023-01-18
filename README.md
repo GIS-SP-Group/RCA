@@ -4,7 +4,12 @@ It is developed by the Prabhakar lab at the Genome Institute of Singapore (GIS).
 The original version of RCA is published in Nature Genetics (doi: 10.1038/ng.3818, Li et al., 2017).
 
 ## Release notes
-Version 2.0 
+
+Version 2.0.1 <br>
+Release date: December 22, 2022 <br>
+Updated the plotRCAClusterComposition function to also return per-cluster annotations ("cell.Type.Estimate.per.cluster") within the RCA object. 
+
+Version 2.0 <br>
 Release date: September 3, 2019
 
 ## Functionality of RCA
@@ -219,8 +224,6 @@ RCAv2::plotRCAUMAP3D(PBMCs,filename = "UMAP3D_PBMCs.html")
 
 To better understand the composition of each cluster we generate a stacked bar plot Figure using the *plotRCAClusterComposition* function:
 ```R
-#Estimate the most probable cell type label for each cell
-PBMCs<-estimateCellTypeFromProjection(PBMCs,confidence = NULL)
 #Generate the cluster composition plot
 RCAv2::plotRCAClusterComposition(PBMCs,filename="Cluster_Composition.pdf")
 ```
@@ -562,14 +565,14 @@ RCA_from_Seurat<-RCAv2::dataProject(rca.obj = RCA_from_Seurat)
 RCA_from_Seurat<-RCAv2::dataClust(RCA_from_Seurat)
 
 #Estimate most likely cell type
-RCA_from_Seurat<-RCAv2::estimateCellTypeFromProjection(RCA_from_Seurat)
+RCA_from_Seurat<-RCAv2::estimateCellTypeFromProjectionPerCluster(RCA_from_Seurat)
 ```
 
 Using the RCA cell type labels, RCA and Seurat clusters, we generate two new UMAPs whose coordinates are based on the PCs derived from HVGs and that are colored according to RCA clusters and cell type labels.
 
 ```R
 #Simplify the cell type annotation
-SimplifiedAnnotation<-unlist(RCA_from_Seurat$cell.Type.Estimate)
+SimplifiedAnnotation<-unlist(RCA_from_Seurat$cell.Type.Estimate.per.cluster)
 SimplifiedAnnotation[which(SimplifiedAnnotation=="CD33._Myeloid")]<-"Myeloid"
 SimplifiedAnnotation[which(SimplifiedAnnotation=="CD4._Tcells")]<-"T cells"
 SimplifiedAnnotation[which(SimplifiedAnnotation=="CD8._Tcells")]<-"T cells"
@@ -635,7 +638,7 @@ For greater convenience the results of RCA can be saved within the Seurat object
 
 ```R
 pbmc_Seurat[["RCA.clusters"]]<-RCA_from_Seurat$clustering.out$dynamicColorsList
-pbmc_Seurat[["cellTypeLabel"]]<-RCA_from_Seurat$cell.Type.Estimate
+pbmc_Seurat[["cellTypeLabel"]]<-RCA_from_Seurat$cell.Type.Estimate.per.cluster
 pbmc_Seurat[["Projection"]]<-CreateAssayObject(data=RCA_from_Seurat$projection.data)
 ```
 
