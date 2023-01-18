@@ -272,4 +272,3 @@ plotRCAUMAP <-
     }
     return(umapPlots)
   }
-
