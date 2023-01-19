@@ -5,6 +5,10 @@ The original version of RCA is published in Nature Genetics (doi: 10.1038/ng.381
 
 ## Release notes
 
+Version 2.0.2 <br>
+Release date: January 18, 2023 <br>
+Updated the plotRCAUMAP function to return UMAP plots coloured based on the per-cluster annotations ("cell.Type.Estimate.per.cluster") within the RCA object.
+
 Version 2.0.1 <br>
 Release date: December 22, 2022 <br>
 Updated the plotRCAClusterComposition function to also return per-cluster annotations ("cell.Type.Estimate.per.cluster") within the RCA object. 
