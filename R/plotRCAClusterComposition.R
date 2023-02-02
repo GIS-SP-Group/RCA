@@ -30,8 +30,9 @@ plotRCAClusterComposition <-
     } else{
       base::print("Cell specific estimates are not computed yet, computing both per cell as well as per cluster")
       
-      rca.obj <- estimateCellTypeFromProjection(rca.obj,  confidence, ctRank, cSCompute)
       rca.obj <- estimateCellTypeFromProjectionPerCluster(rca.obj, homogeneity)
+      rca.obj <- estimateCellTypeFromProjection(rca.obj,  confidence, ctRank, cSCompute)
+      
       
     }
     # Extract projection data and clustering result from RCA object

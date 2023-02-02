@@ -18,19 +18,9 @@ estimateCellTypeFromProjectionPerCluster <- function(rca.obj, homogeneity=NULL) 
     # Assign data to tmp variables
     projection <- rca.obj$projection.data
     clusterColors <- rca.obj$clustering.out$dynamicColorsList[[1]]
-
-    # Returning the likeliest cell type of a cell irrespective of a confidence score
-    cTIdfWU <- function(x){
-         return(base::names(x)[base::which(x == base::max(x))])
-    }
-
-    # Determine the likeliest cell type for each cell.
-    cellTypes <- base::list()
-    for (i in base::c(1:base::dim(projection)[2])) {
-          cellTypes <- base::c(cellTypes,cTIdfWU(projection[,i]))
-    }
-
-
+    
+    cellTypes <- as.list(rownames(projection)[max.col(Matrix::t(projection))])
+  
     # Compute the cell type compositions of each cluster using per cell cell type predictions
     enrichmentAll <- base::c()
     Count <- Cluster <- NULL
