@@ -19,7 +19,7 @@ dataLogNormalise <- function(rca.obj, scale.factor = 10000) {
     seqDepthVec <- Matrix::colSums(raw.data)
 
     # Normalise data by cell
-    norm.data<-raw.data/seqDepthVec*scale.factor
+    norm.data<-t(t(raw.data)/seqDepthVec*scale.factor)
 
     # Log-transform normalised data
     logNorm.data <- base::log(1+norm.data)
