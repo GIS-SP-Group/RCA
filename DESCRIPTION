@@ -1,9 +1,46 @@
-Package: RCA
+Package: RCAv2
 Type: Package
-Title: RCA: Clustering Single Cell RNAseq Data using Reference Component Analysis
-Version: 1.0
-Date: 2017-03-20
-Author: Huipeng Li
-Maintainer: Huipeng Li <lihp@gis.a-star.edu.sg> or <lihuipengsmacsb@gmail.com>
-Description: This package provides the Reference Component Analysis (RCA) algorithm for clustering single cell RNAseq data. The current version can be applied on data from human samples. An extention for mouse data clustering will be available soon.  
-License: MIT
+Title: Reference Component Analysis
+Version: 2.0.0
+Authors@R: c(person("Florian", "Schmidt", email = "florian_schmidt@gis.a-star.edu.sg", role = c("aut", "cre")), person("Bobby", "Ranjan", email = "ranjan_bobby@gis.a-star.edu.sg", role = c("aut")), person("Shyam", "Lab", email = "shyam_lab@gis.a-star.edu.sg", role = c("cph")))
+Maintainer: Florian Schmidt <florian_schmidt@gis.a-star.edu.sg>
+Description: Single-cell clustering by projection onto bulk reference transcriptomes.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: Matrix, R (>= 3.5.0)
+biocViews:
+Imports: qlcMatrix, WGCNA, dynamicTreeCut, ComplexHeatmap, circlize, umap, gridExtra, methods, ggplot2, Seurat, irlba
+Suggests: 
+    dplyr,
+    ROCR,
+    randomcoloR,
+    fastcluster,
+    HiClimR,
+    htmlwidgets,
+    plotrix,
+    dbscan,
+    plotly,
+    graphics,
+    gplots,
+    future,
+    pbapply,
+    future.apply,
+    doParallel,
+    rlang,
+    parallel,
+    magrittr,
+    utils,
+    stringr,
+    foreach,
+    httr,
+    S4Vectors,
+    grDevices,
+    clusterProfiler,
+    edgeR,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+RoxygenNote: 7.1.1
+VignetteBuilder: knitr
+Config/testthat/edition: 3
